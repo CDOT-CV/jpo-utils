@@ -52,7 +52,7 @@ services:
     build:
       context: kafka
       dockerfile: Dockerfile.jikkou
-    restart: on-failure:3
+    restart: on-failure
     deploy:
       resources:
         limits:
@@ -75,6 +75,9 @@ services:
       MONGO_CONNECTOR_PASSWORD: ${MONGO_ADMIN_DB_PASS}
       MONGO_DB_IP: ${MONGO_IP}
       MONGO_DB_NAME: ${MONGO_DB_NAME}
+    volumes:
+      - ./kafka/kafka-connectors-values.yaml:/app/kafka-connectors-values.yaml
+      - ./kafka/kafka-topics-values.yaml:/app/kafka-topics-values.yaml
 
   kafka-schema-registry:
     profiles:

@@ -1,4 +1,4 @@
-{# ----------------- Create Topics for app ----------------- #}
+{# ----------------- Create Kafka Connectors to MongoDB per app ----------------- #}
 {% macro create_connector(app) %}
 
 {# Table Topics #}
@@ -7,7 +7,7 @@
 apiVersion: "kafka.jikkou.io/v1beta1"  {#  The api version (required) #}
 kind: "KafkaConnector"                 {#  The resource kind (required) #}
 metadata:
-  name: sink.{{ connector.collectionName }}
+  name: sink.{{ connector.connectorName | default(connector.collectionName) }}
   labels:
     kafka.jikkou.io/connect-cluster: {{ values.clusterName }}
 spec:
@@ -28,9 +28,6 @@ spec:
     topics: {{ connector.topicName }}
     value.converter: org.apache.kafka.connect.json.JsonConverter
     value.converter.schemas.enable: false
-
-    {%+ if connector.generateTimestamp %}errors.deadletterqueue.topic.name: {{ connector.topicName }}.dlq{% endif %}
-    {%+ if connector.generateTimestamp %}errors.deadletterqueue.topic.replication.factor: {{ system.env.KAFKA_TOPIC_REPLICAS | default(values.replicas) }}{% endif %}
 
     {%+ if connector.generateTimestamp %}transforms: AddTimestamp,AddedTimestampConverter{% endif %}
     {%+ if connector.generateTimestamp %}transforms.AddedTimestampConverter.field: recordGeneratedAt{% endif %}
@@ -59,17 +56,17 @@ spec:
 {{ create_connector(values.apps.ode) }}
 {% endif %}
 
-{# {% if system.env.KAFKA_TOPIC_CREATE_GEOJSONCONVERTER %}
-{{ create_topics(values.apps.geojsonconverter) }}
+{% if system.env.KAFKA_TOPIC_CREATE_GEOJSONCONVERTER %}
+{{ create_connector(values.apps.geojsonconverter) }}
 {% endif %}
 
 {% if system.env.KAFKA_TOPIC_CREATE_CONFLICTMONITOR %}
-{{ create_topics(values.apps.conflictmonitor) }}
+{{ create_connector(values.apps.conflictmonitor) }}
 {% endif %}
 
 {% if system.env.KAFKA_TOPIC_CREATE_DEDUPLICATOR %}
-{{ create_topics(values.apps.deduplicator) }} #}
-{# {% endif %} #}
-
-
-
+{{ create_connector(values.apps.deduplicator) }}
+{% else %}
+{{ create_connector(values.apps.ode_duplicated) }}
+{{ create_connector(values.apps.geojsonconverter_duplicated) }}
+{% endif %}
