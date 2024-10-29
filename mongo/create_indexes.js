@@ -1,115 +1,151 @@
 // Create indexes on all collections
 
 /*
-This script is responsible for initializing the replica set, creating collections, adding indexes and TTLs
+This is the second script responsible for configuring mongoDB automatically on startup.
+This script is responsible for creating users, creating collections, adding indexes, and configuring TTLs
+For more information see the header in a_init_replicas.js
 */
+
+console.log("");
 console.log("Running create_indexes.js");
 
-const ode_db = process.env.MONGO_DB_NAME;
-const rw_user = process.env.MONGO_READ_WRITE_USER;
-const rw_pass = process.env.MONGO_READ_WRITE_PASS;
 
-const ttlInDays = process.env.MONGO_COLLECTION_TTL; // TTL in days
-const expire_seconds = ttlInDays * 24 * 60 * 60;
-const retry_milliseconds = 5000;
+// Setup Username and Password Definitions
+const MONGO_ROOT_USERNAME = process.env.MONGO_ROOT_USERNAME;
+const MONGO_ROOT_PASSWORD = process.env.MONGO_ROOT_PASSWORD;
 
-console.log("DB Name: " + ode_db);
+const MONGO_READ_WRITE_USER=process.MONGO_READ_WRITE_USER;
+const MONGO_READ_WRITE_PASS=process.MONGO_READ_WRITE_PASS;
 
-try {
-    console.log("Initializing replica set...");
+const MONGO_READ_USERNAME = process.env.MONGO_READ_USER;
+const MONGO_READ_PASSWORD = process.env.MONGO_READ_PASS;
 
-    var config = {
-        "_id": "rs0",
-        "version": 1,
-        "members": [
-        {
-            "_id": 0,
-            "host": "mongo:27017",
-            "priority": 2
-        },
-        ]
-    };
-    rs.initiate(config, { force: true });
-    rs.status();
-} catch(e) {
-    rs.status().ok
-}
+// Prometheus Exporter User
+const MONGO_EXPORTER_USERNAME = process.env.MONGO_EXPORTER_USERNAME;
+const MONGO_EXPORTER_PASSWORD = process.env.MONGO_EXPORTER_PASSWORD;
+
+const DATABASE_NAME = process.env.MONGO_DATABASE_NAME || "CV";
+
+const expireSeconds = process.env.MONGO_DATA_RETENTION_SECONDS || 5184000; // 2 months
+const ttlExpireSeconds = process.env.MONGO_ASN_RETENTION_SECONDS || 86400; // 24 hours
+const retryMilliseconds = 10000;
+
+
+const users = [
+    // {username: CM_MONGO_ROOT_USERNAME, password: CM_MONGO_ROOT_PASSWORD, roles: "root", database: "admin" },
+    {username: MONGO_READ_WRITE_USER, password: MONGO_READ_WRITE_USER, permissions: [{role: "readWrite", database: DATABASE_NAME}]},
+    {username: MONGO_USER_USERNAME, password: MONGO_USER_PASSWORD, permissions: [{role: "read", database: DATABASE_NAME}]},
+    {username: MONGO_EXPORTER_USERNAME, password: MONGO_EXPORTER_PASSWORD, permissions: [{role: "clusterMonitor", database: "admin"}, {role: "read", database: DATABASE_NAME}]}
+];
+
 
 // name -> collection name
 // ttlField -> field to perform ttl on 
 // timeField -> field to index for time queries
-
+// intersectionField -> field containing intersection id for id queries
+// rsuIP -> field containing an rsuIP if available
+// expireTime -> the number of seconds after the ttl field at which the record should be deleted
 const collections = [
-    {name: "OdeBsmJson", ttlField: "recordGeneratedAt", timeField: "metadata.odeReceivedAt"},
-    {name: "OdeMapJson", ttlField: "recordGeneratedAt", timeField: "metadata.odeReceivedAt"},
-    {name: "OdeSpatJson", ttlField: "recordGeneratedAt", timeField: "metadata.odeReceivedAt"},
-    {name: "OdeTimJson", ttlField: "recordGeneratedAt", timeField: "metadata.odeReceivedAt"},
-    {name: "OdePsmJson", ttlField: "recordGeneratedAt", timeField: "metadata.odeReceivedAt"},
+
+    // ODE Json data
+    {name: "OdeDriverAlertJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeBsmJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeBsmJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeMapJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeMapJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeSpatJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeSpatRxJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeSrmJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeSrmJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeSsmJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeSsmJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeTimJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeTimJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeTimBroadcastJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeTIMCertExpirationTimeJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
+
+    // Ode Raw ASN
+    {name: "OdeRawEncodedBSMJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
+    {name: "OdeRawEncodedMAPJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
+    {name: "OdeRawEncodedSPATJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
+    {name: "OdeRawEncodedSRMJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
+    {name: "OdeRawEncodedSSMJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
+    {name: "OdeRawEncodedTIMJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
+    
+    // GeoJson Converter Data
+    {name: "ProcessedMap", ttlField: "recordGeneratedAt", timeField: "properties.timeStamp", intersectionField: "properties.intersectionId", expireTime: expireSeconds},
+    {name: "ProcessedSpat", ttlField: "recordGeneratedAt", timeField: "utcTimeStamp", intersectionField: "intersectionId", expireTime: expireSeconds},
+    {name: "ProcessedBsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "features.geometry.coordinates", expireTime: expireSeconds},
+    
+    // Conflict Monitor Events
+    { name: "CmStopLineStopEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmStopLinePassageEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmIntersectionReferenceAlignmentEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSignalGroupAlignmentEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmConnectionOfTravelEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSignalStateConflictEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmLaneDirectionOfTravelEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSpatTimeChangeDetailsEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSpatMinimumDataEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmMapBroadcastRateEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmMapMinimumDataEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSpatBroadcastRateEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CMBsmEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+
+    // Conflict Monitor Assessments
+    { name: "CmLaneDirectionOfTravelAssessment", ttlField: "assessmentGeneratedAt", timeField: "assessmentGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmConnectionOfTravelAssessment", ttlField: "assessmentGeneratedAt", timeField: "assessmentGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSignalStateEventAssessment", ttlField: "assessmentGeneratedAt", timeField: "assessmentGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmStopLineStopAssessment", ttlField: "assessmentGeneratedAt", timeField: "assessmentGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    
+    // Conflict Monitor Notifications
+    { name: "CmSpatTimeChangeDetailsNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmLaneDirectionOfTravelNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmConnectionOfTravelNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmAppHealthNotifications", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSignalStateConflictNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmSignalGroupAlignmentNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmStopLinePassageNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmStopLineStopNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds }
 ];
 
-// Function to check if the replica set is ready
-function isReplicaSetReady() {
-    let status;
-    try {
-        status = rs.status();
-    } catch (error) {
-        console.error("Error getting replica set status: " + error);
-        return false;
-    }
-
-    // Check if the replica set has a primary
-    if (!status.hasOwnProperty('myState') || status.myState !== 1) {
-        console.log("Replica set is not ready yet");
-        return false;
-    }
-
-    console.log("Replica set is ready");
-    return true;
-}
-
 try{
-
-    // Wait for the replica set to be ready
-    while (!isReplicaSetReady()) {
-        sleep(retry_milliseconds);
+    db.getMongo().setReadPref("primaryPreferred");
+    db = db.getSiblingDB("admin");
+    db = db.runCommand({autoCompact: true});
+    
+    // Create Users in Database
+    for(user of users){
+        createUser(user);
     }
-    sleep(retry_milliseconds);
-    // creates another user
-    console.log("Creating Read Write user...");
-    admin = db.getSiblingDB("admin");
-    // Check if user already exists
-    var user = admin.getUser(rw_user);
-    if (user == null) {
-        admin.createUser(
-            {
-                user: rw_user,
-                pwd: rw_pass,
-                roles: [
-                    { role: "readWrite", db: ode_db },
-                ]
-            }
-        );
+
+    db = db.getSiblingDB(DATABASE_NAME);
+    db.getMongo().setReadPref("primaryPreferred");
+    var isMaster = db.isMaster();
+    if (isMaster.primary) {
+        console.log("Connected to the primary replica set member.");
     } else {
-        console.log("User \"" + rw_user + "\" already exists.");
+        console.log("Not connected to the primary replica set member. Current node: " + isMaster.host);
     }
-
-} catch (error) {
-    print("Error connecting to the MongoDB instance: " + error);
+} 
+catch(err){
+    console.log("Could not switch DB to Sibling DB");
+    console.log(err);
 }
+
 
 
 // Wait for the collections to exist in mongo before trying to create indexes on them
 let missing_collection_count;
-const db = db.getSiblingDB(ode_db);
 do {
     try {
         missing_collection_count = 0;
-        const collection_names = db.getCollectionNames();
+        const collectionNames = db.getCollectionNames();
         for (collection of collections) {
-            console.log("Creating Indexes for Collection" + collection["name"]);
-            // Create Collection if It doesn't exist
+            // Create Collection if it doesn't exist
             let created = false;
-            if(!collection_names.includes(collection.name)){
+            if(!collectionNames.includes(collection.name)){
                 created = createCollection(collection);
                 // created = true;
             }else{
@@ -117,30 +153,47 @@ do {
             }
 
             if(created){
-                if (collection.hasOwnProperty('ttlField') && collection.ttlField !== 'none') {
-                    createTTLIndex(collection);  
-                }
-
-
+                createTTLIndex(collection);
+                createTimeIntersectionIndex(collection);
+                createTimeRsuIpIndex(collection);
+                createGeoSpatialIndex(collection);
             }else{
                 missing_collection_count++;
                 console.log("Collection " + collection.name + " does not exist yet");
             }
         }
         if (missing_collection_count > 0) {
-            print("Waiting on " + missing_collection_count + " collections to be created...will try again in " + retry_milliseconds + " ms");
-            sleep(retry_milliseconds);
+            console.log("Waiting on " + missing_collection_count + " collections to be created...will try again in " + retryMilliseconds + " ms");
+            sleep(retryMilliseconds);
         }
     } catch (err) {
         console.log("Error while setting up TTL indexes in collections");
         console.log(rs.status());
         console.error(err);
-        sleep(retry_milliseconds);
+        sleep(retryMilliseconds);
     }
 } while (missing_collection_count > 0);
 
 console.log("Finished Creating All TTL indexes");
 
+function createUser(user){
+    try{
+        console.log("Creating User: " + user.username + " with Permissions: " + user.roles);
+        db.createUser(
+        {
+            user: user.username,
+            pwd: user.password,
+            roles: user.permissions.map(permission => ({
+                role: permission.role,
+                db: permission.database
+            }))
+        });
+
+    }catch (err){
+        console.log(err);
+        console.log("Unable to Create User. Perhaps the User already exists.");
+    }
+}
 
 function createCollection(collection){
     try {
@@ -155,43 +208,178 @@ function createCollection(collection){
 
 // Create TTL Indexes
 function createTTLIndex(collection) {
-    if (ttlIndexExists(collection)) {
-        console.log("TTL index already exists for " + collection.name);
+    try{
+        if(collection.hasOwnProperty("ttlField") && collection.ttlField != null){
+            const ttlField = collection.ttlField;
+            const collectionName = collection.name;
+            const duration = collection.expireTime;
+            
+            let indexJson = {};
+            indexJson[ttlField] = 1;
+
+            if (ttlIndexExists(collection)) {
+                db.runCommand({
+                    "collMod": collectionName,
+                    "index": {
+                        keyPattern: indexJson,
+                        expireAfterSeconds: duration
+                    }
+                });
+                console.log("Updated TTL index for " + collectionName + " using the field: " + ttlField + " as the timestamp");
+            }else{
+                db[collectionName].createIndex(indexJson,
+                    {expireAfterSeconds: duration}
+                );
+                console.log("Created TTL index for " + collectionName + " using the field: " + ttlField + " as the timestamp");
+            }
+        }
+    } catch(err){
+        console.log("Failed to Create or Update index for " + collectionName + "using the field: " + ttlField + " as the timestamp");
+    }
+}
+
+function createTimeIndex(collection){
+    if(timeIndexExists(collection)){
+        // Skip if Index already Exists
         return;
     }
 
-    const collection_name = collection.name;
-    const timeField = collection.ttlField;
+    if(collection.hasOwnProperty("timeField") && collection.timeField != null){
+        const collectionName = collection.name;
+        const timeField = collection.timeField;
+        console.log("Creating Time Index for " + collectionName);
 
-    console.log(
-        "Creating TTL index for " + collection_name + " to remove documents after " +
-        expire_seconds +
-        " seconds"
-    );
+        var indexJson = {};
+        indexJson[timeField] = -1;
 
-    try {
-        var index_json = {};
-        index_json[timeField] = 1;
-        db[collection_name].createIndex(index_json,
-            {expireAfterSeconds: expire_seconds}
-        );
-        console.log("Created TTL index for " + collection_name + " using the field: " + timeField + " as the timestamp");
-    } catch (err) {
-        var pattern_json = {};
-        pattern_json[timeField] = 1;
-        db.runCommand({
-            "collMod": collection_name,
-            "index": {
-                keyPattern: pattern_json,
-                expireAfterSeconds: expire_seconds
-            }
-        });
-        console.log("Updated TTL index for " + collection_name + " using the field: " + timeField + " as the timestamp");
+        try {
+            db[collectionName].createIndex(indexJson);
+            console.log("Created Time Intersection index for " + collectionName + " using the field: " + timeField + " as the timestamp");
+        } catch (err) {
+            db.runCommand({
+                "collMod": collectionName,
+                "index": {
+                    keyPattern: indexJson
+                }
+            });
+            console.log("Updated Time index for " + collectionName + " using the field: " + timeField + " as the timestamp");
+        }
+    }
+}
+
+function createTimeRsuIpIndex(){
+    if(timeRsuIpIndexExists(collection)){
+        // Skip if Index already Exists
+        return;
+    }
+
+    if(collection.hasOwnProperty("timeField") && collection.timeField != null && collection.hasOwnProperty("rsuIP") && collection.rsuIP != null){
+        const collectionName = collection.name;
+        const timeField = collection.timeField;
+        const rsuIP = collection.rsuIP;
+        console.log("Creating Time rsuIP Index for " + collectionName);
+
+        var indexJson = {};
+        indexJson[rsuIP] = -1;
+        indexJson[timeField] = -1;
+        
+
+        try {
+            db[collectionName].createIndex(indexJson);
+            console.log("Created Time rsuIP Intersection index for " + collectionName + " using the field: " + timeField + " as the timestamp and : " + rsuIP+" as the rsuIP");
+        } catch (err) {
+            db.runCommand({
+                "collMod": collectionName,
+                "index": {
+                    keyPattern: indexJson
+                }
+            });
+            console.log("Updated Time rsuIP index for " + collectionName + " using the field: " + timeField + " as the timestamp and : " + rsuIP+" as the rsuIP");
+        }
+    }
+}
+
+
+function createTimeIntersectionIndex(collection){
+    if(timeIntersectionIndexExists(collection)){
+        // Skip if Index already Exists
+        return;
+    }
+
+    if(collection.hasOwnProperty("timeField") && collection.timeField != null && collection.hasOwnProperty("intersectionField") && collection.intersectionField != null){
+        const collectionName = collection.name;
+        const timeField = collection.timeField;
+        const intersectionField = collection.intersectionField;
+        console.log("Creating time intersection index for " + collectionName);
+
+        var indexJson = {};
+        indexJson[intersectionField] = -1;
+        indexJson[timeField] = -1;
+        
+
+        try {
+            db[collectionName].createIndex(indexJson);
+            console.log("Created time intersection index for " + collectionName + " using the field: " + timeField + " as the timestamp and : " + intersectionField + " as the rsuIP");
+        } catch (err) {
+            db.runCommand({
+                "collMod": collectionName,
+                "index": {
+                    keyPattern: indexJson
+                }
+            });
+            console.log("Updated time intersection index for " + collectionName + " using the field: " + timeField + " as the timestamp and : " + intersectionField + " as the rsuIP");
+        }
+    }
+}
+
+function createGeoSpatialIndex(collection){
+    if(geoSpatialIndexExists(collection)){
+        return;
+    }
+
+    if(collection.hasOwnProperty("timeField") && collection.timeField != null && collection.hasOwnProperty("geoSpatialField") && collection.geoSpatialField != null){
+        const collectionName = collection.name;
+        const timeField = collection.timeField;
+        const geoSpatialField = collection.geoSpatialField;
+        console.log("Creating GeoSpatial index for " + collectionName);
+
+        var indexJson = {};
+        indexJson[geoSpatialField] = "2dsphere";
+        indexJson[timeField] = -1;
+        
+
+        try {
+            db[collectionName].createIndex(indexJson);
+            console.log("Created time geospatial index for " + collectionName + " using the field: " + timeField + " as the timestamp and : " + geoSpatialField + " as the GeoSpatial Field");
+        } catch (err) {
+            db.runCommand({
+                "collMod": collectionName,
+                "index": {
+                    keyPattern: indexJson
+                }
+            });
+            console.log("Updated time geospatial index for " + collectionName + " using the field: " + timeField + " as the timestamp and : " + geoSpatialField + " as the GeoSpatial Field");
+        }
     }
 
 }
 
-
 function ttlIndexExists(collection) {
-    return db[collection.name].getIndexes().find((idx) => idx.hasOwnProperty('expireAfterSeconds')) !== undefined;
+    return db[collection.name].getIndexes().find((idx) => idx.hasOwnProperty("expireAfterSeconds")) !== undefined;
+}
+
+function timeIntersectionIndexExists(collection){
+    return db[collection.name].getIndexes().find((idx) => idx.name == collection.intersectionField + "_-1_" + collection.timeField + "_-1") !== undefined;
+}
+
+function timeRsuIpIndexExists(collection){
+    return db[collection.name].getIndexes().find((idx) => idx.name == collection.rsuIP + "_-1_" + collection.timeField + "_-1") !== undefined;
+}
+
+function timeIndexExists(collection){
+    return db[collection.name].getIndexes().find((idx) => idx.name == collection.timeField + "_-1") !== undefined;
+}
+
+function geoSpatialIndexExists(collection){
+    return db[collection.name].getIndexes().find((idx) => idx.name == collection.geoSpatialField + "_2dsphere_timeStamp_-1") !== undefined;
 }
