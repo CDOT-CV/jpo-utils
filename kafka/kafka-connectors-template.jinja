@@ -52,19 +52,19 @@ spec:
 {% endmacro %}
 
 {#-------  Create topics for apps with env variable = true ----------#}
-{% if system.env.KAFKA_TOPIC_CREATE_ODE %}
+{% if system.env.CONNECT_CREATE_ODE %}
 {{ create_connector(values.apps.ode) }}
 {% endif %}
 
-{% if system.env.KAFKA_TOPIC_CREATE_GEOJSONCONVERTER %}
+{% if system.env.CONNECT_CREATE_GEOJSONCONVERTER %}
 {{ create_connector(values.apps.geojsonconverter) }}
 {% endif %}
 
-{% if system.env.KAFKA_TOPIC_CREATE_CONFLICTMONITOR %}
+{% if system.env.CONNECT_CREATE_CONFLICTMONITOR %}
 {{ create_connector(values.apps.conflictmonitor) }}
 {% endif %}
 
-{% if system.env.KAFKA_TOPIC_CREATE_DEDUPLICATOR %}
+{% if system.env.CONNECT_CREATE_DEDUPLICATOR %}
 {{ create_connector(values.apps.deduplicator) }}
 {% else %}
 {{ create_connector(values.apps.ode_duplicated) }}
