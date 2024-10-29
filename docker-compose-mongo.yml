@@ -31,10 +31,10 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: | 
-        echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      test: "echo 'db.runCommand(\"ping\").ok' | mongosh --quiet --username ${MONGO_ADMIN_DB_USER} --password ${MONGO_ADMIN_DB_PASS} --authenticationDatabase admin --eval \"rs.status().ok\""
       interval: 10s
-      start_period: 30s
+      timeout: 5s
+      retries: 5
 
   mongo-setup:
     profiles:
