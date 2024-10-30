@@ -27,6 +27,7 @@ services:
       MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS: ${MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS}
       MONGO_ENABLE_STORAGE_RECORD: ${MONGO_ENABLE_STORAGE_RECORD}
       MONGO_ENABLE_DYNAMIC_TTL: ${MONGO_ENABLE_DYNAMIC_TTL}
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
     entrypoint:
       - bash
       - -c
@@ -48,7 +49,7 @@ services:
     volumes:
       - mongo_data:/data/db
       - ./mongo/keyfile.txt:/data/keyfile-import.txt
-      - .mongo/manage-volume-cron:/data/manage-volume-cron
+      - ./mongo/manage-volume-cron:/data/manage-volume-cron
       - ./mongo/manage_volume.js:/data/manage_volume.js
     healthcheck:
       test: "echo 'db.runCommand(\"ping\").ok' | mongosh --quiet --username ${MONGO_ADMIN_DB_USER} --password ${MONGO_ADMIN_DB_PASS} --authenticationDatabase admin --eval \"rs.status().ok\""
@@ -112,7 +113,6 @@ services:
     depends_on:
       - mongo
     environment:
-      # ME_CONFIG_MONGODB_SERVER: "mongo"
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASS}

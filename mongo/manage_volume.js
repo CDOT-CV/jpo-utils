@@ -37,8 +37,8 @@ const MONGO_ENABLE_DYNAMIC_TTL = (process.env.MONGO_ENABLE_DYNAMIC_TTL || true) 
 
 const MS_PER_HOUR = 60 * 60 * 1000;
 const BYTE_TO_GB = 1024 * 1024 * 1024;
-const DB_TARGET_SIZE_BYTES = DATABASE_SIZE_GB * DATABASE_SIZE_TARGET_PERCENT * BYTE_TO_GB;
-const DB_DELETE_SIZE_BYETS = DATABASE_SIZE_GB * DATABASE_DELETE_THRESHOLD_PERCENT * BYTE_TO_GB;
+const DB_TARGET_SIZE_BYTES = MONGO_DATABASE_SIZE_GB * MONGO_DATABASE_SIZE_TARGET_PERCENT * BYTE_TO_GB;
+const DB_DELETE_SIZE_BYETS = MONGO_DATABASE_SIZE_GB * MONGO_DATABASE_DELETE_THRESHOLD_PERCENT * BYTE_TO_GB;
 
 
 
@@ -47,7 +47,7 @@ print("Managing Mongo Data Volumes");
 
 db = db.getSiblingDB("admin");
 db.auth(MONGO_ROOT_USERNAME, MONGO_ROOT_PASSWORD);
-db = db.getSiblingDB("ConflictMonitor");
+db = db.getSiblingDB(MONGO_DATABASE_NAME);
 
 class CollectionStats{
 	constructor(name, allocatedSpace, freeSpace, indexSpace){
@@ -94,7 +94,7 @@ function updateTTL(){
 	}
 
 	
-	const newestRecords = db.getCollection(DATABASE_STORAGE_COLLECTION_NAME).find().sort({"recordGeneratedAt":-1}).limit(10);
+	const newestRecords = db.getCollection(MONGO_DATABASE_STORAGE_COLLECTION_NAME).find().sort({"recordGeneratedAt":-1}).limit(10);
 
 	let sizes = [];
 	newestRecords.forEach(doc => {
@@ -124,10 +124,10 @@ function updateTTL(){
 	// Clamp TTL and assign to new TTL;
 
 	if(!isNaN(possible_ttl) && possible_ttl != 0){
-		if(possible_ttl > DATABASE_MAX_TTL_RETENTION_SECONDS){
-			new_ttl = DATABASE_MAX_TTL_RETENTION_SECONDS;
-		}else if(possible_ttl < DATABASE_MIN_TTL_RETENTION_SECONDS){
-			new_ttl = DATABASE_MIN_TTL_RETENTION_SECONDS;
+		if(possible_ttl > MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS){
+			new_ttl = MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS;
+		}else if(possible_ttl < MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS){
+			new_ttl = MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS;
 		}else{
 			new_ttl = Math.round(possible_ttl);
 		}
@@ -204,7 +204,7 @@ function addNewStorageRecord(){
 	}
 
 	const storageRecord = new StorageRecord(records, totalAllocatedStorage, totalFreeSpace, totalIndexSize);
-	db.getCollection(DATABASE_STORAGE_COLLECTION_NAME).insertOne(storageRecord);
+	db.getCollection(MONGO_DATABASE_STORAGE_COLLECTION_NAME).insertOne(storageRecord);
 }
 
 function compactCollections(){
