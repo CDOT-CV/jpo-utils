@@ -9,34 +9,46 @@ For more information see the header in a_init_replicas.js
 console.log("");
 console.log("Running create_indexes.js");
 
+Object.keys(process.env).forEach(key => {
+    console.log(`${key}: ${process.env[key]}`);
+});
+
 
 // Setup Username and Password Definitions
-const MONGO_ROOT_USERNAME = process.env.MONGO_ROOT_USERNAME;
-const MONGO_ROOT_PASSWORD = process.env.MONGO_ROOT_PASSWORD;
+const MONGO_ROOT_USERNAME = process.env['MONGO_ADMIN_DB_USER'];
+const MONGO_ROOT_PASSWORD = process.env['MONGO_ADMIN_DB_PASS'];
 
-const MONGO_READ_WRITE_USER=process.MONGO_READ_WRITE_USER;
-const MONGO_READ_WRITE_PASS=process.MONGO_READ_WRITE_PASS;
+const MONGO_READ_WRITE_USER=process.env['MONGO_READ_WRITE_USER'];
+const MONGO_READ_WRITE_PASS=process.env['MONGO_READ_WRITE_PASS'];
 
-const MONGO_READ_USERNAME = process.env.MONGO_READ_USER;
-const MONGO_READ_PASSWORD = process.env.MONGO_READ_PASS;
+const MONGO_READ_USER = process.env['MONGO_READ_USER'];
+const MONGO_READ_PASS = process.env['MONGO_READ_PASS'];
 
 // Prometheus Exporter User
-const MONGO_EXPORTER_USERNAME = process.env.MONGO_EXPORTER_USERNAME;
-const MONGO_EXPORTER_PASSWORD = process.env.MONGO_EXPORTER_PASSWORD;
+const MONGO_EXPORTER_USERNAME = process.env['MONGO_EXPORTER_USERNAME'];
+const MONGO_EXPORTER_PASSWORD = process.env['MONGO_EXPORTER_PASSWORD'];
 
-const DATABASE_NAME = process.env.MONGO_DATABASE_NAME || "CV";
+const MONGO_DB_NAME = process.env['MONGO_DB_NAME'] || "CV";
 
-const expireSeconds = process.env.MONGO_DATA_RETENTION_SECONDS || 5184000; // 2 months
-const ttlExpireSeconds = process.env.MONGO_ASN_RETENTION_SECONDS || 86400; // 24 hours
+const expireSeconds = Number(process.env['MONGO_DATA_RETENTION_SECONDS']) || 5184000; // 2 months
+const ttlExpireSeconds = Number(process.env['MONGO_ASN_RETENTION_SECONDS']) || 86400; // 24 hours
 const retryMilliseconds = 10000;
+
+const CONNECT_CREATE_ODE = process.env['CONNECT_CREATE_ODE'] || true;
+const CONNECT_CREATE_GEOJSONCONVERTER = process.env['CONNECT_CREATE_GEOJSONCONVERTER'] || true;
+const CONNECT_CREATE_CONFLICTMONITOR = process.env['CONNECT_CREATE_CONFLICTMONITOR'] || true;
+const CONNECT_CREATE_DEDUPLICATOR = process.env['CONNECT_CREATE_DEDUPLICATOR'] || true;
 
 
 const users = [
     // {username: CM_MONGO_ROOT_USERNAME, password: CM_MONGO_ROOT_PASSWORD, roles: "root", database: "admin" },
-    {username: MONGO_READ_WRITE_USER, password: MONGO_READ_WRITE_USER, permissions: [{role: "readWrite", database: DATABASE_NAME}]},
-    {username: MONGO_USER_USERNAME, password: MONGO_USER_PASSWORD, permissions: [{role: "read", database: DATABASE_NAME}]},
-    {username: MONGO_EXPORTER_USERNAME, password: MONGO_EXPORTER_PASSWORD, permissions: [{role: "clusterMonitor", database: "admin"}, {role: "read", database: DATABASE_NAME}]}
+    {username: MONGO_READ_WRITE_USER, password: MONGO_READ_WRITE_USER, permissions: [{role: "readWrite", database: MONGO_DB_NAME}]},
+    {username: MONGO_READ_USER, password: MONGO_READ_PASS, permissions: [{role: "read", database: MONGO_DB_NAME}]},
+    {username: MONGO_EXPORTER_USERNAME, password: MONGO_EXPORTER_PASSWORD, permissions: [{role: "clusterMonitor", database: "admin"}, {role: "read", database: MONGO_DB_NAME}]}
 ];
+
+console.log("\n\n\n\nMONGO_READ_WRITE_USER: " + MONGO_READ_WRITE_USER);
+console.log("MONGO_READ_WRITE_PASS: " + MONGO_READ_WRITE_PASS + "\n\n\n\n");
 
 
 // name -> collection name
@@ -45,8 +57,7 @@ const users = [
 // intersectionField -> field containing intersection id for id queries
 // rsuIP -> field containing an rsuIP if available
 // expireTime -> the number of seconds after the ttl field at which the record should be deleted
-const collections = [
-
+const odeCollections = [
     // ODE Json data
     {name: "OdeDriverAlertJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
     {name: "OdeBsmJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
@@ -71,12 +82,17 @@ const collections = [
     {name: "OdeRawEncodedSRMJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
     {name: "OdeRawEncodedSSMJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
     {name: "OdeRawEncodedTIMJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: ttlExpireSeconds},
-    
-    // GeoJson Converter Data
+];
+
+// GeoJson Converter Data
+const geoJsonConverterCollections = [
     {name: "ProcessedMap", ttlField: "recordGeneratedAt", timeField: "properties.timeStamp", intersectionField: "properties.intersectionId", expireTime: expireSeconds},
     {name: "ProcessedSpat", ttlField: "recordGeneratedAt", timeField: "utcTimeStamp", intersectionField: "intersectionId", expireTime: expireSeconds},
     {name: "ProcessedBsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "features.geometry.coordinates", expireTime: expireSeconds},
-    
+];
+
+
+const conflictMonitorCollections = [
     // Conflict Monitor Events
     { name: "CmStopLineStopEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmStopLinePassageEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
@@ -110,17 +126,33 @@ const collections = [
     { name: "CmNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds }
 ];
 
+let collections = [];
+
+if(CONNECT_CREATE_ODE){
+    collections = collections.concat(odeCollections);
+}
+
+if(CONNECT_CREATE_GEOJSONCONVERTER){
+    collections = collections.concat(geoJsonConverterCollections);
+}
+
+if(CONNECT_CREATE_CONFLICTMONITOR){
+    collections = collections.concat(conflictMonitorCollections);
+}
+
+
 try{
+    
     db.getMongo().setReadPref("primaryPreferred");
     db = db.getSiblingDB("admin");
-    db = db.runCommand({autoCompact: true});
+    db.runCommand({autoCompact: true});
     
     // Create Users in Database
     for(user of users){
         createUser(user);
     }
 
-    db = db.getSiblingDB(DATABASE_NAME);
+    db = db.getSiblingDB(MONGO_DB_NAME);
     db.getMongo().setReadPref("primaryPreferred");
     var isMaster = db.isMaster();
     if (isMaster.primary) {
@@ -145,9 +177,8 @@ do {
         for (collection of collections) {
             // Create Collection if it doesn't exist
             let created = false;
-            if(!collectionNames.includes(collection.name)){
+            if(!collectionNames.includes(collection['name'])){
                 created = createCollection(collection);
-                // created = true;
             }else{
                 created = true;
             }
@@ -159,7 +190,7 @@ do {
                 createGeoSpatialIndex(collection);
             }else{
                 missing_collection_count++;
-                console.log("Collection " + collection.name + " does not exist yet");
+                console.log("Collection " + collection['name'] + " does not exist yet");
             }
         }
         if (missing_collection_count > 0) {
@@ -178,14 +209,14 @@ console.log("Finished Creating All TTL indexes");
 
 function createUser(user){
     try{
-        console.log("Creating User: " + user.username + " with Permissions: " + user.roles);
+        console.log("Creating User: " + user['username'] + " with Permissions: " + user['permissions']);
         db.createUser(
         {
-            user: user.username,
-            pwd: user.password,
-            roles: user.permissions.map(permission => ({
-                role: permission.role,
-                db: permission.database
+            user: user['username'],
+            pwd: user['password'],
+            roles: user['permissions'].map(permission => ({
+                role: permission['role'],
+                db: permission['database']
             }))
         });
 
@@ -197,7 +228,7 @@ function createUser(user){
 
 function createCollection(collection){
     try {
-        db.createCollection(collection.name);
+        db.createCollection(collection['name']);
         return true;
     } catch (err) {
         console.log("Unable to Create Collection: " + collection.name);
@@ -208,15 +239,17 @@ function createCollection(collection){
 
 // Create TTL Indexes
 function createTTLIndex(collection) {
-    try{
-        if(collection.hasOwnProperty("ttlField") && collection.ttlField != null){
-            const ttlField = collection.ttlField;
-            const collectionName = collection.name;
-            const duration = collection.expireTime;
-            
-            let indexJson = {};
-            indexJson[ttlField] = 1;
+    if(collection.hasOwnProperty("ttlField") && collection['ttlField'] != null){
+        const ttlField = collection['ttlField'];
+        const collectionName = collection['name'];
+        const duration = collection['expireTime'];
+        
+        let indexJson = {};
+        indexJson[ttlField] = 1;
 
+
+        console.log(collectionName, duration, ttlField);
+        try{
             if (ttlIndexExists(collection)) {
                 db.runCommand({
                     "collMod": collectionName,
@@ -227,14 +260,15 @@ function createTTLIndex(collection) {
                 });
                 console.log("Updated TTL index for " + collectionName + " using the field: " + ttlField + " as the timestamp");
             }else{
-                db[collectionName].createIndex(indexJson,
+                db.getCollection(collectionName).createIndex(indexJson,
                     {expireAfterSeconds: duration}
                 );
                 console.log("Created TTL index for " + collectionName + " using the field: " + ttlField + " as the timestamp");
             }
+        } catch(err){
+            console.log("Failed to Create or Update index for " + collectionName + " using the field: " + ttlField + " as the timestamp");
+            console.log(err);
         }
-    } catch(err){
-        console.log("Failed to Create or Update index for " + collectionName + "using the field: " + ttlField + " as the timestamp");
     }
 }
 
@@ -244,9 +278,9 @@ function createTimeIndex(collection){
         return;
     }
 
-    if(collection.hasOwnProperty("timeField") && collection.timeField != null){
-        const collectionName = collection.name;
-        const timeField = collection.timeField;
+    if(collection.hasOwnProperty("timeField") && collection['timeField'] != null){
+        const collectionName = collection['name'];
+        const timeField = collection['timeField'];
         console.log("Creating Time Index for " + collectionName);
 
         var indexJson = {};
@@ -274,9 +308,9 @@ function createTimeRsuIpIndex(){
     }
 
     if(collection.hasOwnProperty("timeField") && collection.timeField != null && collection.hasOwnProperty("rsuIP") && collection.rsuIP != null){
-        const collectionName = collection.name;
-        const timeField = collection.timeField;
-        const rsuIP = collection.rsuIP;
+        const collectionName = collection['name'];
+        const timeField = collection['timeField'];
+        const rsuIP = collection['rsuIP'];
         console.log("Creating Time rsuIP Index for " + collectionName);
 
         var indexJson = {};
@@ -307,9 +341,9 @@ function createTimeIntersectionIndex(collection){
     }
 
     if(collection.hasOwnProperty("timeField") && collection.timeField != null && collection.hasOwnProperty("intersectionField") && collection.intersectionField != null){
-        const collectionName = collection.name;
-        const timeField = collection.timeField;
-        const intersectionField = collection.intersectionField;
+        const collectionName = collection['name'];
+        const timeField = collection['timeField'];
+        const intersectionField = collection['intersectionField'];
         console.log("Creating time intersection index for " + collectionName);
 
         var indexJson = {};
@@ -337,10 +371,10 @@ function createGeoSpatialIndex(collection){
         return;
     }
 
-    if(collection.hasOwnProperty("timeField") && collection.timeField != null && collection.hasOwnProperty("geoSpatialField") && collection.geoSpatialField != null){
-        const collectionName = collection.name;
-        const timeField = collection.timeField;
-        const geoSpatialField = collection.geoSpatialField;
+    if(collection.hasOwnProperty("timeField") && collection['timeField'] != null && collection.hasOwnProperty("geoSpatialField") && collection['geoSpatialField'] != null){
+        const collectionName = collection['name'];
+        const timeField = collection['timeField'];
+        const geoSpatialField = collection['geoSpatialField'];
         console.log("Creating GeoSpatial index for " + collectionName);
 
         var indexJson = {};
@@ -365,21 +399,21 @@ function createGeoSpatialIndex(collection){
 }
 
 function ttlIndexExists(collection) {
-    return db[collection.name].getIndexes().find((idx) => idx.hasOwnProperty("expireAfterSeconds")) !== undefined;
+    return db[collection['name']].getIndexes().find((idx) => idx.hasOwnProperty("expireAfterSeconds")) !== undefined;
 }
 
 function timeIntersectionIndexExists(collection){
-    return db[collection.name].getIndexes().find((idx) => idx.name == collection.intersectionField + "_-1_" + collection.timeField + "_-1") !== undefined;
+    return db[collection['name']].getIndexes().find((idx) => idx.name == collection['intersectionField'] + "_-1_" + collection['timeField'] + "_-1") !== undefined;
 }
 
 function timeRsuIpIndexExists(collection){
-    return db[collection.name].getIndexes().find((idx) => idx.name == collection.rsuIP + "_-1_" + collection.timeField + "_-1") !== undefined;
+    return db[collection['name']].getIndexes().find((idx) => idx.name == collection['rsuIP'] + "_-1_" + collection['timeField'] + "_-1") !== undefined;
 }
 
 function timeIndexExists(collection){
-    return db[collection.name].getIndexes().find((idx) => idx.name == collection.timeField + "_-1") !== undefined;
+    return db[collection['name']].getIndexes().find((idx) => idx.name == collection['timeField'] + "_-1") !== undefined;
 }
 
 function geoSpatialIndexExists(collection){
-    return db[collection.name].getIndexes().find((idx) => idx.name == collection.geoSpatialField + "_2dsphere_timeStamp_-1") !== undefined;
+    return db[collection['name']].getIndexes().find((idx) => idx.name == collection['geoSpatialField'] + "_2dsphere_timeStamp_-1") !== undefined;
 }

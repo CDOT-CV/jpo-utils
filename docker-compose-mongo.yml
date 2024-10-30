@@ -5,7 +5,7 @@ services:
       - kafka_connect_standalone
       - mongo_full
       - mongo
-    image: mongo:7
+    image: mongo:8
     hostname: mongo 
     restart: ${RESTART_POLICY}
     deploy:
@@ -18,18 +18,38 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_DB_PASS}
-      MONGO_INITDB_DATABASE: admin 
+      MONGO_INITDB_DATABASE: admin
+      MONGO_DATABASE_STORAGE_COLLECTION_NAME: ${MONGO_DATABASE_STORAGE_COLLECTION_NAME}
+      MONGO_DATABASE_SIZE_GB: ${MONGO_DATABASE_SIZE_GB}
+      MONGO_DATABASE_SIZE_TARGET_PERCENT: ${MONGO_DATABASE_SIZE_TARGET_PERCENT}
+      MONGO_DATABASE_DELETE_THRESHOLD_PERCENT: ${MONGO_DATABASE_DELETE_THRESHOLD_PERCENT}
+      MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS: ${MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS}
+      MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS: ${MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS}
+      MONGO_ENABLE_STORAGE_RECORD: ${MONGO_ENABLE_STORAGE_RECORD}
+      MONGO_ENABLE_DYNAMIC_TTL: ${MONGO_ENABLE_DYNAMIC_TTL}
     entrypoint:
       - bash
       - -c
       - |
-          openssl rand -base64 741 > /mongo_keyfile
-          chmod 400 /mongo_keyfile
-          chown 999:999 /mongo_keyfile
-          exec docker-entrypoint.sh $$@
-    command: "mongod --bind_ip_all --replSet rs0 --keyFile /mongo_keyfile"
+        apt update
+        apt install -y cron gettext systemctl dos2unix
+        systemctl start cron
+        systemctl enable cron
+        envsubst < /data/manage-volume-cron > /etc/cron.d/manage-volume-cron
+        dos2unix /etc/cron.d/manage-volume-cron
+        chmod 644 /etc/cron.d/manage-volume-cron
+        systemctl restart cron
+        cp /data/keyfile-import.txt /data/keyfile.txt
+        chmod 400 /data/keyfile.txt
+        chown 999:999 /data/keyfile.txt
+        
+        exec docker-entrypoint.sh $$@
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/data/keyfile.txt"]
     volumes:
       - mongo_data:/data/db
+      - ./mongo/keyfile.txt:/data/keyfile-import.txt
+      - .mongo/manage-volume-cron:/data/manage-volume-cron
+      - ./mongo/manage_volume.js:/data/manage_volume.js
     healthcheck:
       test: | 
         echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
@@ -42,7 +62,7 @@ services:
       - kafka_connect_standalone
       - mongo_full
       - mongo
-    image: mongo:7
+    image: mongo:8
     hostname: mongo_setup
     depends_on:
       - mongo
@@ -58,11 +78,21 @@ services:
       MONGO_DB_NAME: ${MONGO_DB_NAME}
       MONGO_READ_WRITE_USER: ${MONGO_READ_WRITE_USER}
       MONGO_READ_WRITE_PASS: ${MONGO_READ_WRITE_PASS}
-      MONGO_COLLECTION_TTL: ${MONGO_COLLECTION_TTL}
+      MONGO_READ_USER: ${MONGO_READ_USER}
+      MONGO_READ_PASS: ${MONGO_READ_PASS}
+      MONGO_EXPORTER_USERNAME: ${MONGO_EXPORTER_USERNAME}
+      MONGO_EXPORTER_PASSWORD: ${MONGO_EXPORTER_PASSWORD}
+      MONGO_DATA_RETENTION_SECONDS: ${MONGO_DATA_RETENTION_SECONDS}
+      MONGO_ASN_RETENTION_SECONDS: ${MONGO_ASN_RETENTION_SECONDS}
+      CONNECT_CREATE_GEOJSONCONVERTER: ${CONNECT_CREATE_GEOJSONCONVERTER}
+      CONNECT_CREATE_CONFLICTMONITOR: ${CONNECT_CREATE_CONFLICTMONITOR}
+      CONNECT_CREATE_DEDUPLICATOR: ${CONNECT_CREATE_DEDUPLICATOR}
+      
     entrypoint: ["/bin/bash", "setup_mongo.sh"]
     volumes:
       - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH}:/setup_mongo.sh
       - ${MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH}:/create_indexes.js
+      - ${MONGO_INIT_REPLICAS_SCRIPT_RELATIVE_PATH}:/init_replicas.js
 
   mongo-express:
     profiles:
@@ -82,12 +112,13 @@ services:
     depends_on:
       - mongo
     environment:
-      ME_CONFIG_MONGODB_SERVER: "mongo"
+      # ME_CONFIG_MONGODB_SERVER: "mongo"
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
       ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER}
       ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASS}
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ADMIN_DB_USER}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ADMIN_DB_PASS}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ADMIN_DB_USER}:${MONGO_ADMIN_DB_PASS}@mongo:27017/?authSource=admin&directConnection=true
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081"]
       interval: 30s

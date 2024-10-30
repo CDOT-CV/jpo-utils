@@ -27,15 +27,12 @@ const MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS = process.env.MONGO_DATABASE_MAX_
 // The minimum amount of time data should be retained. Measured in Seconds. This only effects TTL's set on the data. It will not prevent the database from manual data deletion.
 const MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS = process.env.MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS || 604800; // 7 Days
 
-// When the free space of a collection exceeds this percent of the collections total volume, automatic compaction should occur
-const MONGO_DATABASE_COMPACTION_TRIGGER_PERCENT = process.env.MONGO_DATABASE_COMPACTION_TRIGGER_PERCENT || 0.5;
-
 
 const MONGO_ROOT_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME || "root";
 const MONGO_ROOT_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD || "root";
 
-const ENABLE_STORAGE_RECORD = process.env.MONGO_ENABLE_STORAGE_RECORD || true;
-const ENABLE_DYNAMIC_TTL = (process.env.MONGO_ENABLE_DYNAMIC_TTL || true) && ENABLE_STORAGE_RECORD; //Storage record must be enabled for Dynamic TTL
+const MONGO_ENABLE_STORAGE_RECORD = process.env.MONGO_ENABLE_STORAGE_RECORD || true;
+const MONGO_ENABLE_DYNAMIC_TTL = (process.env.MONGO_ENABLE_DYNAMIC_TTL || true) && MONGO_ENABLE_STORAGE_RECORD; //Storage record must be enabled for Dynamic TTL
  
 
 const MS_PER_HOUR = 60 * 60 * 1000;
@@ -242,5 +239,12 @@ function compactCollections(){
 	}
 }
 
-addNewStorageRecord();
-updateTTL();
+if(MONGO_ENABLE_STORAGE_RECORD){
+    addNewStorageRecord();
+}
+
+if(MONGO_ENABLE_DYNAMIC_TTL){
+    updateTTL();
+}
+
+

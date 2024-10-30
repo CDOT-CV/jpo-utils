@@ -8,4 +8,5 @@ echo "MongoDB is up and running!"
 
 cd /
 
-mongosh -u $MONGO_ADMIN_DB_USER -p $MONGO_ADMIN_DB_PASS --authenticationDatabase admin --host mongo:27017 /create_indexes.js
+mongosh -u $MONGO_ADMIN_DB_USER -p $MONGO_ADMIN_DB_PASS --authenticationDatabase admin --host mongo:27017 /init_replicas.js
+mongosh -u $MONGO_ADMIN_DB_USER -p $MONGO_ADMIN_DB_PASS --authenticationDatabase admin --host mongo:27017 /create_indexes.js 
