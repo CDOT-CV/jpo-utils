@@ -37,6 +37,7 @@ services:
       KAFKA_CFG_DELETE_TOPIC_ENABLE: "true"
       KAFKA_CFG_LOG_RETENTION_HOURS: ${KAFKA_LOG_RETENTION_HOURS}
       KAFKA_CFG_LOG_RETENTION_BYTES: ${KAFKA_LOG_RETENTION_BYTES}
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "false"
     logging:
       options:
         max-size: "10m"  
@@ -48,10 +49,11 @@ services:
       - all
       - kafka_full
       - kafka_setup
-    image: kafka-setup
+    image: jpo-jikkou
     build:
       context: kafka
       dockerfile: Dockerfile.jikkou
+    entrypoint: ./kafka_init.sh
     restart: on-failure
     deploy:
       resources:
@@ -76,8 +78,7 @@ services:
       MONGO_DB_IP: ${MONGO_IP}
       MONGO_DB_NAME: ${MONGO_DB_NAME}
     volumes:
-      - ./kafka/kafka-connectors-values.yaml:/app/kafka-connectors-values.yaml
-      - ./kafka/kafka-topics-values.yaml:/app/kafka-topics-values.yaml
+      - ${KAFKA_TOPIC_CONFIG_RELATIVE_PATH:-./kafka/kafka-topics-values.yaml}:/app/kafka-topics-values.yaml
 
   kafka-schema-registry:
     profiles:
@@ -129,6 +130,8 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: kafka-connect
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect:8083
 
 volumes:
   kafka:
