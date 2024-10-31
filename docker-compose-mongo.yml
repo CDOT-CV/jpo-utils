@@ -50,7 +50,6 @@ services:
     command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/data/keyfile.txt"]
     volumes:
       - mongo_data:/data/db
-      # - ./mongo/keyfile.txt:/data/keyfile-import.txt
       - ./mongo/manage-volume-cron:/data/manage-volume-cron
       - ./mongo/manage_volume.js:/data/manage_volume.js
     healthcheck:
