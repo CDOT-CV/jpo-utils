@@ -12,8 +12,5 @@ echo "KAFKA_TOPIC_CREATE_DEDUPLICATOR=$KAFKA_TOPIC_CREATE_DEDUPLICATOR"
 
 # Create or update topics
 ./jikkou apply \
-    --files kafka-topics-template.jinja \
-    --values-files kafka-topics-values.yaml 
-
-
- 
+     --files kafka-topics-template.jinja \
+     --values-files kafka-topics-values.yaml
