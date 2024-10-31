@@ -28,6 +28,7 @@ services:
       MONGO_ENABLE_STORAGE_RECORD: ${MONGO_ENABLE_STORAGE_RECORD}
       MONGO_ENABLE_DYNAMIC_TTL: ${MONGO_ENABLE_DYNAMIC_TTL}
       MONGO_DB_NAME: ${MONGO_DB_NAME}
+      MONGO_DB_KEYFILE_STRING: ${MONGO_DB_KEYFILE_STRING:?}
     entrypoint:
       - bash
       - -c
@@ -40,6 +41,7 @@ services:
         dos2unix /etc/cron.d/manage-volume-cron
         chmod 644 /etc/cron.d/manage-volume-cron
         systemctl restart cron
+        echo "$MONGO_DB_KEYFILE_STRING" > /data/keyfile-import.txt
         cp /data/keyfile-import.txt /data/keyfile.txt
         chmod 400 /data/keyfile.txt
         chown 999:999 /data/keyfile.txt
@@ -48,14 +50,14 @@ services:
     command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/data/keyfile.txt"]
     volumes:
       - mongo_data:/data/db
-      - ./mongo/keyfile.txt:/data/keyfile-import.txt
+      # - ./mongo/keyfile.txt:/data/keyfile-import.txt
       - ./mongo/manage-volume-cron:/data/manage-volume-cron
       - ./mongo/manage_volume.js:/data/manage_volume.js
     healthcheck:
       test: "echo 'db.runCommand(\"ping\").ok' | mongosh --quiet --username ${MONGO_ADMIN_DB_USER} --password ${MONGO_ADMIN_DB_PASS} --authenticationDatabase admin --eval \"rs.status().ok\""
       interval: 10s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 10
 
   mongo-setup:
     profiles:
