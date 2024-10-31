@@ -156,6 +156,7 @@ The following environment variables can be used to configure Kafka Connectors:
 
 | Environment Variable | Description |
 |---|---|
+| `CONNECT_URL` | Kafka connect API URL |
 | `CONNECT_LOG_LEVEL` | Kafka connect log level (`OFF`, `ERROR`, `WARN`, `INFO`) |
 | `CONNECT_TASKS_MAX` | Number of concurrent tasks to configure on kafka connectors |
 | `CONNECT_CREATE_ODE` | Whether to create kafka connectors for the ODE |

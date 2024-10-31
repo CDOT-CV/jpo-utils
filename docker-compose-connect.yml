@@ -71,6 +71,7 @@ services:
       kafka-connect:
         condition: service_healthy
     environment:
+      CONNECT_URL: ${CONNECT_URL}
       CONNECT_TASKS_MAX: ${CONNECT_TASKS_MAX}
       CONNECT_CREATE_ODE: ${CONNECT_CREATE_ODE}
       CONNECT_CREATE_GEOJSONCONVERTER: ${CONNECT_CREATE_GEOJSONCONVERTER}
