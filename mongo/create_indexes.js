@@ -42,7 +42,7 @@ const CONNECT_CREATE_DEDUPLICATOR = process.env['CONNECT_CREATE_DEDUPLICATOR'] |
 
 const users = [
     // {username: CM_MONGO_ROOT_USERNAME, password: CM_MONGO_ROOT_PASSWORD, roles: "root", database: "admin" },
-    {username: MONGO_READ_WRITE_USER, password: MONGO_READ_WRITE_USER, permissions: [{role: "readWrite", database: MONGO_DB_NAME}]},
+    {username: MONGO_READ_WRITE_USER, password: MONGO_READ_WRITE_PASS, permissions: [{role: "readWrite", database: MONGO_DB_NAME}]},
     {username: MONGO_READ_USER, password: MONGO_READ_PASS, permissions: [{role: "read", database: MONGO_DB_NAME}]},
     {username: MONGO_EXPORTER_USERNAME, password: MONGO_EXPORTER_PASSWORD, permissions: [{role: "clusterMonitor", database: "admin"}, {role: "read", database: MONGO_DB_NAME}]}
 ];
@@ -209,7 +209,7 @@ console.log("Finished Creating All TTL indexes");
 
 function createUser(user){
     try{
-        console.log("Creating User: " + user['username'] + " with Permissions: " + user['permissions']);
+        console.log("Creating User: " + user['username'] + " with Permissions: " + JSON.stringify(user['permissions']));
         db.createUser(
         {
             user: user['username'],
@@ -219,10 +219,8 @@ function createUser(user){
                 db: permission['database']
             }))
         });
-
-    }catch (err){
-        console.log(err);
-        console.log("Unable to Create User. Perhaps the User already exists.");
+    } catch (error) {
+        console.error("Error creating user: ", error);
     }
 }
 
