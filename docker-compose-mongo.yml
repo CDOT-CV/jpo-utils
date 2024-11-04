@@ -41,8 +41,7 @@ services:
         dos2unix /etc/cron.d/manage-volume-cron
         chmod 644 /etc/cron.d/manage-volume-cron
         systemctl restart cron
-        echo "$MONGO_DB_KEYFILE_STRING" > /data/keyfile-import.txt
-        cp /data/keyfile-import.txt /data/keyfile.txt
+        echo "$MONGO_DB_KEYFILE_STRING" > /data/keyfile.txt
         chmod 400 /data/keyfile.txt
         chown 999:999 /data/keyfile.txt
         
