@@ -58,9 +58,6 @@ apps:
       - topicName: topic.OdeSpatJson
         collectionName: OdeSpatJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedTIMJson
-        collectionName: OdeRawEncodedTIMJson
-        generateTimestamp: true
       - topicName: topic.OdeTimJsonTMCFiltered
         collectionName: OdeTimJsonTMCFiltered
         generateTimestamp: true
@@ -103,12 +100,12 @@ apps:
       - topicName: topic.OdeBsmJson
         collectionName: OdeBsmJson
         generateTimestamp: true
+      - topicName: topic.OdeRawEncodedTIMJson
+        collectionName: OdeRawEncodedTIMJson
+        generateTimestamp: true
   geojsonconverter:
     name: geojsonconverter
     connectors:
-      - topicName: topic.ProcessedSpat
-        collectionName: ProcessedSpat
-        generateTimestamp: true
       - topicName: topic.ProcessedBsm
         collectionName: ProcessedBsm
         generateTimestamp: true
@@ -117,6 +114,9 @@ apps:
     connectors:
       - topicName: topic.ProcessedMap
         collectionName: ProcessedMap
+        generateTimestamp: true
+      - topicName: topic.ProcessedSpat
+        collectionName: ProcessedSpat
         generateTimestamp: true
   deduplicator:
     name: deduplicator
@@ -133,10 +133,18 @@ apps:
         collectionName: OdeTimJson
         generateTimestamp: true
         connectorName: DeduplicatedOdeTimJson
+      - topicName: topic.OdeRawEncodedTIMJson
+        collectionName: OdeTimJson
+        generateTimestamp: true
+        connectorName: DeduplicatedOdeRawEncodedTIMJson
       - topicName: topic.DeduplicatedOdeBsmJson
         collectionName: OdeBsmJson
         generateTimestamp: true
         connectorName: DeduplicatedOdeBsmJson
+      - topicName: topic.DeduplicatedProcessedSpat
+        collectionName: ProcessedSpat
+        generateTimestamp: true
+        connectorName: DeduplicatedProcessedSpat
   conflictmonitor:
     name: conflictmonitor
     connectors:
