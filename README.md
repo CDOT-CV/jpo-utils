@@ -139,7 +139,7 @@ Set the `COMPOSE_PROFILES` environmental variable as follows:
 
 ### Configure Kafka Connector Creation
 
-The Kafka connectors created by the `kafka-connect-setup` service are configured in the [kafka-connectors-values.yaml](kafka/kafka-connectors-values.yaml) file.  The connectors in that file are organized by the application, and given parameters to define the Kafka -> MongoDB sync connector:
+The Kafka connectors created by the `kafka-connect-setup` service are configured in the [kafka-connectors-values.yaml](jikkou/kafka-connectors-values.yaml) file.  The connectors in that file are organized by the application, and given parameters to define the Kafka -> MongoDB sync connector:
 
 | Connector Variable  | Required | Condition | Description|
 |---|---|---|---|
