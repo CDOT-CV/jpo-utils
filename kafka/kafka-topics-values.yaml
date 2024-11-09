@@ -114,6 +114,8 @@ apps:
       - topic.CmBsmIntersection
       - topic.CmKafkaStateChangeEvents
       - topic.CmTimestampDeltaEvent
+      - topic.CmSpatMinimumDataEvent
+      - topic.CmMapMinimumDataEvent
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
