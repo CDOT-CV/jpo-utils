@@ -89,7 +89,7 @@ An optional `kafka-init`, `schema-registry`, and `kafka-ui` instance can be depl
 
 ### Configure Topic Creation
 
-The Kafka topics created by the `kafka-setup` service are configured in the [kafka-topics-values.yaml](kafka/kafka-topics-values.yaml) file.  The topics in that file are organized by the application, and sorted into "Stream Topics" (those with `cleanup.policy` = `delete`) and "Table Topics" (with `cleanup.policy` = `compact`).  
+The Kafka topics created by the `kafka-setup` service are configured in the [kafka-topics-values.yaml](jikkou/kafka-topics-values.yaml) file.  The topics in that file are organized by the application, and sorted into "Stream Topics" (those with `cleanup.policy` = `delete`) and "Table Topics" (with `cleanup.policy` = `compact`).  
 
 The following enviroment variables can be used to configure Kafka Topic creation.  
 
@@ -139,7 +139,7 @@ Set the `COMPOSE_PROFILES` environmental variable as follows:
 
 ### Configure Kafka Connector Creation
 
-The Kafka connectors created by the `kafka-connect-setup` service are configured in the [kafka-connectors-values.yaml](kafka/kafka-connectors-values.yaml) file.  The connectors in that file are organized by the application, and given parameters to define the Kafka -> MongoDB sync connector:
+The Kafka connectors created by the `kafka-connect-setup` service are configured in the [kafka-connectors-values.yaml](jikkou/kafka-connectors-values.yaml) file.  The connectors in that file are organized by the application, and given parameters to define the Kafka -> MongoDB sync connector:
 
 | Connector Variable  | Required | Condition | Description|
 |---|---|---|---|
