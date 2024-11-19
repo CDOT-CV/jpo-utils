@@ -201,8 +201,16 @@ apps:
         collectionName: CmTimestampDeltaEvent
         generateTimestamp: true
         timestampField: eventGeneratedAt
-      - topicName: topic.CmEventStateProgressionEvent
-        collectionName: CmEventStateProgressionEvent
+      - topicName: topic.CmSpatMessageCountProgressionEvents
+        collectionName: CmSpatMessageCountProgressionEvents
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmMapMessageCountProgressionEvents
+        collectionName: CmMapMessageCountProgressionEvents
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmBsmMessageCountProgressionEvents
+        collectionName: CmBsmMessageCountProgressionEvents
         generateTimestamp: true
         timestampField: eventGeneratedAt
 
