@@ -132,6 +132,8 @@ const conflictMonitorCollections = [
     { name: "CmNotification", ttlField: "notificationGeneratedAt", timeField: "notificationGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds }
 ];
 
+let collections = [];
+
 if(CONNECT_CREATE_ODE){
     collections = collections.concat(odeCollections);
 }
