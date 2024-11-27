@@ -114,6 +114,13 @@ apps:
       - topic.CmBsmIntersection
       - topic.CmKafkaStateChangeEvents
       - topic.CmTimestampDeltaEvent
+      - topic.CmSpatMinimumDataEventAggregation
+      - topic.CmMapMinimumDataEventAggregation
+      - topic.CmIntersectionReferenceAlignmentEventAggregation
+      - topic.CmSignalGroupAlignmentEventAggregation
+      - topic.CmSignalStateConflictEventAggregation
+      - topic.CmSpatTimeChangeDetailsEventAggregation
+      - topic.CmEventStateProgressionEventAggregation
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
