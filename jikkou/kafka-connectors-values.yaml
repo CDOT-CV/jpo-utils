@@ -151,59 +151,59 @@ apps:
       # Record Events
       - topicName: topic.CmStopLinePassageEvent
         collectionName: CmStopLinePassageEvent
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmStopLineStopEvent
         collectionName: CmStopLineStopEvent
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSignalStateConflictEvents
         collectionName: CmSignalStateConflictEvents
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmIntersectionReferenceAlignmentEvents
         collectionName: CmIntersectionReferenceAlignmentEvents
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSignalGroupAlignmentEvents
         collectionName: CmSignalGroupAlignmentEvents
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmConnectionOfTravelEvent
         collectionName: CmConnectionOfTravelEvent
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmLaneDirectionOfTravelEvent
         collectionName: CmLaneDirectionOfTravelEvent
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSpatTimeChangeDetailsEvent
         collectionName: CmSpatTimeChangeDetailsEvent
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMinimumDataEvents
         collectionName: CmSpatMinimumDataEvents
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmMapBroadcastRateEvents
         collectionName: CmMapBroadcastRateEvents
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmMapMinimumDataEvents
         collectionName: CmMapMinimumDataEvents
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSpatBroadcastRateEvents
         collectionName: CmSpatBroadcastRateEvents
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmTimestampDeltaEvent
         collectionName: CmTimestampDeltaEvent
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmEventStateProgressionEvent
         collectionName: CmEventStateProgressionEvent
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
 
       # Record BSM events:
@@ -214,71 +214,71 @@ apps:
       # Record Assessments:
       - topicName: topic.CmLaneDirectionOfTravelAssessment
         collectionName: CmLaneDirectionOfTravelAssessment
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: assessmentGeneratedAt
       - topicName: topic.CmConnectionOfTravelAssessment
         collectionName: CmConnectionOfTravelAssessment
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: assessmentGeneratedAt
       - topicName: topic.CmSignalStateEventAssessment
         collectionName: CmSignalStateEventAssessment
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: assessmentGeneratedAt
       - topicName: topic.CmStopLineStopAssessment
         collectionName: CmStopLineStopAssessment
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: assessmentGeneratedAt
       
       # Record Notifications
       - topicName: topic.CmSpatTimeChangeDetailsNotification
         collectionName: CmSpatTimeChangeDetailsNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmLaneDirectionOfTravelNotification
         collectionName: CmLaneDirectionOfTravelNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmConnectionOfTravelNotification
         collectionName: CmConnectionOfTravelNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmAppHealthNotifications
         collectionName: CmAppHealthNotifications
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmSignalStateConflictNotification
         collectionName: CmSignalStateConflictNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmSignalGroupAlignmentNotification
         collectionName: CmSignalGroupAlignmentNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmNotification
         collectionName: CmNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
         useKey: true
         keyField: key
       - topicName: topic.CmStopLineStopNotification
         collectionName: CmStopLineStopNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
         useKey: true
         keyField: key
       - topicName: topic.CmStopLinePassageNotification
         collectionName: CmStopLinePassageNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
         useKey: true
         keyField: key
       - topicName: topic.CmTimestampDeltaNotification
         collectionName: CmTimestampDeltaNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: notificationGeneratedAt
         useKey: true
         keyField: key
       - topicName: topic.CmEventStateProgressionNotification
         collectionName: CmEventStateProgressionNotification
-        generateTimestamp: true
+        useTimestamp: true
         timestampField: eventGeneratedAt
