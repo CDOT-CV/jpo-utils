@@ -56,7 +56,7 @@ services:
       - kafka_connect_standalone
     image: jpo-jikkou
     build:
-      context: kafka
+      context: jikkou
       dockerfile: Dockerfile.jikkou
     entrypoint: ./kafka_connector_init.sh
     restart: on-failure
@@ -80,4 +80,4 @@ services:
       MONGO_DB_IP: ${MONGO_IP}
       MONGO_DB_NAME: ${MONGO_DB_NAME}
     volumes:
-      - ${CONNECT_CONFIG_RELATIVE_PATH-./kafka/kafka-connectors-values.yaml}:/app/kafka-connectors-values.yaml
+      - ${CONNECT_CONFIG_RELATIVE_PATH-./jikkou/kafka-connectors-values.yaml}:/app/kafka-connectors-values.yaml

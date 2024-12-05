@@ -51,7 +51,7 @@ services:
       - kafka_setup
     image: jpo-jikkou
     build:
-      context: kafka
+      context: jikkou
       dockerfile: Dockerfile.jikkou
     entrypoint: ./kafka_init.sh
     restart: on-failure
@@ -79,7 +79,7 @@ services:
       MONGO_DB_IP: ${MONGO_IP}
       MONGO_DB_NAME: ${MONGO_DB_NAME}
     volumes:
-      - ${KAFKA_TOPIC_CONFIG_RELATIVE_PATH:-./kafka/kafka-topics-values.yaml}:/app/kafka-topics-values.yaml
+      - ${KAFKA_TOPIC_CONFIG_RELATIVE_PATH:-./jikkou/kafka-topics-values.yaml}:/app/kafka-topics-values.yaml
 
   kafka-schema-registry:
     profiles:
