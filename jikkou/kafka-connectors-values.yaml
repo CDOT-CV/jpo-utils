@@ -328,10 +328,9 @@ apps:
         keyField: key
       - topicName: topic.CmEventStateProgressionNotification
         collectionName: CmEventStateProgressionNotification
-<<<<<<< HEAD:kafka/kafka-connectors-values.yaml
         generateTimestamp: true
         timestampField: eventGeneratedAt
-	    - topicName: topic.CmIntersectionReferenceAlignmentNotificationAggregation
+      - topicName: topic.CmIntersectionReferenceAlignmentNotificationAggregation
         collectionName: CmIntersectionReferenceAlignmentNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
@@ -351,7 +350,4 @@ apps:
         collectionName: CmEventStateProgressionNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
-=======
-        useTimestamp: true
-        timestampField: eventGeneratedAt
->>>>>>> develop:jikkou/kafka-connectors-values.yaml
+
