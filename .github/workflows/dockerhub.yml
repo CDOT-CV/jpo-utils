@@ -1,11 +1,13 @@
 name: "DockerHub Build and Push"
 
 on:
-  push:
-    branches:
-      - "develop"
-      - "master"
-      - "release/*"
+  # push:
+  #   branches:
+  #     - "develop"
+  #     - "master"
+  #     - "release/*"
+  pull_request:
+      types: [opened, synchronize, reopened]
 jobs:
   dockerhub-jpo-deduplicator:
     runs-on: ubuntu-latest
