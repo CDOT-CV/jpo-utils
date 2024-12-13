@@ -23,7 +23,7 @@ ENV MAVEN_GITHUB_ORG=$MAVEN_GITHUB_ORG
 # Copy and Build Deduplicator
 WORKDIR /home
 COPY ./jpo-deduplicator/pom.xml ./jpo-deduplicator/
-COPY ./settings.xml ./jpo-deduplicator/
+COPY ./jpo-deduplicator/settings.xml ./jpo-deduplicator/
 
 WORKDIR /home/jpo-deduplicator
 RUN mvn -s settings.xml dependency:resolve
