@@ -1,0 +1,44 @@
+services:
+  deduplicator:
+    profiles:
+      - all
+      - deduplicator
+    build:
+      context: jpo-deduplicator
+      dockerfile: Dockerfile
+      args:
+        MAVEN_GITHUB_TOKEN: ${MAVEN_GITHUB_TOKEN:?error}
+        MAVEN_GITHUB_ORG: ${MAVEN_GITHUB_ORG:?error}
+    image: jpo-deduplicator:latest
+    restart: ${RESTART_POLICY}
+    environment:
+      DOCKER_HOST_IP: ${DOCKER_HOST_IP}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:?error}
+      spring.kafka.bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:?error}
+      enableProcessedMapDeduplication: ${ENABLE_PROCESSED_MAP_DEDUPLICATION}
+      enableProcessedMapWktDeduplication: ${ENABLE_PROCESSED_MAP_WKT_DEDUPLICATION}
+      enableOdeMapDeduplication: ${ENABLE_ODE_MAP_DEDUPLICATION}
+      enableOdeTimDeduplication: ${ENABLE_ODE_TIM_DEDUPLICATION}
+      enableOdeRawEncodedTimDeduplication: ${ENABLE_ODE_RAW_ENCODED_TIM_DEDUPLICATION}
+      enableProcessedSpatDeduplication: ${ENABLE_PROCESSED_SPAT_DEDUPLICATION}
+      enableOdeBsmDeduplication: ${ENABLE_ODE_BSM_DEDUPLICATION}
+
+
+
+    healthcheck:
+      test: ["CMD", "java", "-version"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+    depends_on:
+      kafka:
+        condition: service_healthy
+        required: false

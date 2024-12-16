@@ -133,8 +133,8 @@ apps:
         collectionName: OdeTimJson
         generateTimestamp: true
         connectorName: DeduplicatedOdeTimJson
-      - topicName: topic.OdeRawEncodedTIMJson
-        collectionName: OdeTimJson
+      - topicName: topic.DeduplicatedOdeRawEncodedTIMJson
+        collectionName: OdeRawEncodedTIMJson
         generateTimestamp: true
         connectorName: DeduplicatedOdeRawEncodedTIMJson
       - topicName: topic.DeduplicatedOdeBsmJson
