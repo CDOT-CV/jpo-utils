@@ -20,7 +20,7 @@ services:
       enableOdeMapDeduplication: ${ENABLE_ODE_MAP_DEDUPLICATION}
       enableOdeTimDeduplication: ${ENABLE_ODE_TIM_DEDUPLICATION}
       enableOdeRawEncodedTimDeduplication: ${ENABLE_ODE_RAW_ENCODED_TIM_DEDUPLICATION}
-      enableProcessedSpatDeduplication: ${KAFKA_TOPIC_CREATE_GEOJSONCONVERTER}
+      enableProcessedSpatDeduplication: ${ENABLE_PROCESSED_SPAT_DEDUPLICATION}
       enableOdeBsmDeduplication: ${ENABLE_ODE_BSM_DEDUPLICATION}
 
 
