@@ -59,6 +59,7 @@ apps:
       - topic.OdeTimJsonTMCFiltered
       - topic.OdeTimBroadcastJson
       - topic.J2735TimBroadcastJson
+      - topic.FilteredOdeTimJson
       - topic.OdeDriverAlertJson
       - topic.Asn1DecoderInput
       - topic.Asn1DecoderOutput
@@ -82,6 +83,7 @@ apps:
       - topic.OdePsmTxPojo
       - topic.OdePsmJson
     tableTopics: {}
+    customTopics: {}
   geojsonconverter:
     name: jpo-geojsonconverter
     streamTopics:
@@ -90,6 +92,7 @@ apps:
       - topic.ProcessedMapWKT
       - topic.ProcessedBsm
     tableTopics: {}
+    customTopics: {}
   conflictmonitor:
     name: jpo-conflictmonitor
     streamTopics:
@@ -111,6 +114,16 @@ apps:
       - topic.CmBsmIntersection
       - topic.CmKafkaStateChangeEvents
       - topic.CmTimestampDeltaEvent
+      - topic.CmSpatMinimumDataEventAggregation
+      - topic.CmMapMinimumDataEventAggregation
+      - topic.CmIntersectionReferenceAlignmentEventAggregation
+      - topic.CmSignalGroupAlignmentEventAggregation
+      - topic.CmSignalStateConflictEventAggregation
+      - topic.CmSpatTimeChangeDetailsEventAggregation
+      - topic.CmEventStateProgressionEventAggregation
+      - topic.CmBsmMessageCountProgressionEventAggregation
+      - topic.CmMapMessageCountProgressionEventAggregation
+      - topic.CmSpatMessageCountProgressionEventAggregation
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
@@ -137,6 +150,12 @@ apps:
       - topic.CmSpatRevisionCounterEvents
       - topic.CmBsmRevisionCounterEvents
       - topic.CmTimestampDeltaNotification
+      - topic.CmIntersectionReferenceAlignmentNotificationAggregation
+      - topic.CmSignalGroupAlignmentNotificationAggregation
+      - topic.CmSignalStateConflictNotificationAggregation
+      - topic.CmSpatTimeChangeDetailsNotificationAggregation
+      - topic.CmEventStateProgressionNotificationAggregation
+    customTopics: {}
   deduplicator:
     name: jpo-deduplicator
     streamTopics:
@@ -146,4 +165,19 @@ apps:
       - topic.DeduplicatedOdeTimJson
       - topic.DeduplicatedOdeRawEncodedTIMJson
       - topic.DeduplicatedOdeBsmJson    
-    tableTopics: {}  
+    tableTopics: {}
+    customTopics: {}
+  kafkaconnect:
+    name: jpo-kafka-connect
+    streamTopics: {}
+    tableTopics: {}
+    customTopics:
+      - topicName: topic.KafkaConnectConfigs
+        partitions: 1
+        cleanUpPolicy: compact
+      - topicName: topic.KafkaConnectOffsets
+        partitions: 20
+        cleanUpPolicy: compact
+      - topicName: topic.KafkaConnectStatus
+        partitions: 10
+        cleanUpPolicy: compact

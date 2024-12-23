@@ -1,0 +1,353 @@
+#======================================================================================
+# Kafka Connectors configuration settings
+#======================================================================================
+
+#--------------------------------------------------------------------------------------
+# Configuration parameters used to create kafka connectors to sync data from Kafka topics
+# to MongoDB collections.
+#   
+# Ref: https://docs.confluent.io/platform/current/connect/index.html#connect-connectors
+#--------------------------------------------------------------------------------------
+
+clusterName: "kafka-connect"
+connectorClass: "com.mongodb.kafka.connect.MongoSinkConnector"
+tasksMax: 1
+
+
+#--------------------------------------------------------------------------------------
+# Kafka Connectors are grouped by application.  Apps with the corresponding environment variable
+# equal to true are create or updated.
+#   - ode
+#   - geojsonconverter
+#   - conflictmonitor
+#
+# Some Kafka topics have a non-duplicated topic and a duplicated topic.  The duplicated topic will
+# used if the deduplicator is not enabled.
+#   IF env var: KAFKA_TOPIC_CREATE_DEDUPLICATOR = true
+#     - deduplicator
+#   ELSE
+#     - ode_duplicated
+#     - geojsonconverter_duplicated
+# 
+# The Kafka Connectors have the following configuration settings:
+#   Required settings:
+#   - topicName: The name of the Kafka topic to read from
+#   - collectionName: The name of the MongoDB collection to write to
+#   Optional settings:
+#   - generateTimestamp: If true, the connector will add a timestamp field to the document
+#   - connectorName: The name of the connector
+#   - useTimestamp: converts the "timestampField" field at the top level of the value to a BSON date
+#     - timestampField: The name of the timestamp field
+#   - useKey: If true, the connector will use the "keyField" as the document _id in MongoDB
+#     - keyField: The name of the key field
+#
+#--------------------------------------------------------------------------------------
+apps:
+  ode:
+    name: jpo-ode
+    connectors:
+      - topicName: topic.OdeRawEncodedBSMJson
+        collectionName: OdeRawEncodedBSMJson
+        generateTimestamp: true
+      - topicName: topic.OdeRawEncodedMAPJson
+        collectionName: OdeRawEncodedMAPJson
+        generateTimestamp: true
+      - topicName: topic.OdeRawEncodedSPATJson
+        collectionName: OdeRawEncodedSPATJson
+        generateTimestamp: true
+      - topicName: topic.OdeSpatJson
+        collectionName: OdeSpatJson
+        generateTimestamp: true
+      - topicName: topic.OdeTimJsonTMCFiltered
+        collectionName: OdeTimJsonTMCFiltered
+        generateTimestamp: true
+      - topicName: topic.OdeTimBroadcastJson
+        collectionName: OdeTimBroadcastJson
+        generateTimestamp: true
+      - topicName: topic.OdeTIMCertExpirationTimeJson
+        collectionName: OdeTIMCertExpirationTimeJson
+        generateTimestamp: true
+      - topicName: topic.OdeRawEncodedPSMJson
+        collectionName: OdeRawEncodedPSMJson
+        generateTimestamp: true
+      - topicName: topic.OdePsmJson
+        collectionName: OdePsmJson
+        generateTimestamp: true
+      - topicName: topic.OdeRawEncodedSRMJson
+        collectionName: OdeRawEncodedSRMJson
+        generateTimestamp: true
+      - topicName: topic.OdeSrmJson
+        collectionName: OdeSrmJson
+        generateTimestamp: true
+      - topicName: topic.OdeRawEncodedSSMJson
+        collectionName: OdeRawEncodedSSMJson
+        generateTimestamp: true
+      - topicName: topic.OdeSsmJson
+        collectionName: OdeSsmJson
+        generateTimestamp: true
+      - topicName: topic.OdeDriverAlertJson
+        collectionName: OdeDriverAlertJson
+        generateTimestamp: true
+  ode_duplicated:
+    name: ode-duplicated
+    connectors:
+      - topicName: topic.OdeMapJson
+        collectionName: OdeMapJson
+        generateTimestamp: true
+      - topicName: topic.OdeTimJson
+        collectionName: OdeTimJson
+        generateTimestamp: true
+      - topicName: topic.OdeBsmJson
+        collectionName: OdeBsmJson
+        generateTimestamp: true
+      - topicName: topic.OdeRawEncodedTIMJson
+        collectionName: OdeRawEncodedTIMJson
+        generateTimestamp: true
+  geojsonconverter:
+    name: geojsonconverter
+    connectors:
+      - topicName: topic.ProcessedBsm
+        collectionName: ProcessedBsm
+        generateTimestamp: true
+  geojsonconverter_duplicated:
+    name: geojsonconverter-duplicated
+    connectors:
+      - topicName: topic.ProcessedMap
+        collectionName: ProcessedMap
+        generateTimestamp: true
+      - topicName: topic.ProcessedSpat
+        collectionName: ProcessedSpat
+        generateTimestamp: true
+  deduplicator:
+    name: deduplicator
+    connectors:
+      - topicName: topic.DeduplicatedProcessedMap
+        collectionName: ProcessedMap
+        generateTimestamp: true
+        connectorName: DeduplicatedProcessedMap
+      - topicName: topic.DeduplicatedOdeMapJson
+        collectionName: OdeMapJson
+        generateTimestamp: true
+        connectorName: DeduplicatedOdeMapJson
+      - topicName: topic.DeduplicatedOdeTimJson
+        collectionName: OdeTimJson
+        generateTimestamp: true
+        connectorName: DeduplicatedOdeTimJson
+      - topicName: topic.DeduplicatedOdeRawEncodedTIMJson
+        collectionName: OdeRawEncodedTIMJson
+        generateTimestamp: true
+        connectorName: DeduplicatedOdeRawEncodedTIMJson
+      - topicName: topic.DeduplicatedOdeBsmJson
+        collectionName: OdeBsmJson
+        generateTimestamp: true
+        connectorName: DeduplicatedOdeBsmJson
+      - topicName: topic.DeduplicatedProcessedSpat
+        collectionName: ProcessedSpat
+        generateTimestamp: true
+        connectorName: DeduplicatedProcessedSpat
+  conflictmonitor:
+    name: conflictmonitor
+    connectors:
+      # Record Events
+      - topicName: topic.CmStopLinePassageEvent
+        collectionName: CmStopLinePassageEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmStopLineStopEvent
+        collectionName: CmStopLineStopEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSignalStateConflictEvents
+        collectionName: CmSignalStateConflictEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmIntersectionReferenceAlignmentEvents
+        collectionName: CmIntersectionReferenceAlignmentEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSignalGroupAlignmentEvents
+        collectionName: CmSignalGroupAlignmentEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmConnectionOfTravelEvent
+        collectionName: CmConnectionOfTravelEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmLaneDirectionOfTravelEvent
+        collectionName: CmLaneDirectionOfTravelEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatTimeChangeDetailsEvent
+        collectionName: CmSpatTimeChangeDetailsEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatMinimumDataEvents
+        collectionName: CmSpatMinimumDataEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmMapBroadcastRateEvents
+        collectionName: CmMapBroadcastRateEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmMapMinimumDataEvents
+        collectionName: CmMapMinimumDataEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatBroadcastRateEvents
+        collectionName: CmSpatBroadcastRateEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmTimestampDeltaEvent
+        collectionName: CmTimestampDeltaEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatMessageCountProgressionEvents
+        collectionName: CmSpatMessageCountProgressionEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmMapMessageCountProgressionEvents
+        collectionName: CmMapMessageCountProgressionEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmBsmMessageCountProgressionEvents
+        collectionName: CmBsmMessageCountProgressionEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatMinimumDataEventAggregation
+        collectionName: CmSpatMinimumDataEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmMapMinimumDataEventAggregation
+        collectionName: CmMapMinimumDataEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmIntersectionReferenceAlignmentEventAggregation
+        collectionName: CmIntersectionReferenceAlignmentEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSignalGroupAlignmentEventAggregation
+        collectionName: CmSignalGroupAlignmentEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSignalStateConflictEventAggregation
+        collectionName: CmSignalStateConflictEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatTimeChangeDetailsEventAggregation
+        collectionName: CmSpatTimeChangeDetailsEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmEventStateProgressionEventAggregation
+        collectionName: CmEventStateProgressionEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmBsmMessageCountProgressionEventAggregation
+        collectionName: CmBsmMessageCountProgressionEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmMapMessageCountProgressionEventAggregation
+        collectionName: CmMapMessageCountProgressionEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatMessageCountProgressionEventAggregation
+        collectionName: CmSpatMessageCountProgressionEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+
+      # Record BSM events:
+      - topicName: topic.CmBsmEvents
+        collectionName: CmBsmEvents
+        generateTimestamp: true
+      
+      # Record Assessments:
+      - topicName: topic.CmLaneDirectionOfTravelAssessment
+        collectionName: CmLaneDirectionOfTravelAssessment
+        useTimestamp: true
+        timestampField: assessmentGeneratedAt
+      - topicName: topic.CmConnectionOfTravelAssessment
+        collectionName: CmConnectionOfTravelAssessment
+        useTimestamp: true
+        timestampField: assessmentGeneratedAt
+      - topicName: topic.CmSignalStateEventAssessment
+        collectionName: CmSignalStateEventAssessment
+        useTimestamp: true
+        timestampField: assessmentGeneratedAt
+      - topicName: topic.CmStopLineStopAssessment
+        collectionName: CmStopLineStopAssessment
+        useTimestamp: true
+        timestampField: assessmentGeneratedAt
+      
+      # Record Notifications
+      - topicName: topic.CmSpatTimeChangeDetailsNotification
+        collectionName: CmSpatTimeChangeDetailsNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmLaneDirectionOfTravelNotification
+        collectionName: CmLaneDirectionOfTravelNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmConnectionOfTravelNotification
+        collectionName: CmConnectionOfTravelNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmAppHealthNotifications
+        collectionName: CmAppHealthNotifications
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmSignalStateConflictNotification
+        collectionName: CmSignalStateConflictNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmSignalGroupAlignmentNotification
+        collectionName: CmSignalGroupAlignmentNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmNotification
+        collectionName: CmNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+        useKey: true
+        keyField: key
+      - topicName: topic.CmStopLineStopNotification
+        collectionName: CmStopLineStopNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+        useKey: true
+        keyField: key
+      - topicName: topic.CmStopLinePassageNotification
+        collectionName: CmStopLinePassageNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+        useKey: true
+        keyField: key
+      - topicName: topic.CmTimestampDeltaNotification
+        collectionName: CmTimestampDeltaNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+        useKey: true
+        keyField: key
+      - topicName: topic.CmEventStateProgressionNotification
+        collectionName: CmEventStateProgressionNotification
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmIntersectionReferenceAlignmentNotificationAggregation
+        collectionName: CmIntersectionReferenceAlignmentNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmSignalGroupAlignmentNotificationAggregation
+        collectionName: CmSignalGroupAlignmentNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmSignalStateConflictNotificationAggregation
+        collectionName: CmSignalStateConflictNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmSpatTimeChangeDetailsNotificationAggregation
+        collectionName: CmSpatTimeChangeDetailsNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmEventStateProgressionNotificationAggregation
+        collectionName: CmEventStateProgressionNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+
