@@ -42,7 +42,7 @@ enableOdeRawEncodedTimDeduplication: true
 # Ode Bsm Json Configuration
 kafkaTopicOdeBsmJson: topic.OdeBsmJson
 kafkaTopicDeduplicatedOdeBsmJson: topic.DeduplicatedOdeBsmJson
-enableOdeBsmDeduplication: false
+enableOdeBsmDeduplication: true
 odeBsmMaximumTimeDelta: 10000 # Milliseconds
 odeBsmMaximumPositionDelta: 1 # Meter
 odeBsmAlwaysIncludeAtSpeed: 1 # Meter / Second
