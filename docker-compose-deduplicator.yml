@@ -7,14 +7,14 @@ services:
       context: jpo-deduplicator
       dockerfile: Dockerfile
       args:
-        MAVEN_GITHUB_TOKEN: ${MAVEN_GITHUB_TOKEN:?error}
-        MAVEN_GITHUB_ORG: ${MAVEN_GITHUB_ORG:?error}
+        MAVEN_GITHUB_TOKEN: ${MAVEN_GITHUB_TOKEN}
+        MAVEN_GITHUB_ORG: ${MAVEN_GITHUB_ORG}
     image: jpo-deduplicator:latest
     restart: ${RESTART_POLICY}
     environment:
       DOCKER_HOST_IP: ${DOCKER_HOST_IP}
-      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:?error}
-      spring.kafka.bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:?error}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      spring.kafka.bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
       enableProcessedMapDeduplication: ${ENABLE_PROCESSED_MAP_DEDUPLICATION}
       enableProcessedMapWktDeduplication: ${ENABLE_PROCESSED_MAP_WKT_DEDUPLICATION}
       enableOdeMapDeduplication: ${ENABLE_ODE_MAP_DEDUPLICATION}
@@ -22,9 +22,6 @@ services:
       enableOdeRawEncodedTimDeduplication: ${ENABLE_ODE_RAW_ENCODED_TIM_DEDUPLICATION}
       enableProcessedSpatDeduplication: ${ENABLE_PROCESSED_SPAT_DEDUPLICATION}
       enableOdeBsmDeduplication: ${ENABLE_ODE_BSM_DEDUPLICATION}
-
-
-
     healthcheck:
       test: ["CMD", "java", "-version"]
       interval: 10s
