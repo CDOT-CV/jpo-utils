@@ -82,6 +82,7 @@ apps:
       - topic.OdeRawEncodedPSMJson
       - topic.OdePsmTxPojo
       - topic.OdePsmJson
+      - topic.OdeTimRxJson
     tableTopics: {}
     customTopics: {}
   geojsonconverter:
