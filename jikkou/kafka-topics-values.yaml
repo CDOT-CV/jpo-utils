@@ -83,11 +83,6 @@ apps:
       - topic.OdePsmTxPojo
       - topic.OdePsmJson
       - topic.OdeTimRxJson
-      - topic.OdeDNMsgJson
-      - topic.OdeBsmDuringEventPojo
-      - topic.OdeBsmRxPojo
-      - topic.OdeBsmTxPojo
-      - topic.OdeTimBroadcastPojo
     tableTopics: {}
     customTopics: {}
   geojsonconverter:
