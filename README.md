@@ -21,10 +21,11 @@ The JPO ITS utilities repository serves as a central location for deploying open
     - [Configuration](#configuration)
     - [Configure Kafka Connector Creation](#configure-kafka-connector-creation)
     - [Quick Run](#quick-run-2)
-  - [5. Deduplicator](#5-jpo-Deduplicator)
-    - [Deduplication Configuration](#deduplication-config)
-    - [Github Token Generation](#generate-a-github-token)
+  - [5. jpo-deduplicator](#5-jpo-deduplicator)
+    - [Deduplication Config](#deduplication-config)
+    - [Generate a Github Token](#generate-a-github-token)
     - [Quick Run](#quick-run-3)
+  - [Security Notice](#security-notice)
 
 
 <a name="base-configuration"></a>
@@ -256,3 +257,12 @@ For local development the following steps are also required
    4. You should now see only one copy of the map message sent. 
 
 [Back to top](#toc)
+
+## Security Notice
+
+While default passwords are provided for development convenience, it is **strongly recommended** to:
+
+1. Change all passwords before deploying to any environment
+2. Never use default passwords in production
+3. Use secure password generation and management practices
+4. Consider using Docker secrets or environment management tools for production deployments
