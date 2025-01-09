@@ -206,9 +206,7 @@ The JPO-Deduplicator is a Kafka Java spring-boot application designed to reduce 
 
 ### Deduplication Config
 
-When running the jpo-deduplication as a submodule in jpo-utils, the deduplicator will automatically turn on deduplication for a topic when that topic is created. For example if the KAFKA_TOPIC_CREATE_GEOJSONCONVERTER environment variable is set to true, the deduplicator will start performing deduplication for ProcessedMap, ProcessedMapWKT, and ProcessedSpat data. 
-
-To manually configure deduplication for a topic, the following environment variables can also be used.
+When running the jpo-deduplication as a submodule in jpo-utils, the deduplicator will automatically configure an algorithm as enabled or disabled depending on if the corresponding subcomponent is also active.  For example if the KAFKA_TOPIC_CREATE_GEOJSONCONVERTER environment variable is set to true, the deduplicator will start performing deduplication for ProcessedMap, ProcessedMapWKT, and ProcessedSpat data. If the KAFKA_TOPIC_CREATE_GEOJSONCONVERTER is set to false, the deduplicator will disable deduplication for those same topics. To manually configure deduplication for a topic, the following environment variables can also be used. If no value is passed for a given environment variable, the corresponding deduplication algorithm will default to enabled.
 
 | Environment Variable | Description |
 |---|---|
