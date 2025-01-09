@@ -350,4 +350,14 @@ apps:
         collectionName: CmEventStateProgressionNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
-
+  mecdeposit:
+    name: mecdeposit
+    connectors:
+      - topicName: topic.MecEtxMqttDepositMetrics
+        collectionName: MecEtxMqttDepositMetrics
+        useTimestamp: true
+        timestampField: odeReceivedAt
+      - topicName: topic.MecEtxApiDepositMetrics
+        collectionName: MecEtxApiDepositMetrics
+        useTimestamp: true
+        timestampField: odeReceivedAt

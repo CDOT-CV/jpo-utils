@@ -66,7 +66,9 @@ services:
     image: mongo:8
     hostname: mongo_setup
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+        required: false
     restart: on-failure
     deploy:
       resources:
@@ -88,7 +90,7 @@ services:
       CONNECT_CREATE_GEOJSONCONVERTER: ${CONNECT_CREATE_GEOJSONCONVERTER}
       CONNECT_CREATE_CONFLICTMONITOR: ${CONNECT_CREATE_CONFLICTMONITOR}
       CONNECT_CREATE_DEDUPLICATOR: ${CONNECT_CREATE_DEDUPLICATOR}
-      
+      CONNECT_CREATE_MECDEPOSIT: ${CONNECT_CREATE_MECDEPOSIT}
     entrypoint: ["/bin/bash", "setup_mongo.sh"]
     volumes:
       - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH}:/setup_mongo.sh

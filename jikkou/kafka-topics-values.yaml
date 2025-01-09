@@ -183,3 +183,10 @@ apps:
       - topicName: topic.KafkaConnectStatus
         partitions: 10
         cleanUpPolicy: compact
+  mecdeposit:
+    name: jpo-mecdeposit
+    streamTopics:
+      - topic.MecEtxMqttDepositMetrics
+      - topic.MecEtxApiDepositMetrics
+    tableTopics: {}
+    customTopics: {}
