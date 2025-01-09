@@ -8,17 +8,8 @@ ARG MAVEN_GITHUB_ORG
 ENV MAVEN_GITHUB_TOKEN=$MAVEN_GITHUB_TOKEN
 ENV MAVEN_GITHUB_ORG=$MAVEN_GITHUB_ORG
 
-# COPY ./jpo-conflictmonitor/pom.xml ./jpo-conflictmonitor/
-# COPY ./settings.xml ./jpo-conflictmonitor/
-
-# # Copy and Build Conflict Monitor
-# # Download dependencies alone to cache them first
-# WORKDIR /home/jpo-conflictmonitor
-# RUN mvn -s settings.xml dependency:resolve
-
-# # Copy the source code and build the conflict monitor
-# COPY ./jpo-conflictmonitor/src ./src
-# RUN mvn -s settings.xml install -DskipTests -Ppackage-jar
+RUN test -n "$MAVEN_GITHUB_TOKEN" || (echo "Error: MAVEN_GITHUB_TOKEN cannot be empty" && exit 1)
+RUN test -n "$MAVEN_GITHUB_ORG" || (echo "Error: MAVEN_GITHUB_ORG cannot be empty" && exit 1)
 
 # Copy and Build Deduplicator
 WORKDIR /home
