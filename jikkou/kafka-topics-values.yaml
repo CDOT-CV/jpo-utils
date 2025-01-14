@@ -186,7 +186,6 @@ apps:
   mecdeposit:
     name: jpo-mecdeposit
     streamTopics:
-      - topic.MecEtxMqttDepositMetrics
-      - topic.MecEtxApiDepositMetrics
+      - topic.MecDepositMetrics
     tableTopics: {}
     customTopics: {}
