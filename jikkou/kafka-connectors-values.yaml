@@ -355,5 +355,4 @@ apps:
     connectors:
       - topicName: topic.MecDepositMetrics
         collectionName: MecDepositMetrics
-        useTimestamp: true
-        timestampField: odeReceivedAt
+        generateTimestamp: true
