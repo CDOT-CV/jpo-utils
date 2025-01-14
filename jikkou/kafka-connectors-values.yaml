@@ -353,11 +353,7 @@ apps:
   mecdeposit:
     name: mecdeposit
     connectors:
-      - topicName: topic.MecEtxMqttDepositMetrics
-        collectionName: MecEtxMqttDepositMetrics
-        useTimestamp: true
-        timestampField: odeReceivedAt
-      - topicName: topic.MecEtxApiDepositMetrics
-        collectionName: MecEtxApiDepositMetrics
+      - topicName: topic.MecDepositMetrics
+        collectionName: MecDepositMetrics
         useTimestamp: true
         timestampField: odeReceivedAt
