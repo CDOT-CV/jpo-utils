@@ -3,7 +3,7 @@ name: jpo-utils
 on: [pull_request, push]
 
 jobs:  
-  build_intersection_api:
+  build-deduplicator:
     runs-on: ubuntu-latest
     container:
       image: maven:3.9.9-eclipse-temurin-21
