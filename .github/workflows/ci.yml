@@ -3,7 +3,7 @@ name: jpo-utils
 on: [pull_request, push]
 
 jobs:  
-  build-deduplicator:
+  deduplicator-test:
     runs-on: ubuntu-latest
     container:
       image: maven:3.9.9-eclipse-temurin-21
@@ -38,13 +38,3 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/jpo-deduplicator/jpo-deduplicator
           mvn verify -s ./settings.xml
-
-      - name: Archive Test Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: intersection-api-test-results
-          path: $GITHUB_WORKSPACE/jpo-deduplicator/jpo-deduplicator/target/surefire-reports
-
-      - name: Clean up
-        run: |
-          rm -rf $GITHUB_WORKSPACE/jpo-deduplicator/jpo-deduplicator/target
