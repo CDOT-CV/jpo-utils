@@ -17,32 +17,32 @@ log4j.logger.org.apache.kafka: OFF
 # Processed Map Configuration
 kafkaTopicProcessedMap: topic.ProcessedMap
 kafkaTopicDeduplicatedProcessedMap: topic.DeduplicatedProcessedMap
-enableProcessedMapDeduplication: false
+enableProcessedMapDeduplication: true
 
 # Processed Map WKT Configuration
 kafkaTopicProcessedMapWKT: topic.ProcessedMapWKT
 kafkaTopicDeduplicatedProcessedMapWKT: topic.DeduplicatedProcessedMapWKT
-enableProcessedMapWktDeduplication: false
+enableProcessedMapWktDeduplication: true
 
 # Ode Map Json Configuration
 kafkaTopicOdeMapJson: topic.OdeMapJson
 kafkaTopicDeduplicatedOdeMapJson: topic.DeduplicatedOdeMapJson
-enableOdeMapDeduplication: false
+enableOdeMapDeduplication: true
 
 # Ode Tim Json Configuration
 kafkaTopicOdeTimJson: topic.OdeTimJson
 kafkaTopicDeduplicatedOdeTimJson: topic.DeduplicatedOdeTimJson
-enableOdeTimDeduplication: false
+enableOdeTimDeduplication: true
 
 # Ode Raw Encoded Tim Json Configuration
 kafkaTopicOdeRawEncodedTimJson: topic.OdeRawEncodedTIMJson
 kafkaTopicDeduplicatedOdeRawEncodedTimJson: topic.DeduplicatedOdeRawEncodedTIMJson
-enableOdeRawEncodedTimDeduplication: false
+enableOdeRawEncodedTimDeduplication: true
 
 # Ode Bsm Json Configuration
 kafkaTopicOdeBsmJson: topic.OdeBsmJson
 kafkaTopicDeduplicatedOdeBsmJson: topic.DeduplicatedOdeBsmJson
-enableOdeBsmDeduplication: false
+enableOdeBsmDeduplication: true
 odeBsmMaximumTimeDelta: 10000 # Milliseconds
 odeBsmMaximumPositionDelta: 1 # Meter
 odeBsmAlwaysIncludeAtSpeed: 1 # Meter / Second
@@ -50,7 +50,7 @@ odeBsmAlwaysIncludeAtSpeed: 1 # Meter / Second
 # Processed Map Configuration
 kafkaTopicProcessedSpat: topic.ProcessedSpat
 kafkaTopicDeduplicatedProcessedSpat: topic.DeduplicatedProcessedSpat
-enableProcessedSpatDeduplication: false
+enableProcessedSpatDeduplication: true 
 
 
 # Amount of time to wait to try and increase batching

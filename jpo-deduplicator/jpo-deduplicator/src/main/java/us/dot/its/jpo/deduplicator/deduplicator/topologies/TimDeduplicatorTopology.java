@@ -7,8 +7,12 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.KafkaStreams.StateListener;
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 
-import us.dot.its.jpo.deduplicator.deduplicator.serialization.JsonSerdes;
 import us.dot.its.jpo.geojsonconverter.DateJsonMapper;
+import us.dot.its.jpo.ode.model.OdeTimData;
+import us.dot.its.jpo.ode.model.OdeTimMetadata;
+import us.dot.its.jpo.ode.model.OdeTimPayload;
+import us.dot.its.jpo.ode.plugin.j2735.OdeTravelerInformationMessage;
+import us.dot.its.jpo.ode.plugin.j2735.travelerinformation.TravelerInformation;
 
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.Stores;
@@ -23,6 +27,7 @@ import java.util.Properties;
 
 import us.dot.its.jpo.deduplicator.DeduplicatorProperties;
 import us.dot.its.jpo.deduplicator.deduplicator.processors.suppliers.OdeTimJsonProcessorSupplier;
+import us.dot.its.jpo.deduplicator.deduplicator.serialization.JsonSerdes;
 
 
 public class TimDeduplicatorTopology {
@@ -65,37 +70,34 @@ public class TimDeduplicatorTopology {
     public Topology buildTopology() {
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<Void, JsonNode> inputStream = builder.stream(props.getKafkaTopicOdeTimJson(),
-                Consumed.with(Serdes.Void(), JsonSerdes.JSON()));
+        KStream<String, OdeTimData> inputStream = builder.stream(props.getKafkaTopicOdeTimJson(),
+                Consumed.with(Serdes.String(), JsonSerdes.OdeTim()));
 
         builder.addStateStore(Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(props.getKafkaStateStoreOdeTimJsonName()),
-                Serdes.String(), JsonSerdes.JSON()));
+                Serdes.String(), JsonSerdes.OdeTim()));
 
-        
-
-        KStream<String, JsonNode> timRekeyedStream = inputStream.selectKey((key, value) -> {
+        KStream<String, OdeTimData> timRekeyedStream = inputStream.selectKey((key, value) -> {
             try {
-                
-                JsonNode travellerInformation = value.get("payload")
-                        .get("data")
-                        .get("MessageFrame")
-                        .get("value")
-                        .get("TravelerInformation");
 
-                String rsuIP = value.get("metadata").get("originIp").asText();
-                String packetId = travellerInformation.get("packetID").asText();
-                String msgCnt = travellerInformation.get("msgCnt").asText();
+                TravelerInformation travellerInformation = (TravelerInformation)value.getPayload().getData();
+            
+
+                String rsuIP = ((OdeTimMetadata)value.getMetadata()).getOriginIp();
+                // String packetId = ((OdeTimPayload)value.getPayload()).getData();//   .get("packetID").asText();
+                String packetId = travellerInformation.getPacketID().toString();
+                int msgCnt = travellerInformation.getMsgCnt().intValue();
 
                 String newKey = rsuIP + "_" + packetId + "_" + msgCnt;
                 return newKey;
             } catch (Exception e) {
+                System.out.println(e);
                 return "";
             }
-        }).repartition(Repartitioned.with(Serdes.String(), JsonSerdes.JSON()));
+        }).repartition(Repartitioned.with(Serdes.String(), JsonSerdes.OdeTim()));
 
-        KStream<String, JsonNode> deduplicatedStream = timRekeyedStream.process(new OdeTimJsonProcessorSupplier(props), props.getKafkaStateStoreOdeTimJsonName());
+        KStream<String, OdeTimData> deduplicatedStream = timRekeyedStream.process(new OdeTimJsonProcessorSupplier(props), props.getKafkaStateStoreOdeTimJsonName());
 
-        deduplicatedStream.to(props.getKafkaTopicDeduplicatedOdeTimJson(), Produced.with(Serdes.String(), JsonSerdes.JSON()));
+        deduplicatedStream.to(props.getKafkaTopicDeduplicatedOdeTimJson(), Produced.with(Serdes.String(), JsonSerdes.OdeTim()));
 
         return builder.build();
 

@@ -67,7 +67,6 @@ public class ProcessedSpatDeduplicatorTopology {
         
         KStream<String, ProcessedSpat> deduplicatedStream = inputStream.process(new ProcessedSpatProcessorSupplier(props), props.getKafkaStateStoreProcessedSpatName());
         
-        deduplicatedStream.print(Printed.toSysOut());
 
         deduplicatedStream.to(props.getKafkaTopicDeduplicatedProcessedSpat(), Produced.with(Serdes.String(), JsonSerdes.ProcessedSpat()));
 

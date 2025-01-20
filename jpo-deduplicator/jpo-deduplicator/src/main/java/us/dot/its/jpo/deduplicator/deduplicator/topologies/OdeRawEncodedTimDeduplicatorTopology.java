@@ -83,7 +83,6 @@ public class OdeRawEncodedTimDeduplicatorTopology {
 
         KStream<String, JsonNode> timRekeyedStream = inputStream.selectKey((key, value)->{
             try{
-
                 String messageBytes = value.get("payload")
                     .get("data")
                     .get("bytes").asText();
