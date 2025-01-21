@@ -1,4 +1,4 @@
-name: jpo-utils
+name: CI
 
 on:
   pull_request:
@@ -8,31 +8,16 @@ on:
 jobs:  
   deduplicator-test:
     runs-on: ubuntu-latest
-    container:
-      image: maven:3.9.9-eclipse-temurin-21
-      options: --user root
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}-${{ hashFiles('**/settings.xml') }}-${{ runner.os }}-java-21
-          restore-keys: |
-            ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}-${{ runner.os }}-java-21
-            ${{ runner.os }}-maven-${{ runner.os }}-java-21
-            ${{ runner.os }}-maven
-
-      - name: Install Dependencies
-        env:
-          MAVEN_GITHUB_TOKEN: ${{ secrets.MAVEN_GITHUB_TOKEN }}
-          MAVEN_GITHUB_ORG: ${{ github.repository_owner }}
-        run: |
-          cd $GITHUB_WORKSPACE/jpo-deduplicator/jpo-deduplicator
-          mvn clean install -DskipTests -s ./settings.xml
-          mvn dependency:go-offline -s ./settings.xml
+          java-version: "21"
+          distribution: "temurin"
+          cache: 'maven'
 
       - name: Run tests
         env:

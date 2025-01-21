@@ -60,7 +60,7 @@ jobs:
       - name: Build
         uses: docker/build-push-action@v3
         with:
-          context: jpo-jikkou
+          context: jikkou
           push: true
           tags: usdotjpoode/jpo-jikkou:${{ env.TAG }}
           cache-from: type=gha
