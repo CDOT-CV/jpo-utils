@@ -61,6 +61,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: jikkou
+          file: Dockerfile.jikkou
           push: true
           tags: usdotjpoode/jpo-jikkou:${{ env.TAG }}
           cache-from: type=gha
