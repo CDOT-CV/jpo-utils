@@ -208,9 +208,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
+                <!-- <configuration>
                     <jvmArguments>@{argLine}</jvmArguments>
-                </configuration>
+                </configuration> -->
                 <executions>
                     <execution>
                         <id>build-info</id>

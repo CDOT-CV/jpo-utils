@@ -2,12 +2,12 @@ package us.dot.its.jpo.deduplicator.deduplicator.processors.suppliers;
 
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.ProcessorSupplier;
-import com.fasterxml.jackson.databind.JsonNode;
 
 import us.dot.its.jpo.deduplicator.DeduplicatorProperties;
 import us.dot.its.jpo.deduplicator.deduplicator.processors.OdeTimJsonProcessor;
+import us.dot.its.jpo.ode.model.OdeTimData;
 
-public class OdeTimJsonProcessorSupplier implements ProcessorSupplier<String, JsonNode, String, JsonNode> {
+public class OdeTimJsonProcessorSupplier implements ProcessorSupplier<String, OdeTimData, String, OdeTimData> {
     
     String storeName;
     DeduplicatorProperties props;
@@ -16,7 +16,7 @@ public class OdeTimJsonProcessorSupplier implements ProcessorSupplier<String, Js
     }
 
     @Override
-    public Processor<String, JsonNode, String, JsonNode> get() {
+    public Processor<String, OdeTimData, String, OdeTimData> get() {
         return new OdeTimJsonProcessor(props);
     }
 }

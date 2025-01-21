@@ -4,11 +4,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import us.dot.its.jpo.deduplicator.DeduplicatorProperties;
+import us.dot.its.jpo.ode.model.OdeTimData;
+import us.dot.its.jpo.ode.model.OdeTimMetadata;
 
-public class OdeTimJsonProcessor extends DeduplicationProcessor<JsonNode>{
+public class OdeTimJsonProcessor extends DeduplicationProcessor<OdeTimData>{
 
     DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
 
@@ -20,9 +20,10 @@ public class OdeTimJsonProcessor extends DeduplicationProcessor<JsonNode>{
 
 
     @Override
-    public Instant getMessageTime(JsonNode message) {
+    public Instant getMessageTime(OdeTimData message) {
         try {
-            String time = message.get("metadata").get("odeReceivedAt").asText();
+            // String time = message.get("metadata").get("odeReceivedAt").asText();
+            String time = ((OdeTimMetadata)message.getMetadata()).getOdeReceivedAt();
             return Instant.from(formatter.parse(time));
         } catch (Exception e) {
             return Instant.ofEpochMilli(0);
@@ -30,7 +31,7 @@ public class OdeTimJsonProcessor extends DeduplicationProcessor<JsonNode>{
     }
 
     @Override
-    public boolean isDuplicate(JsonNode lastMessage, JsonNode newMessage) {
+    public boolean isDuplicate(OdeTimData lastMessage, OdeTimData newMessage) {
         Instant oldValueTime = getMessageTime(lastMessage);
         Instant newValueTime = getMessageTime(newMessage);
 

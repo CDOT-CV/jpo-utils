@@ -10,7 +10,7 @@ import us.dot.its.jpo.geojsonconverter.serialization.serializers.JsonSerializer;
 import us.dot.its.jpo.ode.model.OdeTimData;
 
 public class JsonSerdes {
-    public static Serde<OdeTimData> Tim() {
+    public static Serde<OdeTimData> OdeTim() {
         return Serdes.serdeFrom(
             new JsonSerializer<OdeTimData>(), 
             new JsonDeserializer<>(OdeTimData.class));

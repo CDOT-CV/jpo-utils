@@ -47,6 +47,7 @@ public class DeduplicatorServiceController {
         try {
 
             if(props.isEnableProcessedMapDeduplication()){
+                logger.info("Starting Processed Map Deduplicator");
                 ProcessedMapDeduplicatorTopology processedMapDeduplicatorTopology = new ProcessedMapDeduplicatorTopology(
                     props,
                     props.createStreamProperties("ProcessedMapDeduplicator")
@@ -55,6 +56,7 @@ public class DeduplicatorServiceController {
             }
             
             if(props.isEnableProcessedMapWktDeduplication()){
+                logger.info("Starting Processed Map WKT Deduplicator");
                 ProcessedMapWktDeduplicatorTopology processedMapWktDeduplicatorTopology = new ProcessedMapWktDeduplicatorTopology(
                     props,
                     props.createStreamProperties("ProcessedMapWKTdeduplicator")
@@ -63,6 +65,7 @@ public class DeduplicatorServiceController {
             }
             
             if(props.isEnableProcessedMapDeduplication()){
+                logger.info("Starting Map Deduplicator");
                 MapDeduplicatorTopology mapDeduplicatorTopology = new MapDeduplicatorTopology(
                     props,
                     props.createStreamProperties("MapDeduplicator")
@@ -71,6 +74,7 @@ public class DeduplicatorServiceController {
             }
             
             if(props.isEnableOdeTimDeduplication()){
+                logger.info("Starting Tim Deduplicator");
                 TimDeduplicatorTopology timDeduplicatorTopology = new TimDeduplicatorTopology(
                     props,
                     props.createStreamProperties("TimDeduplicator")
@@ -79,6 +83,7 @@ public class DeduplicatorServiceController {
             }
 
             if(props.isEnableOdeRawEncodedTimDeduplication()){
+                logger.info("Starting Raw Encoded TIM Deduplicator");
                 OdeRawEncodedTimDeduplicatorTopology odeRawEncodedTimDeduplicatorTopology = new OdeRawEncodedTimDeduplicatorTopology(
                     props,
                     props.createStreamProperties("OdeRawEncodedTimDeduplicator")
@@ -87,6 +92,7 @@ public class DeduplicatorServiceController {
             }
 
             if(props.isEnableProcessedSpatDeduplication()){
+                logger.info("Starting Processed Spat Deduplicator");
                 ProcessedSpatDeduplicatorTopology processedSpatDeduplicatorTopology = new ProcessedSpatDeduplicatorTopology(
                     props,
                     props.createStreamProperties("ProcessedSpatDeduplicator")
@@ -95,6 +101,7 @@ public class DeduplicatorServiceController {
             }
 
             if(props.isEnableOdeBsmDeduplication()){
+                logger.info("Starting BSM Deduplicator");
                 BsmDeduplicatorTopology bsmDeduplicatorTopology = new BsmDeduplicatorTopology(props);
                 bsmDeduplicatorTopology.start();
             }

@@ -121,7 +121,7 @@ services:
       - kafka_full
       - kafka_ui
     hostname: kafka-ui
-    image: ghcr.io/kafbat/kafka-ui:v1.0.0
+    image: ghcr.io/kafbat/kafka-ui:v1.1.0
     restart: ${RESTART_POLICY}
     deploy:
       resources:
