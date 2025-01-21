@@ -24,3 +24,31 @@ jobs:
             MAVEN_GITHUB_TOKEN: ${{ secrets.MAVEN_GITHUB_TOKEN }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  
+  jpo-jikkou:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: jpo-jikkou
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+  
+  jpo-kafka-connect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: kafka-connect
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

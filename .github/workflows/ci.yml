@@ -1,6 +1,9 @@
 name: jpo-utils
 
-on: [pull_request, push]
+on:
+  pull_request:
+    paths:
+      - 'jpo-deduplicator/**'
 
 jobs:  
   deduplicator-test:
