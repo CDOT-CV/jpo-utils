@@ -8,6 +8,9 @@ services:
     image: mongo:8
     hostname: mongo 
     restart: ${RESTART_POLICY}
+    env_file:
+      - path: ./sample.env
+        required: true
     deploy:
       resources:
         limits:
@@ -106,6 +109,9 @@ services:
     image: mongo-express:1.0.2-18
     hostname: mongo-express
     restart: ${RESTART_POLICY}
+    env_file:
+      - path: ./sample.env
+        required: true
     deploy:
       resources:
         limits:
