@@ -350,4 +350,9 @@ apps:
         collectionName: CmEventStateProgressionNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
-
+  mecdeposit:
+    name: mecdeposit
+    connectors:
+      - topicName: topic.MecDepositMetrics
+        collectionName: MecDepositMetrics
+        generateTimestamp: true
