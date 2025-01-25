@@ -16,7 +16,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: jikkou
-          file: Dockerfile.jikkou
+          file: jikkou/Dockerfile.jikkou
           cache-from: type=gha
           cache-to: type=gha,mode=max
   
