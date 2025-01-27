@@ -40,3 +40,7 @@ Enhancements in this release:
 - USDOT PR 25: Updating version for kafka ui to latest release
 - CDOT PR 7: Tim compatibility and CI updates
 - CDOT PR 8: Jpo deduplicator removal
+
+
+### **NOTES**
+- The jpo-deduplicator was added to the jpo-utils during the development of this release but has been since transferred to it's own repository: [jpo-deduplicator](https://github.com/usdot-jpo-ode/jpo-deduplicator)
