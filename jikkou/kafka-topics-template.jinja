@@ -2,7 +2,7 @@
 {% macro create_topics(app) %}
 
 {# Stream Topics #}
-{% for topicName in app.streamTopics %}
+{% for topicName in app.streamTopics | default([]) %}
 ---
 apiVersion: "kafka.jikkou.io/v1beta2"
 kind: KafkaTopic
@@ -20,7 +20,7 @@ spec:
 {% endfor %}
 
 {# Table Topics #}
-{% for topicName in app.tableTopics %}
+{% for topicName in app.tableTopics | default([]) %}
 ---
 apiVersion: "kafka.jikkou.io/v1beta2"
 kind: KafkaTopic
@@ -37,7 +37,27 @@ spec:
     delete.retention.ms: {{ system.env.KAFKA_TOPIC_DELETE_RETENTION_MS | default(values.deleteRetentionMs) }}
 {% endfor %}
 
+{# macro not needed at the moment but it allows for more custom topic creation #}
+{% for topic in app.customTopics | default([]) %}
+---
+apiVersion: "kafka.jikkou.io/v1beta2"
+kind: KafkaTopic
+metadata:
+  name: "{{ topic.topicName }}"
+  labels: 
+    app: "{{ app.name }}"
+spec:
+  partitions: {{ topic.partitions | default(values.partitions) }}
+  replicas: {{ system.env.KAFKA_TOPIC_REPLICAS | default(values.replicas) }}
+  configs:
+    cleanup.policy: {{ topic.cleanUpPolicy | default(delete) }}
+    min.insync.replicas: {{ system.env.KAFKA_TOPIC_MIN_INSYNC_REPLICAS | default(values.minInsyncReplicas) }}
+    delete.retention.ms: {{ system.env.KAFKA_TOPIC_DELETE_RETENTION_MS | default(values.deleteRetentionMs) }}
+{% endfor %}
+
 {% endmacro %}
+
+{{ create_topics(values.apps.kafkaconnect) }}
 
 {#-------  Create topics for apps with env variable = true ----------#}
 {% if system.env.KAFKA_TOPIC_CREATE_ODE %}
@@ -56,5 +76,6 @@ spec:
 {{ create_topics(values.apps.deduplicator) }}
 {% endif %}
 
-
-
+{% if system.env.KAFKA_TOPIC_CREATE_MECDEPOSIT %}
+{{ create_topics(values.apps.mecdeposit) }}
+{% endif %}

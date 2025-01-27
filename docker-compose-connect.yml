@@ -16,26 +16,33 @@ services:
           memory: 4G
     ports:
       - "8083:8083"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/connectors"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
     depends_on:
       mongo:
         condition: service_healthy
+        required: false
+      kafka:
+        condition: service_healthy
+        required: false
     environment:
-      MONGO_URI: ${MONGO_URI}
-      MONGO_DB_NAME: ${MONGO_DB_NAME}
       CONNECT_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: kafka-connect-group
-      CONNECT_CONFIG_STORAGE_TOPIC: topic.kafka-connect-configs
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_CONFIG_STORAGE_CLEANUP_POLICY: compact
+      # Topics are created with jikkou in the kafka-setup service
+      CONNECT_CONFIG_STORAGE_TOPIC: topic.KafkaConnectConfigs
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: -1
       CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
-      CONNECT_OFFSET_STORAGE_TOPIC: topic.kafka-connect-offsets
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_TOPIC: topic.KafkaConnectOffsets
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: -1
       CONNECT_OFFSET_STORAGE_CLEANUP_POLICY: compact
-      CONNECT_STATUS_STORAGE_TOPIC: topic.kafka-connect-status
+      CONNECT_STATUS_STORAGE_TOPIC: topic.KafkaConnectStatus
       CONNECT_STATUS_STORAGE_CLEANUP_POLICY: compact
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: -1
       CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
@@ -43,5 +50,39 @@ services:
       CONNECT_LOG4J_ROOT_LOGLEVEL: ${CONNECT_LOG_LEVEL}
       CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=${CONNECT_LOG_LEVEL},org.reflections=${CONNECT_LOG_LEVEL},com.mongodb.kafka=${CONNECT_LOG_LEVEL}"
       CONNECT_PLUGIN_PATH: /usr/share/confluent-hub-components
+
+  kafka-connect-setup:
+    profiles:
+      - all
+      - kafka_connect
+      - kafka_connect_standalone
+      - kafka_connect_setup
+    image: jpo-jikkou
+    build:
+      context: jikkou
+      dockerfile: Dockerfile.jikkou
+    entrypoint: ./kafka_connector_init.sh
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    depends_on:
+      kafka-connect:
+        condition: service_healthy
+        required: false
+    environment:
+      CONNECT_URL: ${CONNECT_URL}
+      CONNECT_TASKS_MAX: ${CONNECT_TASKS_MAX}
+      CONNECT_CREATE_ODE: ${CONNECT_CREATE_ODE}
+      CONNECT_CREATE_GEOJSONCONVERTER: ${CONNECT_CREATE_GEOJSONCONVERTER}
+      CONNECT_CREATE_CONFLICTMONITOR: ${CONNECT_CREATE_CONFLICTMONITOR}
+      CONNECT_CREATE_DEDUPLICATOR: ${CONNECT_CREATE_DEDUPLICATOR}
+      CONNECT_CREATE_MECDEPOSIT: ${CONNECT_CREATE_MECDEPOSIT}
+      MONGO_CONNECTOR_USERNAME: ${MONGO_ADMIN_DB_USER}
+      MONGO_CONNECTOR_PASSWORD: ${MONGO_ADMIN_DB_PASS:?}
+      MONGO_DB_IP: ${MONGO_IP}
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
     volumes:
-      - ${CONNECT_SCRIPT_RELATIVE_PATH}:/scripts/connect_start.sh
+      - ${CONNECT_CONFIG_RELATIVE_PATH-./jikkou/kafka-connectors-values.yaml}:/app/kafka-connectors-values.yaml

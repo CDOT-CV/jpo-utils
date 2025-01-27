@@ -19,7 +19,9 @@ The JPO ITS utilities repository serves as a central location for deploying open
     - [Quick Run](#quick-run-1)
   - [4. MongoDB Kafka Connect](#4-mongodb-kafka-connect)
     - [Configuration](#configuration)
+    - [Configure Kafka Connector Creation](#configure-kafka-connector-creation)
     - [Quick Run](#quick-run-2)
+  - [Security Notice](#security-notice)
 
 
 <a name="base-configuration"></a>
@@ -88,7 +90,7 @@ An optional `kafka-init`, `schema-registry`, and `kafka-ui` instance can be depl
 
 ### Configure Topic Creation
 
-The Kafka topics created by the `kafka-setup` service are configured in the [kafka-topics-values.yaml](kafka/kafka-topics-values.yaml) file.  The topics in that file are organized by the application, and sorted into "Stream Topics" (those with `cleanup.policy` = `delete`) and "Table Topics" (with `cleanup.policy` = `compact`).  
+The Kafka topics created by the `kafka-setup` service are configured in the [kafka-topics-values.yaml](jikkou/kafka-topics-values.yaml) file.  The topics in that file are organized by the application, and sorted into "Stream Topics" (those with `cleanup.policy` = `delete`) and "Table Topics" (with `cleanup.policy` = `compact`).  
 
 The following enviroment variables can be used to configure Kafka Topic creation.  
 
@@ -103,8 +105,7 @@ The following enviroment variables can be used to configure Kafka Topic creation
 | `KAFKA_TOPIC_MIN_INSYNC_REPLICAS` | Minumum number of in-sync replicas (for use with ack=all) |
 | `KAFKA_TOPIC_RETENTION_MS` | Retention time for stream topics, milliseconds |
 | `KAFKA_TOPIC_DELETE_RETENTION_MS` | Tombstone retention time for compacted topics, milliseconds |
-
-
+| `KAFKA_TOPIC_CONFIG_RELATIVE_PATH` | Relative path to the Kafka topic yaml configuration script, upper level directories are supported |
 
 ### Quick Run
 
@@ -121,34 +122,49 @@ The following enviroment variables can be used to configure Kafka Topic creation
 <a name="mongodb-kafka-connect"></a>
 
 ## 4. MongoDB Kafka Connect
-The mongo-connector service connects to specified Kafka topics (as defined in the mongo-connector/connect_start.sh script) and deposits these messages to separate collections in the MongoDB Database. The codebase that provides this functionality comes from Confluent using their community licensed [cp-kafka-connect image](https://hub.docker.com/r/confluentinc/cp-kafka-connect). Documentation for this image can be found [here](https://docs.confluent.io/platform/current/connect/index.html#what-is-kafka-connect).
+The mongo-connector service connects to specified Kafka topics and deposits these messages to separate collections in the MongoDB Database. The codebase that provides this functionality comes from Confluent using their community licensed [cp-kafka-connect image](https://hub.docker.com/r/confluentinc/cp-kafka-connect). Documentation for this image can be found [here](https://docs.confluent.io/platform/current/connect/index.html#what-is-kafka-connect).
 
 ### Configuration
-Provided in the mongo-connector directory is a sample configuration shell script ([connect_start.sh](./kafka-connect/connect_start.sh)) that can be used to create kafka connectors to MongoDB. The connectors in kafka connect are defined in the format that follows:
 
-``` shell
-declare -A config_name=([name]="topic_name" [collection]="mongo_collection_name"
-    [convert_timestamp]=true [timefield]="timestamp" [use_key]=true [key]="key" [add_timestamp]=true)
-```
-
-The format above describes the basic configuration for configuring a sink connector, this should be placed at the beginning of the connect_start.sh file. In general we recommend to keep the MongoDB collection name the same as the topic name to avoid confusion. Additionally, if there is a top level timefield set `convert_timestamp` to true and then specify the time field name that appears in the message. This will allow MongoDB to transform that message into a date object to allow for TTL creation and reduce message size. To override MongoDB's default message `_id` field, set `use_key` to true and then set the `key` property to "key". The "add_timestamp" field defines whether the connector will add a auto generated timestamp to each document. This allows for creation of Time To Live (TTL) indexes on the collections to help limit collection size growth.
-
-After the sink connector is configured above, then make sure to call the createSink function with the config_name of the configuration like so:
-
-``` shell
-createSink config_name
-```
-
-This needs to be put after the createSink function definition. To use a different `connect_start.sh` script, pass in the relative path of the new script by overriding the `CONNECT_SCRIPT_RELATIVE_PATH` environmental variable.
+Kafka connectors are managed by the 
 
 Set the `COMPOSE_PROFILES` environmental variable as follows:
 
-- `kafka_connect` will only spin up the `kafka-connect` service in [docker-compose-connect](docker-compose-connect.yml)
+- `kafka_connect` will only spin up the `kafka-connect` and `kafka-init` services in [docker-compose-connect](docker-compose-connect.yml)
   - NOTE: This implies that you will be using a separate Kafka and MongoDB cluster
 - `kafka_connect_standalone` will run the following:
   1. `kafka-connect` service from [docker-compose-connect](docker-compose-connect.yml)
-  2. `kafka` service from [docker-compose-kafka](docker-compose-kafka.yml)
-  3. `mongo` and `mongo-setup` services from [docker-compose-mongo](docker-compose-mongo.yml)
+  2. `kafka-init` service from [docker-compose-connect](docker-compose-connect.yml)
+  3. `kafka` service from [docker-compose-kafka](docker-compose-kafka.yml)
+  4. `mongo` and `mongo-setup` services from [docker-compose-mongo](docker-compose-mongo.yml)
+
+### Configure Kafka Connector Creation
+
+The Kafka connectors created by the `kafka-connect-setup` service are configured in the [kafka-connectors-values.yaml](jikkou/kafka-connectors-values.yaml) file.  The connectors in that file are organized by the application, and given parameters to define the Kafka -> MongoDB sync connector:
+
+| Connector Variable  | Required | Condition | Description|
+|---|---|---|---|
+| `topicName` | Yes | Always | The name of the Kafka topic to sync from |
+| `collectionName` | Yes | Always | The name of the MongoDB collection to write to |
+| `generateTimestamp` | No | Optional | Enable or disable adding a timestamp to each message (true/false) |
+| `connectorName` | No | Optional | Override the name of the connector from the `collectionName` to this field instead |
+| `useTimestamp` | No | Optional | Converts the `timestampField` field at the top level of the value to a BSON date |
+| `timestampField` | No | Required if `useTimestamp` is `true` | The name of the timestamp field at the top level of the message |
+| `useKey` | No | Optional | Override the document `_id` field in MongoDB to use a specified `keyField` from the message |
+| `keyField` | No | Required if `useKey` is `true` | The name of the key field |
+
+The following environment variables can be used to configure Kafka Connectors:
+
+| Environment Variable | Description |
+|---|---|
+| `CONNECT_URL` | Kafka connect API URL |
+| `CONNECT_LOG_LEVEL` | Kafka connect log level (`OFF`, `ERROR`, `WARN`, `INFO`) |
+| `CONNECT_TASKS_MAX` | Number of concurrent tasks to configure on kafka connectors |
+| `CONNECT_CREATE_ODE` | Whether to create kafka connectors for the ODE |
+| `CONNECT_CREATE_GEOJSONCONVERTER` | Whether to create topics for the GeojsonConverter |
+| `CONNECT_CREATE_CONFLICTMONITOR` | Whether to create kafka connectors for the Conflict Monitor |
+| `CONNECT_CREATE_DEDUPLICATOR` | Whether to create topics for the Deduplicator |
+| `CONNECT_CONFIG_RELATIVE_PATH` | Relative path to the Kafka connector yaml configuration script, upper level directories are supported |
 
 ### Quick Run
 
@@ -171,3 +187,12 @@ Set the `COMPOSE_PROFILES` environmental variable as follows:
 8. Feel free to test this with other topics or by producing to these topics using the [ODE](https://github.com/usdot-jpo-ode/jpo-ode)
 
 [Back to top](#toc)
+
+## Security Notice
+
+While default passwords are provided for development convenience, it is **strongly recommended** to:
+
+1. Change all passwords before deploying to any environment
+2. Never use default passwords in production
+3. Use secure password generation and management practices
+4. Consider using Docker secrets or environment management tools for production deployments
