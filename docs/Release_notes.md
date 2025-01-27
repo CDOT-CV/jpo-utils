@@ -40,6 +40,7 @@ Enhancements in this release:
 - USDOT PR 25: Updating version for kafka ui to latest release
 - CDOT PR 7: Tim compatibility and CI updates
 - CDOT PR 8: Jpo deduplicator removal
+- USDOT PR 27: Updates to jikkou image build (for dockerhub)
 
 
 ### **NOTES**
