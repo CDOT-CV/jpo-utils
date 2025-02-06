@@ -115,6 +115,9 @@ apps:
       - topic.CmBsmIntersection
       - topic.CmKafkaStateChangeEvents
       - topic.CmTimestampDeltaEvent
+      - topic.CmBsmMessageCountProgressionEvents
+      - topic.CmMapMessageCountProgressionEvents
+      - topic.CmSpatMessageCountProgressionEvents
       - topic.CmSpatMinimumDataEventAggregation
       - topic.CmMapMinimumDataEventAggregation
       - topic.CmIntersectionReferenceAlignmentEventAggregation
