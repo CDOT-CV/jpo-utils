@@ -18,6 +18,8 @@ COPY ./kafka-connectors-template.jinja /app/kafka-connectors-template.jinja
 COPY ./kafka_connector_init.sh /app/kafka_connector_init.sh
 
 # copy default connector and topic files
+COPY ./kafka-connectors-values.yaml /app/kafka-connectors-values.yaml
+COPY ./kafka-topics-values.yaml /app/kafka-topics-values.yaml
 
 # Create/update topics then exit container
 # Disabled by default to be applied in the docker-compose.yml instead
