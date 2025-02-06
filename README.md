@@ -16,6 +16,7 @@ The JPO ITS utilities repository serves as a central location for deploying open
     - [Quick Run](#quick-run)
   - [3. Kafka](#3-kafka)
     - [Configure Topic Creation](#configure-topic-creation)
+      - [Confluent Cloud Support](#confluent-cloud-support)
     - [Quick Run](#quick-run-1)
   - [4. MongoDB Kafka Connect](#4-mongodb-kafka-connect)
     - [Configuration](#configuration)
@@ -105,6 +106,17 @@ The following enviroment variables can be used to configure Kafka Topic creation
 | `KAFKA_TOPIC_MIN_INSYNC_REPLICAS` | Minumum number of in-sync replicas (for use with ack=all) |
 | `KAFKA_TOPIC_RETENTION_MS` | Retention time for stream topics, milliseconds |
 | `KAFKA_TOPIC_DELETE_RETENTION_MS` | Tombstone retention time for compacted topics, milliseconds |
+
+#### Confluent Cloud Support
+
+The following environment variables are used to configure the Kafka client for Confluent Cloud.
+
+| Environment Variable | Description |
+|---|---|
+| `KAFKA_SECURITY_PROTOCOL` | Security protocol for Kafka |
+| `KAFKA_SASL_MECHANISM` | SASL mechanism for Kafka |
+| `KAFKA_SASL_JAAS_CONFIG` | SASL JAAS configuration for Kafka |
+| `KAFKA_SSL_ENDPOINT_ALGORITHM` | SSL endpoint algorithm for Kafka |
 
 ### Quick Run
 
