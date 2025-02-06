@@ -103,12 +103,6 @@ apps:
       - topicName: topic.OdeRawEncodedTIMJson
         collectionName: OdeRawEncodedTIMJson
         generateTimestamp: true
-  geojsonconverter:
-    name: geojsonconverter
-    connectors:
-      - topicName: topic.ProcessedBsm
-        collectionName: ProcessedBsm
-        generateTimestamp: true
   geojsonconverter_duplicated:
     name: geojsonconverter-duplicated
     connectors:
@@ -117,6 +111,9 @@ apps:
         generateTimestamp: true
       - topicName: topic.ProcessedSpat
         collectionName: ProcessedSpat
+        generateTimestamp: true
+      - topicName: topic.ProcessedBsm
+        collectionName: ProcessedBsm
         generateTimestamp: true
   deduplicator:
     name: deduplicator
@@ -145,6 +142,10 @@ apps:
         collectionName: ProcessedSpat
         generateTimestamp: true
         connectorName: DeduplicatedProcessedSpat
+      - topicName: topic.DeduplicatedProcessedBsm
+        collectionName: ProcessedBsm
+        generateTimestamp: true
+        connectorName: DeduplicatedProcessedBsm
   conflictmonitor:
     name: conflictmonitor
     connectors:

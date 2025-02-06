@@ -166,7 +166,8 @@ apps:
       - topic.DeduplicatedOdeMapJson
       - topic.DeduplicatedOdeTimJson
       - topic.DeduplicatedOdeRawEncodedTIMJson
-      - topic.DeduplicatedOdeBsmJson    
+      - topic.DeduplicatedOdeBsmJson 
+      - topic.DeduplicatedProcessedBsm
     tableTopics: {}
     customTopics: {}
   kafkaconnect:

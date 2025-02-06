@@ -56,10 +56,6 @@ spec:
 {{ create_connector(values.apps.ode) }}
 {% endif %}
 
-{% if system.env.CONNECT_CREATE_GEOJSONCONVERTER %}
-{{ create_connector(values.apps.geojsonconverter) }}
-{% endif %}
-
 {% if system.env.CONNECT_CREATE_CONFLICTMONITOR %}
 {{ create_connector(values.apps.conflictmonitor) }}
 {% endif %}
