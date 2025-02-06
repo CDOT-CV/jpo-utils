@@ -29,8 +29,8 @@ metadata:
   labels: 
     app: "{{ app.name }}"
 spec:
-  partitions: 1
-  replicas: 1
+  partitions: {{ topic.partitions | default(values.partitions) }}
+  replicas: {{ system.env.KAFKA_TOPIC_REPLICAS | default(values.replicas) }}
   configs:
     cleanup.policy: compact
     min.insync.replicas: {{ system.env.KAFKA_TOPIC_MIN_INSYNC_REPLICAS | default(values.minInsyncReplicas) }}
