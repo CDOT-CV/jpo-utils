@@ -105,7 +105,6 @@ The following enviroment variables can be used to configure Kafka Topic creation
 | `KAFKA_TOPIC_MIN_INSYNC_REPLICAS` | Minumum number of in-sync replicas (for use with ack=all) |
 | `KAFKA_TOPIC_RETENTION_MS` | Retention time for stream topics, milliseconds |
 | `KAFKA_TOPIC_DELETE_RETENTION_MS` | Tombstone retention time for compacted topics, milliseconds |
-| `KAFKA_TOPIC_CONFIG_RELATIVE_PATH` | Relative path to the Kafka topic yaml configuration script, upper level directories are supported |
 
 ### Quick Run
 
@@ -164,7 +163,6 @@ The following environment variables can be used to configure Kafka Connectors:
 | `CONNECT_CREATE_GEOJSONCONVERTER` | Whether to create topics for the GeojsonConverter |
 | `CONNECT_CREATE_CONFLICTMONITOR` | Whether to create kafka connectors for the Conflict Monitor |
 | `CONNECT_CREATE_DEDUPLICATOR` | Whether to create topics for the Deduplicator |
-| `CONNECT_CONFIG_RELATIVE_PATH` | Relative path to the Kafka connector yaml configuration script, upper level directories are supported |
 
 ### Quick Run
 

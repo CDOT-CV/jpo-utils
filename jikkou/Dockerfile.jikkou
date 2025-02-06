@@ -1,4 +1,4 @@
-FROM streamthoughts/jikkou:0.35.3
+FROM streamthoughts/jikkou:0.35.7
 
 # Root user is required to run the 'jikkou apply' command in the kafka_init.sh script
 USER root
@@ -16,6 +16,8 @@ COPY ./kafka_init.sh /app/kafka_init.sh
 # kafka connect creation files
 COPY ./kafka-connectors-template.jinja /app/kafka-connectors-template.jinja
 COPY ./kafka_connector_init.sh /app/kafka_connector_init.sh
+
+# copy default connector and topic files
 
 # Create/update topics then exit container
 # Disabled by default to be applied in the docker-compose.yml instead
