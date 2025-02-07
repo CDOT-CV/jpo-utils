@@ -94,9 +94,11 @@ services:
       CONNECT_CREATE_MECDEPOSIT: ${CONNECT_CREATE_MECDEPOSIT}
     entrypoint: ["/bin/bash", "setup_mongo.sh"]
     volumes:
-      - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH}:/setup_mongo.sh
-      - ${MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH}:/create_indexes.js
-      - ${MONGO_INIT_REPLICAS_SCRIPT_RELATIVE_PATH}:/init_replicas.js
+      - ./mongo/setup_mongo.sh:/setup_mongo.sh
+      - ./mongo/create_indexes.js:/create_indexes.js
+      - ./mongo/init_replicas.js:/init_replicas.js
+      - ./mongo/mongorestore.sh:/mongorestore.sh
+      - ${MONGO_DUMP_RELATIVE_PATH:-}:/dump
 
   mongo-express:
     profiles:
