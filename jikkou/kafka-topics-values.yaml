@@ -118,6 +118,7 @@ apps:
       - topic.CmBsmMessageCountProgressionEvents
       - topic.CmMapMessageCountProgressionEvents
       - topic.CmSpatMessageCountProgressionEvents
+      - topic.CmEventStateProgressionEvent
       - topic.CmSpatMinimumDataEventAggregation
       - topic.CmMapMinimumDataEventAggregation
       - topic.CmIntersectionReferenceAlignmentEventAggregation
