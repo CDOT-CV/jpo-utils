@@ -184,10 +184,10 @@ apps:
         partitions: 1
         cleanUpPolicy: compact
       - topicName: topic.KafkaConnectOffsets
-        partitions: 20
+        partitions: 3
         cleanUpPolicy: compact
       - topicName: topic.KafkaConnectStatus
-        partitions: 10
+        partitions: 3
         cleanUpPolicy: compact
   mecdeposit:
     name: jpo-mecdeposit
