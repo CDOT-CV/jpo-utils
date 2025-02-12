@@ -201,6 +201,12 @@ apps:
       - topicName: topic.CmTimestampDeltaEvent
         collectionName: CmTimestampDeltaEvent
         useTimestamp: true
+      - topicName: topic.CmSpatTransitionEvent
+        collectionName: CmSpatTransitionEvent
+        useTimestamp: true
+      - topicName: topic.CmEventStateProgressionEvent
+        collectionName: CmEventStateProgressionEvent
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMessageCountProgressionEvents
         collectionName: CmSpatMessageCountProgressionEvents
@@ -301,6 +307,13 @@ apps:
         timestampField: notificationGeneratedAt
       - topicName: topic.CmSignalGroupAlignmentNotification
         collectionName: CmSignalGroupAlignmentNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmIntersectionReferenceAlignmentNotification
+        collectionName: CmIntersectionReferenceAlignmentNotification
+        useTimestamp: true
+      - topicName: topic.CmSpatTransitionNotification
+        collectionName: CmSpatTransitionNotification
         useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmNotification

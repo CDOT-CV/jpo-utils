@@ -115,6 +115,7 @@ apps:
       - topic.CmBsmIntersection
       - topic.CmKafkaStateChangeEvents
       - topic.CmTimestampDeltaEvent
+      - topic.CmSpatTransitionEvent
       - topic.CmBsmMessageCountProgressionEvents
       - topic.CmMapMessageCountProgressionEvents
       - topic.CmSpatMessageCountProgressionEvents
@@ -132,7 +133,6 @@ apps:
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
-      - topic.CmAppHealthNotification
       - topic.CmSpatTimeChangeDetailsNotification
       - topic.CmSignalStateConflictNotification
       - topic.CmSignalGroupAlignmentNotification
@@ -155,12 +155,14 @@ apps:
       - topic.CmSpatRevisionCounterEvents
       - topic.CmBsmRevisionCounterEvents
       - topic.CmTimestampDeltaNotification
+      - topic.CmSpatTransitionNotification
+      - topic.CmEventStateProgressionNotification
       - topic.CmIntersectionReferenceAlignmentNotificationAggregation
       - topic.CmSignalGroupAlignmentNotificationAggregation
       - topic.CmSignalStateConflictNotificationAggregation
       - topic.CmSpatTimeChangeDetailsNotificationAggregation
       - topic.CmEventStateProgressionNotificationAggregation
-      - topic.CmEventStateProgressionNotification
+      
     customTopics: {}
   deduplicator:
     name: jpo-deduplicator
