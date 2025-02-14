@@ -16,6 +16,7 @@ The JPO ITS utilities repository serves as a central location for deploying open
     - [Quick Run](#quick-run)
   - [3. Kafka](#3-kafka)
     - [Configure Topic Creation](#configure-topic-creation)
+      - [Confluent Cloud Support](#confluent-cloud-support)
     - [Quick Run](#quick-run-1)
   - [4. MongoDB Kafka Connect](#4-mongodb-kafka-connect)
     - [Configuration](#configuration)
@@ -105,7 +106,17 @@ The following enviroment variables can be used to configure Kafka Topic creation
 | `KAFKA_TOPIC_MIN_INSYNC_REPLICAS` | Minumum number of in-sync replicas (for use with ack=all) |
 | `KAFKA_TOPIC_RETENTION_MS` | Retention time for stream topics, milliseconds |
 | `KAFKA_TOPIC_DELETE_RETENTION_MS` | Tombstone retention time for compacted topics, milliseconds |
-| `KAFKA_TOPIC_CONFIG_RELATIVE_PATH` | Relative path to the Kafka topic yaml configuration script, upper level directories are supported |
+
+#### Confluent Cloud Support
+
+The following environment variables are used to configure the Kafka client for Confluent Cloud.
+
+| Environment Variable | Description |
+|---|---|
+| `KAFKA_SECURITY_PROTOCOL` | Security protocol for Kafka |
+| `KAFKA_SASL_MECHANISM` | SASL mechanism for Kafka |
+| `KAFKA_SASL_JAAS_CONFIG` | SASL JAAS configuration for Kafka |
+| `KAFKA_SSL_ENDPOINT_ALGORITHM` | SSL endpoint algorithm for Kafka |
 
 ### Quick Run
 
@@ -164,7 +175,6 @@ The following environment variables can be used to configure Kafka Connectors:
 | `CONNECT_CREATE_GEOJSONCONVERTER` | Whether to create topics for the GeojsonConverter |
 | `CONNECT_CREATE_CONFLICTMONITOR` | Whether to create kafka connectors for the Conflict Monitor |
 | `CONNECT_CREATE_DEDUPLICATOR` | Whether to create topics for the Deduplicator |
-| `CONNECT_CONFIG_RELATIVE_PATH` | Relative path to the Kafka connector yaml configuration script, upper level directories are supported |
 
 ### Quick Run
 
