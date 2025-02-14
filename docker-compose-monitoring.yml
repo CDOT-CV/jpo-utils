@@ -118,6 +118,33 @@ services:
         limits:
           memory: 256M
 
+  mongodb-exporter:
+    profiles:
+      - all
+      - monitoring_full
+      - mongodb_exporter
+    image: percona/mongodb_exporter:0.43.1
+    hostname: mongodb-exporter
+    ports:
+      - "9216:9216"
+    environment:
+      MONGODB_URI: mongodb://${MONGO_EXPORTER_USERNAME}:${MONGO_EXPORTER_PASSWORD}@${MONGO_IP}:27017/?authSource=admin&directConnection=true
+    command:
+      - '--web.listen-address=:9216'
+      - '--collect-all'
+      - '--mongodb.direct-connect=true'
+      - '--discovering-mode'
+      - '--log.level=warn'
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-S", "http://localhost:9216/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
 volumes:
   prom_data:
   grafana_data:
