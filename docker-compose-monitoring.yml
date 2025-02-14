@@ -12,7 +12,7 @@ services:
       - '--storage.tsdb.path=/prometheus'
     ports:
       - 9095:9090
-    restart: ${RESTART_POLICY}
+    restart: ${RESTART_POLICY:-on-failure:3}
     volumes:
       - ./monitoring/prometheus:/etc/prometheus
       - prom_data:/prometheus
@@ -37,7 +37,7 @@ services:
     hostname: grafana
     ports:
       - 3000:3000
-    restart: ${RESTART_POLICY}
+    restart: ${RESTART_POLICY:-on-failure:3}
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-grafana}
@@ -128,7 +128,7 @@ services:
     ports:
       - "9216:9216"
     environment:
-      MONGODB_URI: mongodb://${MONGO_EXPORTER_USERNAME}:${MONGO_EXPORTER_PASSWORD}@${MONGO_IP}:27017/?authSource=admin&directConnection=true
+      MONGODB_URI: mongodb://${MONGO_EXPORTER_USERNAME:-exporter}:${MONGO_EXPORTER_PASSWORD:-replace_me}@${MONGO_IP:-mongo}:27017/?authSource=admin&directConnection=true
     command:
       - '--web.listen-address=:9216'
       - '--collect-all'

@@ -8,7 +8,7 @@ services:
     build:
       context: kafka-connect
       dockerfile: Dockerfile
-    restart: ${RESTART_POLICY}
+    restart: ${RESTART_POLICY:-on-failure:3}
     deploy:
       resources:
         limits:
@@ -29,14 +29,14 @@ services:
         condition: service_healthy
         required: false
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      CONNECT_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-kafka:9092}
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: kafka-connect-group
       # Topics are created with jikkou in the kafka-setup service
       CONNECT_CONFIG_STORAGE_TOPIC: topic.KafkaConnectConfigs
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: -1
-      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: ${CONNECT_FLUSH_INTERVAL:-1000}
       CONNECT_OFFSET_STORAGE_TOPIC: topic.KafkaConnectOffsets
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: -1
       CONNECT_OFFSET_STORAGE_CLEANUP_POLICY: compact
@@ -47,8 +47,8 @@ services:
       CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
       CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-      CONNECT_LOG4J_ROOT_LOGLEVEL: ${CONNECT_LOG_LEVEL}
-      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=${CONNECT_LOG_LEVEL},org.reflections=${CONNECT_LOG_LEVEL},com.mongodb.kafka=${CONNECT_LOG_LEVEL}"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: ${CONNECT_LOG_LEVEL:-ERROR}
+      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=${CONNECT_LOG_LEVEL:-ERROR},org.reflections=${CONNECT_LOG_LEVEL:-ERROR},com.mongodb.kafka=${CONNECT_LOG_LEVEL:-ERROR}"
       CONNECT_PLUGIN_PATH: /usr/share/confluent-hub-components
 
   kafka-connect-setup:
@@ -73,16 +73,16 @@ services:
         condition: service_healthy
         required: false
     environment:
-      CONNECT_URL: ${CONNECT_URL}
-      CONNECT_TASKS_MAX: ${CONNECT_TASKS_MAX}
-      CONNECT_CREATE_ODE: ${CONNECT_CREATE_ODE}
-      CONNECT_CREATE_GEOJSONCONVERTER: ${CONNECT_CREATE_GEOJSONCONVERTER}
-      CONNECT_CREATE_CONFLICTMONITOR: ${CONNECT_CREATE_CONFLICTMONITOR}
-      CONNECT_CREATE_DEDUPLICATOR: ${CONNECT_CREATE_DEDUPLICATOR}
-      CONNECT_CREATE_MECDEPOSIT: ${CONNECT_CREATE_MECDEPOSIT}
-      MONGO_CONNECTOR_USERNAME: ${MONGO_ADMIN_DB_USER}
-      MONGO_CONNECTOR_PASSWORD: ${MONGO_ADMIN_DB_PASS:?}
-      MONGO_DB_IP: ${MONGO_IP}
-      MONGO_DB_NAME: ${MONGO_DB_NAME}
+      CONNECT_URL: ${CONNECT_URL:-http://connect:8083}
+      CONNECT_TASKS_MAX: ${CONNECT_TASKS_MAX:-10}
+      CONNECT_CREATE_ODE: ${CONNECT_CREATE_ODE:-true}
+      CONNECT_CREATE_GEOJSONCONVERTER: ${CONNECT_CREATE_GEOJSONCONVERTER:-true}
+      CONNECT_CREATE_CONFLICTMONITOR: ${CONNECT_CREATE_CONFLICTMONITOR:-true}
+      CONNECT_CREATE_DEDUPLICATOR: ${CONNECT_CREATE_DEDUPLICATOR:-false}
+      CONNECT_CREATE_MECDEPOSIT: ${CONNECT_CREATE_MECDEPOSIT:-false}
+      MONGO_CONNECTOR_USERNAME: ${MONGO_ADMIN_DB_USER:-admin}
+      MONGO_CONNECTOR_PASSWORD: ${MONGO_ADMIN_DB_PASS:-replace_me}
+      MONGO_DB_IP: ${MONGO_IP:-mongo}
+      MONGO_DB_NAME: ${MONGO_DB_NAME:-CV}
     volumes:
-      - ${CONNECT_CONFIG_RELATIVE_PATH-./jikkou/kafka-connectors-values.yaml}:/app/kafka-connectors-values.yaml
+      - ${CONNECT_CONFIG_RELATIVE_PATH:-./jikkou/kafka-connectors-values.yaml}:/app/kafka-connectors-values.yaml
