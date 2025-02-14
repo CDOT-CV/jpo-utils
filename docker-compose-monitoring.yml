@@ -39,9 +39,9 @@ services:
       - 3000:3000
     restart: ${RESTART_POLICY}
     environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-grafana}
-      - GF_USERS_ALLOW_SIGN_UP=false
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-grafana}
+      GF_USERS_ALLOW_SIGN_UP: false
     volumes:
       - ./monitoring/grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
       - ./monitoring/grafana/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml:ro
@@ -80,6 +80,36 @@ services:
       - /:/rootfs:ro
     healthcheck:
       test: ["CMD", "wget", "--spider", "-S", "http://localhost:9100/metrics"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  kafka-exporter:
+    profiles:
+      - all
+      - monitoring_full
+      - kafka_exporter
+    image: seglo/kafka-lag-exporter:0.8.2
+    hostname: kafka-exporter
+    ports:
+      - "8000:8000"
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-kafka:9092}
+      ROOT_LOG_LEVEL: ${ROOT_LOG_LEVEL:-WARN}
+      KAFKA_LAG_EXPORTER_LOG_LEVEL: ${KAFKA_LAG_EXPORTER_LOG_LEVEL:-INFO}
+      KAFKA_LAG_EXPORTER_KAFKA_LOG_LEVEL: ${KAFKA_LAG_EXPORTER_KAFKA_LOG_LEVEL:-ERROR}
+    command:
+      - '/opt/docker/bin/kafka-lag-exporter'
+      - '-Dconfig.file=/opt/docker/conf/application.conf'
+      - '-Dlogback.configurationFile=/opt/docker/conf/logback.xml'
+    volumes:
+      - ./monitoring/kafka-exporter:/opt/docker/conf
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-S", "http://localhost:8000/metrics"]
       interval: 30s
       timeout: 10s
       retries: 3
