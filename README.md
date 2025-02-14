@@ -236,7 +236,7 @@ The following environment variables can be used to configure the monitoring stac
 4. Run the following command: `docker compose up -d`
 5. Access the monitoring interfaces:
    - Grafana: `http://localhost:3000` (default credentials: admin/grafana)
-   - Prometheus: `http://localhost:9095`
+   - Prometheus: `http://localhost:9090`
 6. The following metrics endpoints will be available:
    - Node Exporter: `http://localhost:9100/metrics`
    - Kafka Lag Exporter: `http://localhost:8000/metrics`
