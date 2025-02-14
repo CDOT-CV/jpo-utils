@@ -4,7 +4,7 @@ services:
       - all
       - monitoring_full
       - prometheus
-    image: prom/prometheus
+    image: prom/prometheus:v3.1.0
     hostname: prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -33,7 +33,7 @@ services:
       - all
       - monitoring_full
       - grafana
-    image: grafana/grafana
+    image: grafana/grafana:11.5.1
     hostname: grafana
     ports:
       - 3000:3000
@@ -65,7 +65,7 @@ services:
       - all
       - monitoring_full
       - node_exporter
-    image: prom/node-exporter:latest
+    image: prom/node-exporter:v1.8.2
     hostname: node-exporter
     ports:
       - "9100:9100"
