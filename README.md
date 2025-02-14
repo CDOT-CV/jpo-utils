@@ -25,6 +25,7 @@ The JPO ITS utilities repository serves as a central location for deploying open
   - [5. Monitoring Stack](#5-monitoring-stack)
     - [Configuration](#configuration-1)
     - [Quick Run](#quick-run-3)
+    - [Scrape Configurations](#scrape-configurations)
   - [Security Notice](#security-notice)
 
 
@@ -240,6 +241,17 @@ The following environment variables can be used to configure the monitoring stac
    - Node Exporter: `http://localhost:9100/metrics`
    - Kafka Lag Exporter: `http://localhost:8000/metrics`
    - MongoDB Exporter: `http://localhost:9216/metrics`
+
+### Scrape Configurations
+
+The scrape configurations for the monitoring stack are defined in the [prometheus.yml](monitoring/prometheus/prometheus.yml) file. If you would like to add a new scrape configuration, you can do so by adding a new job to the `scrape_configs` section. Please note that this file doesn't support environment variables, so you will need to manually edit the file.
+
+The following scrape configurations are available:
+
+- `prometheus` - scrapes the Prometheus metrics
+- `node_exporter` - scrapes the Node Exporter metrics
+- `kafka_exporter` - scrapes the Kafka Lag Exporter metrics
+- `mongodb_exporter` - scrapes the MongoDB Exporter metrics
 
 [Back to top](#toc)
 
