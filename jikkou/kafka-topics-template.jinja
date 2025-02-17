@@ -79,3 +79,7 @@ spec:
 {% if system.env.KAFKA_TOPIC_CREATE_MECDEPOSIT %}
 {{ create_topics(values.apps.mecdeposit) }}
 {% endif %}
+
+{% if system.env.KAFKA_TOPIC_CREATE_OTHER %}
+{{ create_topics(values.apps.other) }}
+{% endif %}

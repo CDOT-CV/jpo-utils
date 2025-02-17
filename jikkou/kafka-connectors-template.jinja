@@ -70,3 +70,7 @@ spec:
 {% if system.env.CONNECT_CREATE_MECDEPOSIT %}
 {{ create_connector(values.apps.mecdeposit) }}
 {% endif %}
+
+{% if system.env.CONNECT_CREATE_OTHER %}
+{{ create_connector(values.apps.other) }}
+{% endif %}
