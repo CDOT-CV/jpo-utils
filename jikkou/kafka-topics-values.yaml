@@ -197,3 +197,8 @@ apps:
       - topic.MecDepositMetrics
     tableTopics: {}
     customTopics: {}
+  other:
+    name: other-topics
+    streamTopics: {}
+    tableTopics: {}
+    customTopics: {}
