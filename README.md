@@ -105,6 +105,8 @@ The following enviroment variables can be used to configure Kafka Topic creation
 | `KAFKA_TOPIC_CREATE_GEOJSONCONVERTER` | Whether to create topics for the GeoJSON Converter |
 | `KAFKA_TOPIC_CREATE_CONFLICTMONITOR` | Whether to create topics for the Conflict Monitor |
 | `KAFKA_TOPIC_CREATE_DEDUPLICATOR` | Whether to create topics for the Deduplicator |
+| `KAFKA_TOPIC_CREATE_OTHER` | Whether to create topics for other applications, this is only useful when you attach a custom `kafka-topics-values.yaml` file with other topics |
+| `KAFKA_TOPICS_VALUES_FILE` | Path to a custom `kafka-topics-values.yaml` file|
 | `KAFKA_TOPIC_PARTITIONS` | Number of partitions |
 | `KAFKA_TOPIC_REPLICAS` | Number of replicas |
 | `KAFKA_TOPIC_MIN_INSYNC_REPLICAS` | Minumum number of in-sync replicas (for use with ack=all) |
@@ -178,7 +180,9 @@ The following environment variables can be used to configure Kafka Connectors:
 | `CONNECT_CREATE_ODE` | Whether to create kafka connectors for the ODE |
 | `CONNECT_CREATE_GEOJSONCONVERTER` | Whether to create topics for the GeojsonConverter |
 | `CONNECT_CREATE_CONFLICTMONITOR` | Whether to create kafka connectors for the Conflict Monitor |
-| `CONNECT_CREATE_DEDUPLICATOR` | Whether to create topics for the Deduplicator |
+| `CONNECT_CREATE_DEDUPLICATOR` | Whether to create kafka connectors for the Deduplicator |
+| `CONNECT_KAFKA_CONNECTORS_VALUES_FILE` | Path to a custom `kafka-connectors-values.yaml` file |
+| `CONNECT_CREATE_OTHER` | Whether to create kafka connectors for other applications, this is only useful when you attach a custom `kafka-connectors-values.yaml` file with other connectors |
 
 ### Quick Run
 

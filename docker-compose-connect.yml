@@ -82,5 +82,8 @@ services:
       CONNECT_CREATE_MECDEPOSIT: ${CONNECT_CREATE_MECDEPOSIT:-false}
       MONGO_CONNECTOR_USERNAME: ${MONGO_ADMIN_DB_USER:-admin}
       MONGO_CONNECTOR_PASSWORD: ${MONGO_ADMIN_DB_PASS:-replace_me}
+      
       MONGO_DB_IP: ${MONGO_IP:-mongo}
       MONGO_DB_NAME: ${MONGO_DB_NAME:-CV}
+    volumes:
+      - ${CONNECT_KAFKA_CONNECTORS_VALUES_FILE:-./jikkou/kafka-connectors-values.yaml}:/kafka-connectors-values.yaml
