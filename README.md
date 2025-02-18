@@ -22,6 +22,10 @@ The JPO ITS utilities repository serves as a central location for deploying open
     - [Configuration](#configuration)
     - [Configure Kafka Connector Creation](#configure-kafka-connector-creation)
     - [Quick Run](#quick-run-2)
+  - [5. Monitoring Stack](#5-monitoring-stack)
+    - [Configuration](#configuration-1)
+    - [Quick Run](#quick-run-3)
+    - [Scrape Configurations](#scrape-configurations)
   - [Security Notice](#security-notice)
 
 
@@ -199,6 +203,59 @@ The following environment variables can be used to configure Kafka Connectors:
    2. Click `ode` -- Or click whatever value you set the `MONGO_DB_NAME` to
    3. Click `OdeBsmJson`, and now you should see your message!
 8. Feel free to test this with other topics or by producing to these topics using the [ODE](https://github.com/usdot-jpo-ode/jpo-ode)
+
+[Back to top](#toc)
+
+## 5. Monitoring Stack
+
+The monitoring stack consists of Prometheus for metrics collection and Grafana for visualization, along with several exporters that collect metrics from different services. The configuration is defined in [docker-compose-monitoring.yml](docker-compose-monitoring.yml).
+
+Set the `COMPOSE_PROFILES` environmental variable as follows:
+
+- `monitoring_full` - deploys all resources in the [docker-compose-monitoring.yml](docker-compose-monitoring.yml) file
+  - `prometheus` - deploys only the Prometheus service
+  - `grafana` - deploys only the Grafana service
+  - `node_exporter` - deploys only the Node Exporter service for system metrics
+  - `kafka_exporter` - deploys only the Kafka Lag Exporter service
+  - `mongodb_exporter` - deploys only the MongoDB Exporter service
+
+### Configuration
+
+The following environment variables can be used to configure the monitoring stack:
+
+| Environment Variable | Description |
+|---|---|
+| `PROMETHEUS_RETENTION` | Data retention period for Prometheus (default: 15d) |
+| `GRAFANA_ADMIN_USER` | Grafana admin username (default: admin) |
+| `GRAFANA_ADMIN_PASSWORD` | Grafana admin password (default: grafana) |
+| `KAFKA_LAG_EXPORTER_ROOT_LOG_LEVEL` | Root log level for kafka lag exporter (default: WARN) |
+| `KAFKA_LAG_EXPORTER_LOG_LEVEL` | Kafka lag exporter log level (default: INFO) |
+| `KAFKA_LAG_EXPORTER_KAFKA_LOG_LEVEL` | Kafka log level for kafka lag exporter (default: ERROR) |
+
+### Quick Run
+
+1. Create a copy of `sample.env` and rename it to `.env`.
+2. Set the `COMPOSE_PROFILES` variable to: `monitoring_full`
+3. Update any passwords in the `.env` file for security
+4. Run the following command: `docker compose up -d`
+5. Access the monitoring interfaces:
+   - Grafana: `http://localhost:3000` (default credentials: admin/grafana)
+   - Prometheus: `http://localhost:9090`
+6. The following metrics endpoints will be available:
+   - Node Exporter: `http://localhost:9100/metrics`
+   - Kafka Lag Exporter: `http://localhost:8000/metrics`
+   - MongoDB Exporter: `http://localhost:9216/metrics`
+
+### Scrape Configurations
+
+The scrape configurations for the monitoring stack are defined in the [prometheus.yml](monitoring/prometheus/prometheus.yml) file. If you would like to add a new scrape configuration, you can do so by adding a new job to the `scrape_configs` section. Please note that this file doesn't support environment variables, so you will need to manually edit the file.
+
+The following scrape configurations are available:
+
+- `prometheus` - scrapes the Prometheus metrics
+- `node_exporter` - scrapes the Node Exporter metrics
+- `kafka_exporter` - scrapes the Kafka Lag Exporter metrics
+- `mongodb_exporter` - scrapes the MongoDB Exporter metrics
 
 [Back to top](#toc)
 
