@@ -34,6 +34,7 @@ The pipeline automatically triggers when:
      - `data` directories
      - `docs` directories
      - Markdown (`.md`) files
+     - `.github` directories
 
 2. **Publish Artifact**
    - Creates an artifact named 'jpo-utils-services'
