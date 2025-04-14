@@ -34,5 +34,7 @@ if [ "${MONGO_SAMPLE_DATA_RELATIVE_PATH}" != "" ]; then
     echo "Restore Calling Dump"
 
     mongorestore --host mongo --username "${MONGO_ADMIN_DB_USER}" --password "${MONGO_ADMIN_DB_PASS}" --authenticationDatabase admin /dump
+else
+    echo "No sample data path provided. Skipping data restore."
 fi
 echo "Restore Done Dumping"
