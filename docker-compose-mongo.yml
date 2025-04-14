@@ -94,11 +94,13 @@ services:
       MONGO_INDEX_CREATE_GEOJSONCONVERTER: ${MONGO_INDEX_CREATE_GEOJSONCONVERTER:-true}
       MONGO_INDEX_CREATE_CONFLICTMONITOR: ${MONGO_INDEX_CREATE_CONFLICTMONITOR:-true}
       MONGO_INDEX_CREATE_DEDUPLICATOR: ${MONGO_INDEX_CREATE_DEDUPLICATOR:-false}
-    entrypoint: ["/bin/bash", "setup_mongo.sh"]
+    entrypoint: ["/bin/bash", "-c", "./setup_mongo.sh && ./restore_mongo.sh"]
     volumes:
-      - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH:-./mongo/setup_mongo.sh}:/setup_mongo.sh
-      - ${MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH:-./mongo/create_indexes.js}:/create_indexes.js
-      - ${MONGO_INIT_REPLICAS_SCRIPT_RELATIVE_PATH:-./mongo/init_replicas.js}:/init_replicas.js
+      - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH}:/setup_mongo.sh
+      - ${MONGO_RESTORE_SCRIPT_RELATIVE_PATH}:/restore_mongo.sh
+      - ${MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH}:/create_indexes.js
+      - ${MONGO_INIT_REPLICAS_SCRIPT_RELATIVE_PATH}:/init_replicas.js
+      - ${MONGO_SAMPLE_DATA_RELATIVE_PATH}:/dump
 
   mongo-express:
     profiles:
