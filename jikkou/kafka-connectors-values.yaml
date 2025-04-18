@@ -150,12 +150,12 @@ apps:
     name: conflictmonitor
     connectors:
       # Record Events
-      - topicName: topic.CmStopLinePassageEvent
-        collectionName: CmStopLinePassageEvent
+      - topicName: topic.CmSignalStateEvent
+        collectionName: CmSignalStateEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
-      - topicName: topic.CmStopLineStopEvent
-        collectionName: CmStopLineStopEvent
+      - topicName: topic.CmSignalStateStopEvent
+        collectionName: CmSignalStateStopEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSignalStateConflictEvents
