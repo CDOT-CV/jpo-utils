@@ -105,8 +105,8 @@ apps:
       - topic.CmBsmEvents
       - topic.CmConnectionOfTravelEvent
       - topic.CmLaneDirectionOfTravelEvent
-      - topic.StopLinePassageEvent
-      - topic.StopLineStopEvent
+      - topic.CmStopLinePassageEvent
+      - topic.CmStopLineStopEvent
       - topic.CmSpatTimeChangeDetailsEvent
       - topic.CmSignalGroupAlignmentEvents
       - topic.CmIntersectionReferenceAlignmentEvents
@@ -147,9 +147,9 @@ apps:
       - topic.CmMapBoundingBox
       - topic.CmEvent
       - topic.CmAssessment
-      - topic.StopLineStopAssessment
+      - topic.CmStopLineStopAssessment
       - topic.CmStopLineStopNotification
-      - topic.StopLinePassageAssessment
+      - topic.CmStopLinePassageAssessment
       - topic.CmStopLinePassageNotification
       - topic.CmMapRevisionCounterEvents
       - topic.CmSpatRevisionCounterEvents
