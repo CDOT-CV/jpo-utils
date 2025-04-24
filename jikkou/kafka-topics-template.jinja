@@ -47,12 +47,12 @@ metadata:
   labels: 
     app: "{{ app.name }}"
 spec:
-  partitions: {{ topic.partitions | default(values.partitions) }}
+  partitions: {{ system.env.KAFKA_TOPIC_PARTITIONS | default(values.partitions) }}
   replicas: {{ system.env.KAFKA_TOPIC_REPLICAS | default(values.replicas) }}
   configs:
     cleanup.policy: {{ topic.cleanUpPolicy | default(delete) }}
     min.insync.replicas: {{ system.env.KAFKA_TOPIC_MIN_INSYNC_REPLICAS | default(values.minInsyncReplicas) }}
-    delete.retention.ms: {{ system.env.KAFKA_TOPIC_DELETE_RETENTION_MS | default(values.deleteRetentionMs) }}
+    retention.ms: {{ topic.retentionMs }}
 {% endfor %}
 
 {% endmacro %}
