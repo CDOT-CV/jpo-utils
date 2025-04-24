@@ -150,12 +150,12 @@ apps:
     name: conflictmonitor
     connectors:
       # Record Events
-      - topicName: topic.CmSignalStateEvent
-        collectionName: CmSignalStateEvent
+      - topicName: topic.StopLinePassageEvent
+        collectionName: StopLinePassageEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
-      - topicName: topic.CmSignalStateStopEvent
-        collectionName: CmSignalStateStopEvent
+      - topicName: topic.StopLineStopEvent
+        collectionName: StopLineStopEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSignalStateConflictEvents
@@ -275,12 +275,12 @@ apps:
         collectionName: CmConnectionOfTravelAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
-      - topicName: topic.CmSignalStateEventAssessment
-        collectionName: CmSignalStateEventAssessment
+      - topicName: topic.StopLinePassageAssessment
+        collectionName: StopLinePassageAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
-      - topicName: topic.CmStopLineStopAssessment
-        collectionName: CmStopLineStopAssessment
+      - topicName: topic.StopLineStopAssessment
+        collectionName: StopLineStopAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
       
