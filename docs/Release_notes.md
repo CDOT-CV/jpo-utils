@@ -3,10 +3,11 @@
 ## Version 2.1.0
 ----------------------------------------
 ### **Summary**
-In this release, the Docker Compose now auto-loads default environment variables from `sample.env` and deploys a full monitoring stack (Grafana, Prometheus, Node Exporter, MongoDB dashboards) 
-for enhanced observability. MongoDB TTL indexes have been updated for better data management, and new Conflict Monitor event state progression topics were added to improve event tracking. 
-Kafka support has been expanded with customizable topics and connectors, deduplicated processed BSM topics, configurable max-tasks settings, and optional Confluent Cloud integration. 
-Jikkou utilities have been updated to bundle scripts within Docker images, simplify deployments, and support missing event topics.
+In this release, default values for many environment variables are now defined directly in the docker-compose.yml file. A complete monitoring stack is included, featuring Grafana, 
+Prometheus, Node Exporter, and MongoDB dashboards to enhance observability. MongoDB TTL indexes have been updated for better data management, and new Conflict Monitor event state 
+progression topics were added to improve event tracking. Kafka support has been expanded with customizable topics and connectors, deduplicated processed BSM topics, configurable 
+max-tasks settings, and optional Confluent Cloud integration. Jikkou utilities have been updated to bundle scripts within Docker images, simplify deployments, and support missing 
+event topics.
 
 Enhancements in this release:
 - [CDOT PR 13](https://github.com/CDOT-CV/jpo-utils/pull/13): Set up CI with Azure Pipelines
