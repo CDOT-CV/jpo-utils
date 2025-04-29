@@ -47,7 +47,7 @@ metadata:
   labels: 
     app: "{{ app.name }}"
 spec:
-  partitions: {{ system.env.KAFKA_TOPIC_PARTITIONS | default(values.partitions) }}
+  partitions: {{ topic.partitions | default(system.env.KAFKA_TOPIC_PARTITIONS) | default(values.partitions) }}
   replicas: {{ system.env.KAFKA_TOPIC_REPLICAS | default(values.replicas) }}
   configs:
     cleanup.policy: {{ topic.cleanUpPolicy | default(delete) }}
