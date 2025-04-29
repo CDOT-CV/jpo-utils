@@ -275,8 +275,8 @@ apps:
         collectionName: CmConnectionOfTravelAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
-      - topicName: topic.CmSignalStateEventAssessment
-        collectionName: CmSignalStateEventAssessment
+      - topicName: topic.CmStopLinePassageAssessment
+        collectionName: CmStopLinePassageAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
       - topicName: topic.CmStopLineStopAssessment

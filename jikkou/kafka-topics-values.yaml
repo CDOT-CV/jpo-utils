@@ -149,7 +149,7 @@ apps:
       - topic.CmAssessment
       - topic.CmStopLineStopAssessment
       - topic.CmStopLineStopNotification
-      - topic.CmSignalStateEventAssessment
+      - topic.CmStopLinePassageAssessment
       - topic.CmStopLinePassageNotification
       - topic.CmMapRevisionCounterEvents
       - topic.CmSpatRevisionCounterEvents
