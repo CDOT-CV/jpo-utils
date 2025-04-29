@@ -7,7 +7,8 @@ In this release, default values for many environment variables are now defined d
 Prometheus, Node Exporter, and MongoDB dashboards to enhance observability. MongoDB TTL indexes have been updated for better data management, and new Conflict Monitor event state 
 progression topics were added to improve event tracking. Kafka support has been expanded with customizable topics and connectors, deduplicated processed BSM topics, configurable 
 max-tasks settings, and optional Confluent Cloud integration. Jikkou utilities have been updated to bundle scripts within Docker images, simplify deployments, and support missing 
-event topics.
+event topics. Additionally, MongoDB data can now be initialized from a relative data path, some collection names have been updated, and the Jikkou topic creation script has been 
+modified to utilize the custom topic section to address requests for custom topic retention times.
 
 Enhancements in this release:
 - [CDOT PR 13](https://github.com/CDOT-CV/jpo-utils/pull/13): Set up CI with Azure Pipelines
@@ -18,6 +19,9 @@ Enhancements in this release:
 - [CDOT PR 18](https://github.com/CDOT-CV/jpo-utils/pull/18): Monitoring Stack & Default Values in Docker Compose
 - [CDOT PR 19](https://github.com/CDOT-CV/jpo-utils/pull/19): Custom Kafka topics / Connectors
 - [CDOT PR 20](https://github.com/CDOT-CV/jpo-utils/pull/20): CI Updates
+- [CDOT PR 21](https://github.com/CDOT-CV/jpo-utils/pull/21): Supporting MongoDB Sample Data Initialization
+- [CDOT PR 22](https://github.com/CDOT-CV/jpo-utils/pull/22): Update Intersection API Topic and Collection Names
+- [CDOT PR 23](https://github.com/CDOT-CV/jpo-utils/pull/23): Custom Kafka Retention ms
 - [USDOT PR 34](https://github.com/usdot-jpo-ode/jpo-utils/pull/34): Feature/deduplicated processed bsm
 - [USDOT PR 35](https://github.com/usdot-jpo-ode/jpo-utils/pull/35): Jikkou Image Updates
 - [USDOT PR 36](https://github.com/usdot-jpo-ode/jpo-utils/pull/36): Confluent Cloud Topic Creation
