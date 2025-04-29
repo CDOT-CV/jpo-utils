@@ -112,6 +112,7 @@ The following enviroment variables can be used to configure Kafka Topic creation
 | `KAFKA_TOPIC_MIN_INSYNC_REPLICAS` | Minumum number of in-sync replicas (for use with ack=all) |
 | `KAFKA_TOPIC_RETENTION_MS` | Retention time for stream topics, milliseconds |
 | `KAFKA_TOPIC_DELETE_RETENTION_MS` | Tombstone retention time for compacted topics, milliseconds |
+| `KAFKA_CUSTOM_TOPIC_RETENTION_MS` | Retention time for custom stream topics to allow for a secondary retention time. If more granular retention time is required, this can be further customized by configuring the `retentionMs` per defined topic in the `customTopics` objects within [kafka-topics-values.yaml](./jikkou/kafka-topics-values.yaml) |
 
 #### Confluent Cloud Support
 
