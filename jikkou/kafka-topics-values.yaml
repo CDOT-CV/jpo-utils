@@ -115,6 +115,11 @@ apps:
       - topic.CmBsmIntersection
       - topic.CmKafkaStateChangeEvents
       - topic.CmTimestampDeltaEvent
+      - topic.CmSpatTransitionEvent
+      - topic.CmBsmMessageCountProgressionEvents
+      - topic.CmMapMessageCountProgressionEvents
+      - topic.CmSpatMessageCountProgressionEvents
+      - topic.CmEventStateProgressionEvent
       - topic.CmSpatMinimumDataEventAggregation
       - topic.CmMapMinimumDataEventAggregation
       - topic.CmIntersectionReferenceAlignmentEventAggregation
@@ -128,7 +133,6 @@ apps:
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
-      - topic.CmAppHealthNotification
       - topic.CmSpatTimeChangeDetailsNotification
       - topic.CmSignalStateConflictNotification
       - topic.CmSignalGroupAlignmentNotification
@@ -145,30 +149,42 @@ apps:
       - topic.CmAssessment
       - topic.CmStopLineStopAssessment
       - topic.CmStopLineStopNotification
-      - topic.CmSignalStateEventAssessment
+      - topic.CmStopLinePassageAssessment
       - topic.CmStopLinePassageNotification
       - topic.CmMapRevisionCounterEvents
       - topic.CmSpatRevisionCounterEvents
       - topic.CmBsmRevisionCounterEvents
       - topic.CmTimestampDeltaNotification
+      - topic.CmSpatTransitionNotification
+      - topic.CmEventStateProgressionNotification
       - topic.CmIntersectionReferenceAlignmentNotificationAggregation
       - topic.CmSignalGroupAlignmentNotificationAggregation
       - topic.CmSignalStateConflictNotificationAggregation
       - topic.CmSpatTimeChangeDetailsNotificationAggregation
       - topic.CmEventStateProgressionNotificationAggregation
-      - topic.CmEventStateProgressionNotification
+      
     customTopics: {}
   deduplicator:
     name: jpo-deduplicator
-    streamTopics:
-      - topic.DeduplicatedProcessedMap
-      - topic.DeduplicatedProcessedMapWKT
-      - topic.DeduplicatedOdeMapJson
-      - topic.DeduplicatedOdeTimJson
-      - topic.DeduplicatedOdeRawEncodedTIMJson
-      - topic.DeduplicatedOdeBsmJson    
+    streamTopics: {}
     tableTopics: {}
-    customTopics: {}
+    customTopics:
+      - topicName: topic.DeduplicatedProcessedMap
+        retentionMs: 43200000  # 12 hours
+      - topicName: topic.DeduplicatedProcessedMapWKT
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeMapJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeTimJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeRawEncodedTIMJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeBsmJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedProcessedBsm
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedProcessedSpat
+        retentionMs: 43200000
   kafkaconnect:
     name: jpo-kafka-connect
     streamTopics: {}
@@ -178,14 +194,19 @@ apps:
         partitions: 1
         cleanUpPolicy: compact
       - topicName: topic.KafkaConnectOffsets
-        partitions: 20
+        partitions: 3
         cleanUpPolicy: compact
       - topicName: topic.KafkaConnectStatus
-        partitions: 10
+        partitions: 3
         cleanUpPolicy: compact
   mecdeposit:
     name: jpo-mecdeposit
     streamTopics:
       - topic.MecDepositMetrics
+    tableTopics: {}
+    customTopics: {}
+  other:
+    name: other-topics
+    streamTopics: {}
     tableTopics: {}
     customTopics: {}

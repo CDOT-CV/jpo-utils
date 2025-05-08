@@ -103,12 +103,6 @@ apps:
       - topicName: topic.OdeRawEncodedTIMJson
         collectionName: OdeRawEncodedTIMJson
         generateTimestamp: true
-  geojsonconverter:
-    name: geojsonconverter
-    connectors:
-      - topicName: topic.ProcessedBsm
-        collectionName: ProcessedBsm
-        generateTimestamp: true
   geojsonconverter_duplicated:
     name: geojsonconverter-duplicated
     connectors:
@@ -117,6 +111,9 @@ apps:
         generateTimestamp: true
       - topicName: topic.ProcessedSpat
         collectionName: ProcessedSpat
+        generateTimestamp: true
+      - topicName: topic.ProcessedBsm
+        collectionName: ProcessedBsm
         generateTimestamp: true
   deduplicator:
     name: deduplicator
@@ -145,6 +142,10 @@ apps:
         collectionName: ProcessedSpat
         generateTimestamp: true
         connectorName: DeduplicatedProcessedSpat
+      - topicName: topic.DeduplicatedProcessedBsm
+        collectionName: ProcessedBsm
+        generateTimestamp: true
+        connectorName: DeduplicatedProcessedBsm
   conflictmonitor:
     name: conflictmonitor
     connectors:
@@ -199,6 +200,12 @@ apps:
         timestampField: eventGeneratedAt
       - topicName: topic.CmTimestampDeltaEvent
         collectionName: CmTimestampDeltaEvent
+        useTimestamp: true
+      - topicName: topic.CmSpatTransitionEvent
+        collectionName: CmSpatTransitionEvent
+        useTimestamp: true
+      - topicName: topic.CmEventStateProgressionEvent
+        collectionName: CmEventStateProgressionEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMessageCountProgressionEvents
@@ -268,8 +275,8 @@ apps:
         collectionName: CmConnectionOfTravelAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
-      - topicName: topic.CmSignalStateEventAssessment
-        collectionName: CmSignalStateEventAssessment
+      - topicName: topic.CmStopLinePassageAssessment
+        collectionName: CmStopLinePassageAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
       - topicName: topic.CmStopLineStopAssessment
@@ -300,6 +307,13 @@ apps:
         timestampField: notificationGeneratedAt
       - topicName: topic.CmSignalGroupAlignmentNotification
         collectionName: CmSignalGroupAlignmentNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
+      - topicName: topic.CmIntersectionReferenceAlignmentNotification
+        collectionName: CmIntersectionReferenceAlignmentNotification
+        useTimestamp: true
+      - topicName: topic.CmSpatTransitionNotification
+        collectionName: CmSpatTransitionNotification
         useTimestamp: true
         timestampField: notificationGeneratedAt
       - topicName: topic.CmNotification
@@ -356,3 +370,7 @@ apps:
       - topicName: topic.MecDepositMetrics
         collectionName: MecDepositMetrics
         generateTimestamp: true
+  # Allow for custom connectors to be added - users can override this file and add other kafka connectors here
+  other:
+    name: other
+    connectors:

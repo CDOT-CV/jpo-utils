@@ -12,7 +12,7 @@ metadata:
     kafka.jikkou.io/connect-cluster: {{ values.clusterName }}
 spec:
   connectorClass: {{ system.env.KAFKA_CONNECT_CONNECTOR_CLASS | default(values.connectorClass) }}
-  tasksMax: {{ system.env.KAFKA_TOPIC_PARTITIONS | default(values.tasksMax) }}
+  tasksMax: {{ system.env.CONNECT_TASKS_MAX | default(values.tasksMax) }}
   config:
     collection: {{ connector.collectionName }}
     connection.uri: mongodb://{{ system.env.MONGO_CONNECTOR_USERNAME }}:{{ system.env.MONGO_CONNECTOR_PASSWORD }}@{{ system.env.MONGO_DB_IP }}:27017/
@@ -56,10 +56,6 @@ spec:
 {{ create_connector(values.apps.ode) }}
 {% endif %}
 
-{% if system.env.CONNECT_CREATE_GEOJSONCONVERTER %}
-{{ create_connector(values.apps.geojsonconverter) }}
-{% endif %}
-
 {% if system.env.CONNECT_CREATE_CONFLICTMONITOR %}
 {{ create_connector(values.apps.conflictmonitor) }}
 {% endif %}
@@ -73,4 +69,8 @@ spec:
 
 {% if system.env.CONNECT_CREATE_MECDEPOSIT %}
 {{ create_connector(values.apps.mecdeposit) }}
+{% endif %}
+
+{% if system.env.CONNECT_CREATE_OTHER %}
+{{ create_connector(values.apps.other) }}
 {% endif %}
