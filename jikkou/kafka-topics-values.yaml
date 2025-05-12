@@ -115,9 +115,11 @@ apps:
       - topic.CmBsmIntersection
       - topic.CmKafkaStateChangeEvents
       - topic.CmTimestampDeltaEvent
+      - topic.CmSpatTransitionEvent
       - topic.CmBsmMessageCountProgressionEvents
       - topic.CmMapMessageCountProgressionEvents
       - topic.CmSpatMessageCountProgressionEvents
+      - topic.CmEventStateProgressionEvent
       - topic.CmSpatMinimumDataEventAggregation
       - topic.CmMapMinimumDataEventAggregation
       - topic.CmIntersectionReferenceAlignmentEventAggregation
@@ -131,7 +133,6 @@ apps:
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
-      - topic.CmAppHealthNotification
       - topic.CmSpatTimeChangeDetailsNotification
       - topic.CmSignalStateConflictNotification
       - topic.CmSignalGroupAlignmentNotification
@@ -154,12 +155,14 @@ apps:
       - topic.CmSpatRevisionCounterEvents
       - topic.CmBsmRevisionCounterEvents
       - topic.CmTimestampDeltaNotification
+      - topic.CmSpatTransitionNotification
+      - topic.CmEventStateProgressionNotification
       - topic.CmIntersectionReferenceAlignmentNotificationAggregation
       - topic.CmSignalGroupAlignmentNotificationAggregation
       - topic.CmSignalStateConflictNotificationAggregation
       - topic.CmSpatTimeChangeDetailsNotificationAggregation
       - topic.CmEventStateProgressionNotificationAggregation
-      - topic.CmEventStateProgressionNotification
+      
     customTopics: {}
   deduplicator:
     name: jpo-deduplicator
@@ -171,6 +174,7 @@ apps:
       - topic.DeduplicatedOdeRawEncodedTIMJson
       - topic.DeduplicatedOdeBsmJson 
       - topic.DeduplicatedProcessedBsm
+      - topic.DeduplicatedProcessedSpat
     tableTopics: {}
     customTopics: {}
   kafkaconnect:
@@ -182,14 +186,19 @@ apps:
         partitions: 1
         cleanUpPolicy: compact
       - topicName: topic.KafkaConnectOffsets
-        partitions: 20
+        partitions: 3
         cleanUpPolicy: compact
       - topicName: topic.KafkaConnectStatus
-        partitions: 10
+        partitions: 3
         cleanUpPolicy: compact
   mecdeposit:
     name: jpo-mecdeposit
     streamTopics:
       - topic.MecDepositMetrics
+    tableTopics: {}
+    customTopics: {}
+  other:
+    name: other-topics
+    streamTopics: {}
     tableTopics: {}
     customTopics: {}

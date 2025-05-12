@@ -7,7 +7,7 @@ services:
       - mongo
     image: mongo:8
     hostname: mongo 
-    restart: ${RESTART_POLICY}
+    restart: ${RESTART_POLICY:-on-failure:3}
     deploy:
       resources:
         limits:
@@ -16,19 +16,19 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_DB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_DB_PASS:?}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_DB_USER:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_DB_PASS:-replace_me}
       MONGO_INITDB_DATABASE: admin
-      MONGO_DATABASE_STORAGE_COLLECTION_NAME: ${MONGO_DATABASE_STORAGE_COLLECTION_NAME}
-      MONGO_DATABASE_SIZE_GB: ${MONGO_DATABASE_SIZE_GB}
-      MONGO_DATABASE_SIZE_TARGET_PERCENT: ${MONGO_DATABASE_SIZE_TARGET_PERCENT}
-      MONGO_DATABASE_DELETE_THRESHOLD_PERCENT: ${MONGO_DATABASE_DELETE_THRESHOLD_PERCENT}
-      MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS: ${MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS}
-      MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS: ${MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS}
-      MONGO_ENABLE_STORAGE_RECORD: ${MONGO_ENABLE_STORAGE_RECORD}
-      MONGO_ENABLE_DYNAMIC_TTL: ${MONGO_ENABLE_DYNAMIC_TTL}
-      MONGO_DB_NAME: ${MONGO_DB_NAME}
-      MONGO_DB_KEYFILE_STRING: ${MONGO_DB_KEYFILE_STRING:?}
+      MONGO_DATABASE_STORAGE_COLLECTION_NAME: ${MONGO_DATABASE_STORAGE_COLLECTION_NAME:-storage}
+      MONGO_DATABASE_SIZE_GB: ${MONGO_DATABASE_SIZE_GB:-10}
+      MONGO_DATABASE_SIZE_TARGET_PERCENT: ${MONGO_DATABASE_SIZE_TARGET_PERCENT:-0.8}
+      MONGO_DATABASE_DELETE_THRESHOLD_PERCENT: ${MONGO_DATABASE_DELETE_THRESHOLD_PERCENT:-0.9}
+      MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS: ${MONGO_DATABASE_MAX_TTL_RETENTION_SECONDS:-5184000}
+      MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS: ${MONGO_DATABASE_MIN_TTL_RETENTION_SECONDS:-604800}
+      MONGO_ENABLE_STORAGE_RECORD: ${MONGO_ENABLE_STORAGE_RECORD:-true}
+      MONGO_ENABLE_DYNAMIC_TTL: ${MONGO_ENABLE_DYNAMIC_TTL:-true}
+      MONGO_DB_NAME: ${MONGO_DB_NAME:-CV}
+      MONGO_DB_KEYFILE_STRING: ${MONGO_DB_KEYFILE_STRING:-replacethisstring}
     entrypoint:
       - bash
       - -c
@@ -41,7 +41,7 @@ services:
         dos2unix /etc/cron.d/manage-volume-cron
         chmod 644 /etc/cron.d/manage-volume-cron
         systemctl restart cron
-        echo "$MONGO_DB_KEYFILE_STRING" > /data/keyfile.txt
+        echo "${MONGO_DB_KEYFILE_STRING:-replacethisstring}" > /data/keyfile.txt
         chmod 400 /data/keyfile.txt
         chown 999:999 /data/keyfile.txt
         
@@ -53,7 +53,7 @@ services:
       - ./mongo/manage_volume.js:/data/manage_volume.js
     healthcheck:
       # Removal of replica set status check as the mongo-setup container is what actually configures the replica set
-      test: mongosh --quiet --username ${MONGO_ADMIN_DB_USER} --password ${MONGO_ADMIN_DB_PASS} --authenticationDatabase admin --eval "db.adminCommand('ping').ok"
+      test: mongosh --quiet --username ${MONGO_ADMIN_DB_USER:-admin} --password ${MONGO_ADMIN_DB_PASS:-replace_me} --authenticationDatabase admin --eval "db.adminCommand('ping').ok"
       interval: 10s
       timeout: 10s
       retries: 10
@@ -77,26 +77,28 @@ services:
           cpus: '0.5'
           memory: 1G
     environment:
-      MONGO_ADMIN_DB_USER: ${MONGO_ADMIN_DB_USER}
-      MONGO_ADMIN_DB_PASS: ${MONGO_ADMIN_DB_PASS:?}
-      MONGO_DB_NAME: ${MONGO_DB_NAME}
-      MONGO_READ_WRITE_USER: ${MONGO_READ_WRITE_USER}
-      MONGO_READ_WRITE_PASS: ${MONGO_READ_WRITE_PASS:?}
-      MONGO_READ_USER: ${MONGO_READ_USER}
-      MONGO_READ_PASS: ${MONGO_READ_PASS:?}
-      MONGO_EXPORTER_USERNAME: ${MONGO_EXPORTER_USERNAME}
-      MONGO_EXPORTER_PASSWORD: ${MONGO_EXPORTER_PASSWORD:?}
-      MONGO_DATA_RETENTION_SECONDS: ${MONGO_DATA_RETENTION_SECONDS}
-      MONGO_ASN_RETENTION_SECONDS: ${MONGO_ASN_RETENTION_SECONDS}
-      CONNECT_CREATE_GEOJSONCONVERTER: ${CONNECT_CREATE_GEOJSONCONVERTER}
-      CONNECT_CREATE_CONFLICTMONITOR: ${CONNECT_CREATE_CONFLICTMONITOR}
-      CONNECT_CREATE_DEDUPLICATOR: ${CONNECT_CREATE_DEDUPLICATOR}
-      CONNECT_CREATE_MECDEPOSIT: ${CONNECT_CREATE_MECDEPOSIT}
+      MONGO_ADMIN_DB_USER: ${MONGO_ADMIN_DB_USER:-admin}
+      MONGO_ADMIN_DB_PASS: ${MONGO_ADMIN_DB_PASS:-replace_me}
+      MONGO_DB_NAME: ${MONGO_DB_NAME:-CV}
+      MONGO_READ_WRITE_USER: ${MONGO_READ_WRITE_USER:-ode}
+      MONGO_READ_WRITE_PASS: ${MONGO_READ_WRITE_PASS:-replace_me}
+      MONGO_READ_USER: ${MONGO_READ_USER:-read}
+      MONGO_READ_PASS: ${MONGO_READ_PASS:-replace_me}
+      MONGO_EXPORTER_USERNAME: ${MONGO_EXPORTER_USERNAME:-exporter}
+      MONGO_EXPORTER_PASSWORD: ${MONGO_EXPORTER_PASSWORD:-replace_me}
+      
+      MONGO_DATA_RETENTION_SECONDS: ${MONGO_DATA_RETENTION_SECONDS:-5184000}
+      MONGO_ASN_RETENTION_SECONDS: ${MONGO_ASN_RETENTION_SECONDS:-86400}
+
+      MONGO_INDEX_CREATE_ODE: ${MONGO_INDEX_CREATE_ODE:-true}
+      MONGO_INDEX_CREATE_GEOJSONCONVERTER: ${MONGO_INDEX_CREATE_GEOJSONCONVERTER:-true}
+      MONGO_INDEX_CREATE_CONFLICTMONITOR: ${MONGO_INDEX_CREATE_CONFLICTMONITOR:-true}
+      MONGO_INDEX_CREATE_DEDUPLICATOR: ${MONGO_INDEX_CREATE_DEDUPLICATOR:-false}
     entrypoint: ["/bin/bash", "setup_mongo.sh"]
     volumes:
-      - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH}:/setup_mongo.sh
-      - ${MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH}:/create_indexes.js
-      - ${MONGO_INIT_REPLICAS_SCRIPT_RELATIVE_PATH}:/init_replicas.js
+      - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH:-./mongo/setup_mongo.sh}:/setup_mongo.sh
+      - ${MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH:-./mongo/create_indexes.js}:/create_indexes.js
+      - ${MONGO_INIT_REPLICAS_SCRIPT_RELATIVE_PATH:-./mongo/init_replicas.js}:/init_replicas.js
 
   mongo-express:
     profiles:
@@ -105,7 +107,7 @@ services:
       - mongo_express
     image: mongo-express:1.0.2-18
     hostname: mongo-express
-    restart: ${RESTART_POLICY}
+    restart: ${RESTART_POLICY:-on-failure:3}
     deploy:
       resources:
         limits:
@@ -119,11 +121,11 @@ services:
         required: false
     environment:
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
-      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASS:?}
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ADMIN_DB_USER}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ADMIN_DB_PASS:?}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ADMIN_DB_USER}:${MONGO_ADMIN_DB_PASS}@${MONGO_IP}:27017/?authSource=admin&directConnection=true
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASS:-replace_me}
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ADMIN_DB_USER:-admin}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ADMIN_DB_PASS:-replace_me}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ADMIN_DB_USER:-admin}:${MONGO_ADMIN_DB_PASS:-replace_me}@${MONGO_IP:-mongo}:27017/?authSource=admin&directConnection=true
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081"]
       interval: 30s

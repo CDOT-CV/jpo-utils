@@ -201,6 +201,12 @@ apps:
       - topicName: topic.CmTimestampDeltaEvent
         collectionName: CmTimestampDeltaEvent
         useTimestamp: true
+      - topicName: topic.CmSpatTransitionEvent
+        collectionName: CmSpatTransitionEvent
+        useTimestamp: true
+      - topicName: topic.CmEventStateProgressionEvent
+        collectionName: CmEventStateProgressionEvent
+        useTimestamp: true
         timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMessageCountProgressionEvents
         collectionName: CmSpatMessageCountProgressionEvents
@@ -303,6 +309,13 @@ apps:
         collectionName: CmSignalGroupAlignmentNotification
         useTimestamp: true
         timestampField: notificationGeneratedAt
+      - topicName: topic.CmIntersectionReferenceAlignmentNotification
+        collectionName: CmIntersectionReferenceAlignmentNotification
+        useTimestamp: true
+      - topicName: topic.CmSpatTransitionNotification
+        collectionName: CmSpatTransitionNotification
+        useTimestamp: true
+        timestampField: notificationGeneratedAt
       - topicName: topic.CmNotification
         collectionName: CmNotification
         useTimestamp: true
@@ -357,3 +370,7 @@ apps:
       - topicName: topic.MecDepositMetrics
         collectionName: MecDepositMetrics
         generateTimestamp: true
+  # Allow for custom connectors to be added - users can override this file and add other kafka connectors here
+  other:
+    name: other
+    connectors:
