@@ -149,7 +149,7 @@ apps:
       - topic.CmAssessment
       - topic.CmStopLineStopAssessment
       - topic.CmStopLineStopNotification
-      - topic.CmSignalStateEventAssessment
+      - topic.CmStopLinePassageAssessment
       - topic.CmStopLinePassageNotification
       - topic.CmMapRevisionCounterEvents
       - topic.CmSpatRevisionCounterEvents
@@ -166,17 +166,25 @@ apps:
     customTopics: {}
   deduplicator:
     name: jpo-deduplicator
-    streamTopics:
-      - topic.DeduplicatedProcessedMap
-      - topic.DeduplicatedProcessedMapWKT
-      - topic.DeduplicatedOdeMapJson
-      - topic.DeduplicatedOdeTimJson
-      - topic.DeduplicatedOdeRawEncodedTIMJson
-      - topic.DeduplicatedOdeBsmJson 
-      - topic.DeduplicatedProcessedBsm
-      - topic.DeduplicatedProcessedSpat
+    streamTopics: {}
     tableTopics: {}
-    customTopics: {}
+    customTopics:
+      - topicName: topic.DeduplicatedProcessedMap
+        retentionMs: 43200000  # 12 hours
+      - topicName: topic.DeduplicatedProcessedMapWKT
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeMapJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeTimJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeRawEncodedTIMJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedOdeBsmJson
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedProcessedBsm
+        retentionMs: 43200000
+      - topicName: topic.DeduplicatedProcessedSpat
+        retentionMs: 43200000
   kafkaconnect:
     name: jpo-kafka-connect
     streamTopics: {}
