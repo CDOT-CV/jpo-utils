@@ -23,7 +23,7 @@ done
 echo "Replica set initialized and primary node is ready!"
 
 # Restore data if sample data path is provided
-if [ "${MONGO_SAMPLE_DATA_RELATIVE_PATH}" != "" ]; then
+if [ "${MONGO_SAMPLE_DATA_RELATIVE_PATH}" != "./mongo/default_dump.txt" ]; then
     echo "Restoring mongo data"
 
     # Ensure username and password are set
@@ -35,6 +35,6 @@ if [ "${MONGO_SAMPLE_DATA_RELATIVE_PATH}" != "" ]; then
 
     mongorestore --host mongo --username "${MONGO_ADMIN_DB_USER}" --password "${MONGO_ADMIN_DB_PASS}" --authenticationDatabase admin /dump
 else
-    echo "No sample data path provided. Skipping data restore."
+    echo "No sample data path provided. Skipping data restore. './mongo/default_dump.txt' is intentionally ignored"
 fi
 echo "Restore Done Dumping"

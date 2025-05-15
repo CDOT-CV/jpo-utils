@@ -102,7 +102,7 @@ services:
       - ${MONGO_RESTORE_SCRIPT_RELATIVE_PATH}:/restore_mongo.sh
       - ${MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH}:/create_indexes.js
       - ${MONGO_INIT_REPLICAS_SCRIPT_RELATIVE_PATH}:/init_replicas.js
-      - ${MONGO_SAMPLE_DATA_RELATIVE_PATH}:/dump
+      - ${MONGO_SAMPLE_DATA_RELATIVE_PATH:-./mongo/default_dump.txt}:/dump
 
   mongo-express:
     profiles:
