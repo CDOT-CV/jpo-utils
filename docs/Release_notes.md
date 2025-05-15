@@ -22,6 +22,7 @@ Enhancements in this release:
 - [CDOT PR 21](https://github.com/CDOT-CV/jpo-utils/pull/21): Supporting MongoDB Sample Data Initialization
 - [CDOT PR 22](https://github.com/CDOT-CV/jpo-utils/pull/22): Update Intersection API Topic and Collection Names
 - [CDOT PR 23](https://github.com/CDOT-CV/jpo-utils/pull/23): Custom Kafka Retention ms
+- [CDOT PR 26](https://github.com/CDOT-CV/jpo-utils/pull/26): Defaulting Mongo Sample Data Dump Path
 - [USDOT PR 34](https://github.com/usdot-jpo-ode/jpo-utils/pull/34): Feature/deduplicated processed bsm
 - [USDOT PR 35](https://github.com/usdot-jpo-ode/jpo-utils/pull/35): Jikkou Image Updates
 - [USDOT PR 36](https://github.com/usdot-jpo-ode/jpo-utils/pull/36): Confluent Cloud Topic Creation
