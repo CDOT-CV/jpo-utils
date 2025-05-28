@@ -130,6 +130,8 @@ apps:
       - topic.CmBsmMessageCountProgressionEventAggregation
       - topic.CmMapMessageCountProgressionEventAggregation
       - topic.CmSpatMessageCountProgressionEventAggregation
+      - topic.CmRevocableEnabledLaneAlignment
+      - topic.CmRevocableEnabledLaneAlignmentEventAggregation
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
