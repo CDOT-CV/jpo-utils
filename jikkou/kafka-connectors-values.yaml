@@ -115,6 +115,13 @@ apps:
       - topicName: topic.ProcessedBsm
         collectionName: ProcessedBsm
         generateTimestamp: true
+  intersection_api:
+    name: intersection_api
+    connectors:
+      topicName: IntersectionApiRsuStatus
+      collectionName: IntersectionApiRsuStatus
+      useTimestamp: true
+      timestampField: timestamp
   deduplicator:
     name: deduplicator
     connectors:
