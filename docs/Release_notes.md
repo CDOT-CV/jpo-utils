@@ -1,5 +1,21 @@
 # JPO-UTILS Release Notes
 
+## Version 2.1.2
+----------------------------------------
+### **Summary**
+In this hotfix, default values were added for all MongoDB docker-compose dynamic volumes. This enables operation without setting any of the MONGO_*_RELATIVE_PATH variables, reducing integration workload for parent projects using this as a submodule. 
+
+Enhancements in this release:
+- [USDOT PR 44](https://github.com/usdot-jpo-ode/jpo-utils/pull/44): Hotfix/2.1.2: Adding Default MongoDB Volume Paths
+
+## Version 2.1.1
+----------------------------------------
+### **Summary**
+In this hotfix, a bug was fixed which required manual configuration of the mongodb sample data environment variable (MONGO_SAMPLE_DATA_RELATIVE_PATH) to be set before building. This is now defaulted correctly and runs without any additional configuration. 
+
+Enhancements in this release:
+- [USDOT PR 42](https://github.com/usdot-jpo-ode/jpo-utils/pull/42): Hotfix/2.1.1: Setting MongoDB Sample Data ENV
+
 ## Version 2.1.0
 ----------------------------------------
 ### **Summary**
