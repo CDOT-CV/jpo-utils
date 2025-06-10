@@ -1,5 +1,13 @@
 # JPO-UTILS Release Notes
 
+## Version 2.1.3
+----------------------------------------
+### **Summary**
+In this hotfix, a new topic was added to support the latest jpo-ode hotfix to address a bug regarding its handling of the TMC generated TIM messages within a Kafka Streams KTable.
+
+Enhancements in this release:
+- [USDOT PR 48](https://github.com/usdot-jpo-ode/jpo-utils/pull/48): Hotfix 2.1.3: JPO-ODE KTable Topic Addition
+
 ## Version 2.1.2
 ----------------------------------------
 ### **Summary**
