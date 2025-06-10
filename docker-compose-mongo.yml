@@ -64,6 +64,7 @@ services:
       - kafka_connect_standalone
       - mongo_full
       - mongo
+      - mongo_setup
     image: mongo:8
     hostname: mongo_setup
     depends_on:
@@ -96,6 +97,7 @@ services:
       MONGO_INDEX_CREATE_GEOJSONCONVERTER: ${MONGO_INDEX_CREATE_GEOJSONCONVERTER:-true}
       MONGO_INDEX_CREATE_CONFLICTMONITOR: ${MONGO_INDEX_CREATE_CONFLICTMONITOR:-true}
       MONGO_INDEX_CREATE_DEDUPLICATOR: ${MONGO_INDEX_CREATE_DEDUPLICATOR:-false}
+      MONGO_INDEX_CREATE_INTERSECTION_API: ${MONGO_INDEX_CREATE_INTERSECTION_API:-true}
     entrypoint: ["/bin/bash", "-c", "./setup_mongo.sh && ./restore_mongo.sh"]
     volumes:
       - ${MONGO_SETUP_SCRIPT_RELATIVE_PATH:-./mongo/setup_mongo.sh}:/setup_mongo.sh

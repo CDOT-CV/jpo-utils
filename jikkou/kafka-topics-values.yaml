@@ -166,6 +166,11 @@ apps:
       - topic.CmEventStateProgressionNotificationAggregation
       
     customTopics: {}
+  intersection_api:
+    name: intersection_api
+    customTopics:
+      - topicName: topic.IntersectionApiRsuStatus
+        retentionMs: 43200000
   deduplicator:
     name: jpo-deduplicator
     streamTopics: {}
