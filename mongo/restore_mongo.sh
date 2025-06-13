@@ -23,18 +23,14 @@ done
 echo "Replica set initialized and primary node is ready!"
 
 # Restore data if sample data path is provided
-if [ "${MONGO_SAMPLE_DATA_RELATIVE_PATH}" != "" ]; then
-    echo "Restoring mongo data"
+echo "Restoring mongo data"
 
-    # Ensure username and password are set
-    if [ -z "${MONGO_ADMIN_DB_USER}" ] || [ -z "${MONGO_ADMIN_DB_PASS}" ]; then
-        echo "Error: MONGO_ADMIN_DB_USER or MONGO_ADMIN_DB_PASS is not set."
-        exit 1
-    fi
-    echo "Restore Calling Dump"
-
-    mongorestore --host mongo --username "${MONGO_ADMIN_DB_USER}" --password "${MONGO_ADMIN_DB_PASS}" --authenticationDatabase admin /dump
-else
-    echo "No sample data path provided. Skipping data restore."
+# Ensure username and password are set
+if [ -z "${MONGO_ADMIN_DB_USER}" ] || [ -z "${MONGO_ADMIN_DB_PASS}" ]; then
+    echo "Error: MONGO_ADMIN_DB_USER or MONGO_ADMIN_DB_PASS is not set."
+    exit 1
 fi
+echo "Restore Calling Dump"
+
+mongorestore --host mongo --username "${MONGO_ADMIN_DB_USER}" --password "${MONGO_ADMIN_DB_PASS}" --authenticationDatabase admin /dump
 echo "Restore Done Dumping"
