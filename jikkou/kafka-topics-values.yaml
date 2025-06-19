@@ -159,11 +159,13 @@ apps:
       - topic.CmTimestampDeltaNotification
       - topic.CmSpatTransitionNotification
       - topic.CmEventStateProgressionNotification
+      - topic.CmRevocableEnabledLaneAlignmentNotification
       - topic.CmIntersectionReferenceAlignmentNotificationAggregation
       - topic.CmSignalGroupAlignmentNotificationAggregation
       - topic.CmSignalStateConflictNotificationAggregation
       - topic.CmSpatTimeChangeDetailsNotificationAggregation
       - topic.CmEventStateProgressionNotificationAggregation
+      - topic.CmRevocableEnabledLaneAlignmentNotificationAggregation
       
     customTopics: {}
   deduplicator:
