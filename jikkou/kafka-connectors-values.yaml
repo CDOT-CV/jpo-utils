@@ -88,6 +88,12 @@ apps:
       - topicName: topic.OdeDriverAlertJson
         collectionName: OdeDriverAlertJson
         generateTimestamp: true
+      - topicName: topic.OdeRawEncodedSDSMJson
+        collectionName: OdeRawEncodedSDSMJson
+        generateTimestamp: true
+      - topicName: topic.OdeSdsmJson
+        collectionName: OdeSdsmJson
+        generateTimestamp: true
   ode_duplicated:
     name: ode-duplicated
     connectors:
@@ -275,8 +281,8 @@ apps:
         collectionName: CmConnectionOfTravelAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
-      - topicName: topic.CmSignalStateEventAssessment
-        collectionName: CmSignalStateEventAssessment
+      - topicName: topic.CmStopLinePassageAssessment
+        collectionName: CmStopLinePassageAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
       - topicName: topic.CmStopLineStopAssessment
