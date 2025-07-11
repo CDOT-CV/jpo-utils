@@ -46,19 +46,12 @@ apps:
   ode:
     name: jpo-ode
     streamTopics:
-      - topic.OdeBsmPojo
-      - topic.OdeSpatTxPojo
-      - topic.OdeSpatPojo
       - topic.OdeSpatJson
       - topic.FilteredOdeSpatJson
-      - topic.OdeSpatRxJson
-      - topic.OdeSpatRxPojo
       - topic.OdeBsmJson
       - topic.FilteredOdeBsmJson
       - topic.OdeTimJson
       - topic.OdeTimJsonTMCFiltered
-      - topic.OdeTimBroadcastJson
-      - topic.J2735TimBroadcastJson
       - topic.OdeTimKTableJson
       - topic.FilteredOdeTimJson
       - topic.OdeDriverAlertJson
@@ -72,20 +65,17 @@ apps:
       - topic.OdeRawEncodedSPATJson
       - topic.OdeRawEncodedTIMJson
       - topic.OdeRawEncodedMAPJson
-      - topic.OdeMapTxPojo
       - topic.OdeMapJson
       - topic.OdeRawEncodedSSMJson
-      - topic.OdeSsmPojo
       - topic.OdeSsmJson
       - topic.OdeRawEncodedSRMJson
-      - topic.OdeSrmTxPojo
       - topic.OdeSrmJson
       - topic.OdeRawEncodedPSMJson
-      - topic.OdePsmTxPojo
       - topic.OdePsmJson
-      - topic.OdeTimRxJson
       - topic.OdeRawEncodedSDSMJson
       - topic.OdeSdsmJson
+      - topic.OdeRawEncodedRTCMJson
+      - topic.OdeRtcmJson
     tableTopics: {}
     customTopics: {}
   geojsonconverter:

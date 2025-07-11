@@ -94,6 +94,12 @@ apps:
       - topicName: topic.OdeSdsmJson
         collectionName: OdeSdsmJson
         generateTimestamp: true
+      - topicName: topic.OdeRawEncodedRTCMJson
+        collectionName: OdeRawEncodedRTCMJson
+        generateTimestamp: true
+      - topicName: topic.OdeRtcmJson
+        collectionName: OdeRtcmJson
+        generateTimestamp: true
   ode_duplicated:
     name: ode-duplicated
     connectors:
