@@ -64,6 +64,7 @@ services:
       - kafka_connect_standalone
       - mongo_full
       - mongo
+      - mongo_setup
     image: mongo:8
     hostname: mongo_setup
     depends_on:

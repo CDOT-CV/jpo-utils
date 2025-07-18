@@ -94,6 +94,12 @@ apps:
       - topicName: topic.OdeSdsmJson
         collectionName: OdeSdsmJson
         generateTimestamp: true
+      - topicName: topic.OdeRawEncodedRTCMJson
+        collectionName: OdeRawEncodedRTCMJson
+        generateTimestamp: true
+      - topicName: topic.OdeRtcmJson
+        collectionName: OdeRtcmJson
+        generateTimestamp: true
   ode_duplicated:
     name: ode-duplicated
     connectors:
@@ -121,6 +127,13 @@ apps:
       - topicName: topic.ProcessedBsm
         collectionName: ProcessedBsm
         generateTimestamp: true
+  intersection_api:
+    name: intersection_api
+    connectors:
+      - topicName: topic.IntersectionApiRsuStatus
+        collectionName: IntersectionApiRsuStatus
+        useTimestamp: true
+        timestampField: timestamp
   deduplicator:
     name: deduplicator
     connectors:
