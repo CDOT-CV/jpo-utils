@@ -38,6 +38,7 @@ const CONNECT_CREATE_ODE = process.env['CONNECT_CREATE_ODE'] || true;
 const CONNECT_CREATE_GEOJSONCONVERTER = process.env['CONNECT_CREATE_GEOJSONCONVERTER'] || true;
 const CONNECT_CREATE_CONFLICTMONITOR = process.env['CONNECT_CREATE_CONFLICTMONITOR'] || true;
 const CONNECT_CREATE_DEDUPLICATOR = process.env['CONNECT_CREATE_DEDUPLICATOR'] || true;
+const CONNECT_INDEX_CREATE_INTERSECTION_API = process.env['CONNECT_CREATE_INTERSECTION_API'] || true;
 
 
 const users = [
@@ -169,6 +170,10 @@ const conflictMonitorCollections = [
 
 ];
 
+let intersectionAPICollections = [
+    { name: "IntersectionApiRsuStatus", timeField: "timestamp", intersectionField: "intersectionID", rsuIP:"rsuIP"},
+];
+
 let collections = [];
 
 if(CONNECT_CREATE_ODE){
@@ -181,6 +186,10 @@ if(CONNECT_CREATE_GEOJSONCONVERTER){
 
 if(CONNECT_CREATE_CONFLICTMONITOR){
     collections = collections.concat(conflictMonitorCollections);
+}
+
+if(CONNECT_INDEX_CREATE_INTERSECTION_API){
+    collections = collections.concat(intersectionAPICollections);
 }
 
 

@@ -60,6 +60,10 @@ spec:
 {{ create_connector(values.apps.conflictmonitor) }}
 {% endif %}
 
+{% if system.env.CONNECT_CREATE_INTERSECTION_API %}
+{{ create_connector(values.apps.intersection_api) }}
+{% endif %}
+
 {% if system.env.CONNECT_CREATE_DEDUPLICATOR %}
 {{ create_connector(values.apps.deduplicator) }}
 {% else %}
