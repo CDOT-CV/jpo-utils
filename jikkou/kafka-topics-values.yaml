@@ -113,6 +113,7 @@ apps:
       - topic.CmMapMessageCountProgressionEvents
       - topic.CmSpatMessageCountProgressionEvents
       - topic.CmEventStateProgressionEvent
+      - topic.CmRevocableEnabledLaneAlignmentEvent
       - topic.CmSpatMinimumDataEventAggregation
       - topic.CmMapMinimumDataEventAggregation
       - topic.CmIntersectionReferenceAlignmentEventAggregation
@@ -123,7 +124,6 @@ apps:
       - topic.CmBsmMessageCountProgressionEventAggregation
       - topic.CmMapMessageCountProgressionEventAggregation
       - topic.CmSpatMessageCountProgressionEventAggregation
-      - topic.CmRevocableEnabledLaneAlignment
       - topic.CmRevocableEnabledLaneAlignmentEventAggregation
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification

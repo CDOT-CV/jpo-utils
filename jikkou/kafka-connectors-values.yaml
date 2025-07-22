@@ -239,6 +239,10 @@ apps:
         collectionName: CmBsmMessageCountProgressionEvents
         useTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentEvent
+        collectionName: CmRevocableEnabledLaneAlignmentEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMinimumDataEventAggregation
         collectionName: CmSpatMinimumDataEventAggregation
         generateTimestamp: true
@@ -279,6 +283,12 @@ apps:
         collectionName: CmSpatMessageCountProgressionEventAggregation
         generateTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentEventAggregation
+        collectionName: CmRevocableEnabledLaneAlignmentEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+
+
 
       # Record BSM events:
       - topicName: topic.CmBsmEvents
@@ -363,6 +373,10 @@ apps:
         collectionName: CmEventStateProgressionNotification
         generateTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentNotification
+        collectionName: CmRevocableEnabledLaneAlignmentNotification
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmIntersectionReferenceAlignmentNotificationAggregation
         collectionName: CmIntersectionReferenceAlignmentNotificationAggregation
         generateTimestamp: true
@@ -383,6 +397,11 @@ apps:
         collectionName: CmEventStateProgressionNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentNotificationAggregation
+        collectionName: CmRevocableEnabledLaneAlignmentNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+      
   mecdeposit:
     name: mecdeposit
     connectors:
