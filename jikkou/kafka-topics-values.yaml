@@ -76,6 +76,8 @@ apps:
       - topic.OdeSdsmJson
       - topic.OdeRawEncodedRTCMJson
       - topic.OdeRtcmJson
+      - topic.OdeRawEncodedRSMJson
+      - topic.OdeRsmJson
     tableTopics: {}
     customTopics: {}
   geojsonconverter:
