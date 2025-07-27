@@ -87,6 +87,7 @@ apps:
       - topic.ProcessedMap
       - topic.ProcessedMapWKT
       - topic.ProcessedBsm
+      - topic.ProcessedRtcm
     tableTopics: {}
     customTopics: {}
   conflictmonitor:

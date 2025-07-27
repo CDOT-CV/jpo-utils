@@ -249,6 +249,14 @@ apps:
         collectionName: CmRevocableEnabledLaneAlignmentEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRtcmBroadcastRateEvent
+        collectionName: CmRtcmBroadcastRateEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmRtcmMinimumDataEvent
+        collectionName: CmRtcmMinimumDataEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMinimumDataEventAggregation
         collectionName: CmSpatMinimumDataEventAggregation
         generateTimestamp: true
@@ -291,6 +299,10 @@ apps:
         timestampField: eventGeneratedAt
       - topicName: topic.CmRevocableEnabledLaneAlignmentEventAggregation
         collectionName: CmRevocableEnabledLaneAlignmentEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmRtcmMinimumDataEventAggregation
+        collectionName: CmRtcmMinimumDataEventAggregation
         generateTimestamp: true
         timestampField: eventGeneratedAt
 
