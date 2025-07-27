@@ -72,6 +72,10 @@ spec:
 {{ create_topics(values.apps.conflictmonitor) }}
 {% endif %}
 
+{% if system.env.KAFKA_TOPIC_CREATE_INTERSECTION_API %}
+{{ create_topics(values.apps.intersection_api) }}
+{% endif %}
+
 {% if system.env.KAFKA_TOPIC_CREATE_DEDUPLICATOR %}
 {{ create_topics(values.apps.deduplicator) }}
 {% endif %}
