@@ -1,6 +1,7 @@
 #!/bin/bash 
 
 until mongosh --host mongo:27017 --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)' &>/dev/null; do
+  echo "Waiting for valid Ping from MongoDB"
   sleep 1
 done
 

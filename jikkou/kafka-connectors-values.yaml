@@ -94,6 +94,18 @@ apps:
       - topicName: topic.OdeSdsmJson
         collectionName: OdeSdsmJson
         generateTimestamp: true
+      - topicName: topic.OdeRawEncodedRTCMJson
+        collectionName: OdeRawEncodedRTCMJson
+        generateTimestamp: true
+      - topicName: topic.OdeRtcmJson
+        collectionName: OdeRtcmJson
+        generateTimestamp: true
+      - topicName: topic.OdeRawEncodedRSMJson
+        collectionName: OdeRawEncodedRSMJson
+        generateTimestamp: true
+      - topicName: topic.OdeRsmJson
+        collectionName: OdeRsmJson
+        generateTimestamp: true
   ode_duplicated:
     name: ode-duplicated
     connectors:
@@ -121,6 +133,13 @@ apps:
       - topicName: topic.ProcessedBsm
         collectionName: ProcessedBsm
         generateTimestamp: true
+  intersection_api:
+    name: intersection_api
+    connectors:
+      - topicName: topic.IntersectionApiRsuStatus
+        collectionName: IntersectionApiRsuStatus
+        useTimestamp: true
+        timestampField: timestamp
   deduplicator:
     name: deduplicator
     connectors:
@@ -226,6 +245,10 @@ apps:
         collectionName: CmBsmMessageCountProgressionEvents
         useTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentEvent
+        collectionName: CmRevocableEnabledLaneAlignmentEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMinimumDataEventAggregation
         collectionName: CmSpatMinimumDataEventAggregation
         generateTimestamp: true
@@ -266,6 +289,12 @@ apps:
         collectionName: CmSpatMessageCountProgressionEventAggregation
         generateTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentEventAggregation
+        collectionName: CmRevocableEnabledLaneAlignmentEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+
+
 
       # Record BSM events:
       - topicName: topic.CmBsmEvents
@@ -350,6 +379,10 @@ apps:
         collectionName: CmEventStateProgressionNotification
         generateTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentNotification
+        collectionName: CmRevocableEnabledLaneAlignmentNotification
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmIntersectionReferenceAlignmentNotificationAggregation
         collectionName: CmIntersectionReferenceAlignmentNotificationAggregation
         generateTimestamp: true
@@ -370,6 +403,11 @@ apps:
         collectionName: CmEventStateProgressionNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentNotificationAggregation
+        collectionName: CmRevocableEnabledLaneAlignmentNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+      
   mecdeposit:
     name: mecdeposit
     connectors:
