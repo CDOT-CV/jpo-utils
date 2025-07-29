@@ -15,6 +15,7 @@ The JPO ITS utilities repository serves as a central location for deploying open
   - [2. MongoDB](#2-mongodb)
     - [Quick Run](#quick-run)
   - [3. Kafka](#3-kafka)
+    - [Kafka Topic Log Retention and Rotation](#kafka-topic-log-retention-and-rotation)
     - [Configure Topic Creation](#configure-topic-creation)
       - [Confluent Cloud Support](#confluent-cloud-support)
     - [Quick Run](#quick-run-1)
@@ -26,6 +27,7 @@ The JPO ITS utilities repository serves as a central location for deploying open
     - [Configuration](#configuration-1)
     - [Quick Run](#quick-run-3)
     - [Scrape Configurations](#scrape-configurations)
+    - [VictoriaMetrics Configuration](#victoriametrics-configuration)
   - [Security Notice](#security-notice)
 
 
@@ -213,12 +215,12 @@ The following environment variables can be used to configure Kafka Connectors:
 
 ## 5. Monitoring Stack
 
-The monitoring stack consists of Prometheus for metrics collection and Grafana for visualization, along with several exporters that collect metrics from different services. The configuration is defined in [docker-compose-monitoring.yml](docker-compose-monitoring.yml).
+The monitoring stack consists of VictoriaMetrics (a Prometheus-compatible time series database) for metrics collection and Grafana for visualization, along with several exporters that collect metrics from different services. The configuration is defined in [docker-compose-monitoring.yml](docker-compose-monitoring.yml).
 
 Set the `COMPOSE_PROFILES` environmental variable as follows:
 
 - `monitoring_full` - deploys all resources in the [docker-compose-monitoring.yml](docker-compose-monitoring.yml) file
-  - `prometheus` - deploys only the Prometheus service
+  - `victoriametrics` - deploys only the Victoria Metrics service (Prometheus-compatible time series database)
   - `grafana` - deploys only the Grafana service
   - `node_exporter` - deploys only the Node Exporter service for system metrics
   - `kafka_exporter` - deploys only the Kafka Lag Exporter service
@@ -230,12 +232,17 @@ The following environment variables can be used to configure the monitoring stac
 
 | Environment Variable | Description |
 |---|---|
-| `PROMETHEUS_RETENTION` | Data retention period for Prometheus (default: 15d) |
+| `PROMETHEUS_RETENTION` | Data retention period for VictoriaMetrics (default: 15d) |
 | `GRAFANA_ADMIN_USER` | Grafana admin username (default: admin) |
 | `GRAFANA_ADMIN_PASSWORD` | Grafana admin password (default: grafana) |
 | `KAFKA_LAG_EXPORTER_ROOT_LOG_LEVEL` | Root log level for kafka lag exporter (default: WARN) |
 | `KAFKA_LAG_EXPORTER_LOG_LEVEL` | Kafka lag exporter log level (default: INFO) |
 | `KAFKA_LAG_EXPORTER_KAFKA_LOG_LEVEL` | Kafka log level for kafka lag exporter (default: ERROR) |
+| `VICTORIAMETRICS_RETENTION` | Data retention period for VictoriaMetrics (default: 30d) |
+| `VICTORIAMETRICS_MAX_HOURLY_SERIES` | Maximum hourly series for VictoriaMetrics (default: 1000000) |
+| `VICTORIAMETRICS_MAX_UNIQUE_TIMESERIES` | Maximum unique time series for VictoriaMetrics (default: 1000000) |
+| `VICTORIAMETRICS_REMOTE_WRITE_URL` | URL to forward filtered metrics to (optional) |
+| `VICTORIAMETRICS_REMOTE_READ_URL` | URL for remote read operations (optional) |
 
 ### Quick Run
 
@@ -245,11 +252,12 @@ The following environment variables can be used to configure the monitoring stac
 4. Run the following command: `docker compose up -d`
 5. Access the monitoring interfaces:
    - Grafana: `http://localhost:3000` (default credentials: admin/grafana)
-   - Prometheus: `http://localhost:9090`
+   - VictoriaMetrics: `http://localhost:8428` (Prometheus-compatible time series database)
 6. The following metrics endpoints will be available:
    - Node Exporter: `http://localhost:9100/metrics`
    - Kafka Lag Exporter: `http://localhost:8000/metrics`
    - MongoDB Exporter: `http://localhost:9216/metrics`
+   - VictoriaMetrics: `http://localhost:8428/metrics`
 
 ### Scrape Configurations
 
@@ -257,10 +265,28 @@ The scrape configurations for the monitoring stack are defined in the [prometheu
 
 The following scrape configurations are available:
 
-- `prometheus` - scrapes the Prometheus metrics
+- `victoriametrics` - scrapes the VictoriaMetrics metrics (Prometheus-compatible)
 - `node_exporter` - scrapes the Node Exporter metrics
 - `kafka_exporter` - scrapes the Kafka Lag Exporter metrics
 - `mongodb_exporter` - scrapes the MongoDB Exporter metrics
+
+### VictoriaMetrics Configuration
+
+VictoriaMetrics is configured to act as a metrics aggregator and forwarder. It:
+
+1. **Accepts remote write from Prometheus-compatible sources** - All metrics from Prometheus-compatible sources are sent to VictoriaMetrics
+2. **Filters specific metrics** - Only `kafka_produced_rsu_messages_total` metrics are forwarded to the configured remote write URL
+3. **Provides remote read capabilities** - Can read metrics from external sources
+4. **Stores metrics locally** - Maintains its own time-series database with configurable retention
+
+The configuration is defined in [monitoring/victoriametrics/relabel.yml](monitoring/victoriametrics/relabel.yml) and supports the following features:
+
+- **Metric filtering**: Only forwards metrics matching the specified pattern
+- **Label addition**: Adds source identification labels to forwarded metrics
+- **Configurable forwarding**: Set `VICTORIAMETRICS_REMOTE_WRITE_URL` to specify where filtered metrics should be sent
+- **Remote read support**: Set `VICTORIAMETRICS_REMOTE_READ_URL` for reading from external sources
+
+For detailed configuration information, see [monitoring/victoriametrics/README.md](monitoring/victoriametrics/README.md).
 
 [Back to top](#toc)
 

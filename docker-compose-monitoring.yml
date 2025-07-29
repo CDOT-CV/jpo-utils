@@ -1,23 +1,25 @@
 services:
-  prometheus:
+  victoriametrics:
     profiles:
       - all
       - monitoring_full
-      - prometheus
-    image: prom/prometheus:v3.1.0
-    hostname: prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.retention.time=${PROMETHEUS_RETENTION:-15d}"
-      - "--storage.tsdb.path=/prometheus"
+      - victoriametrics
+    image: victoriametrics/victoria-metrics:v1.121.0
+    hostname: victoriametrics
     ports:
-      - 9095:9090
+      - "8428:8428"
     restart: ${RESTART_POLICY:-on-failure:3}
+    command:
+      - "--httpListenAddr=:8428"
+      - "--storageDataPath=/victoria-metrics-data"
+      - "--retentionPeriod=${VICTORIAMETRICS_RETENTION:-30d}"
+      - "--search.maxUniqueTimeseries=${VICTORIAMETRICS_MAX_UNIQUE_TIMESERIES:-1000000}"
+      - "--promscrape.config=/etc/victoriametrics/scrape.yml"
     volumes:
-      - ./monitoring/prometheus:/etc/prometheus
-      - prom_data:/prometheus
+      - ./monitoring/victoriametrics:/etc/victoriametrics
+      - victoriametrics_data:/victoria-metrics-data
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-S", "http://localhost:9090/-/healthy"]
+      test: ["CMD", "wget", "--spider", "-S", "http://localhost:8428/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -162,5 +164,5 @@ services:
           memory: 256M
 
 volumes:
-  prom_data:
+  victoriametrics_data:
   grafana_data:
