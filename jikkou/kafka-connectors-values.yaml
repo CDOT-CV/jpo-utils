@@ -118,9 +118,6 @@ apps:
       - topicName: topic.OdeBsmJson
         collectionName: OdeBsmJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedTIMJson
-        collectionName: OdeRawEncodedTIMJson
-        generateTimestamp: true
   geojsonconverter_duplicated:
     name: geojsonconverter-duplicated
     connectors:
@@ -155,10 +152,6 @@ apps:
         collectionName: OdeTimJson
         generateTimestamp: true
         connectorName: DeduplicatedOdeTimJson
-      - topicName: topic.DeduplicatedOdeRawEncodedTIMJson
-        collectionName: OdeRawEncodedTIMJson
-        generateTimestamp: true
-        connectorName: DeduplicatedOdeRawEncodedTIMJson
       - topicName: topic.DeduplicatedOdeBsmJson
         collectionName: OdeBsmJson
         generateTimestamp: true

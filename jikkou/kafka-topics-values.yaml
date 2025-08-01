@@ -182,8 +182,6 @@ apps:
         retentionMs: 43200000
       - topicName: topic.DeduplicatedOdeTimJson
         retentionMs: 43200000
-      - topicName: topic.DeduplicatedOdeRawEncodedTIMJson
-        retentionMs: 43200000
       - topicName: topic.DeduplicatedOdeBsmJson
         retentionMs: 43200000
       - topicName: topic.DeduplicatedProcessedBsm
