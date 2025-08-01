@@ -46,15 +46,6 @@ apps:
   ode:
     name: jpo-ode
     connectors:
-      - topicName: topic.OdeRawEncodedBSMJson
-        collectionName: OdeRawEncodedBSMJson
-        generateTimestamp: true
-      - topicName: topic.OdeRawEncodedMAPJson
-        collectionName: OdeRawEncodedMAPJson
-        generateTimestamp: true
-      - topicName: topic.OdeRawEncodedSPATJson
-        collectionName: OdeRawEncodedSPATJson
-        generateTimestamp: true
       - topicName: topic.OdeSpatJson
         collectionName: OdeSpatJson
         generateTimestamp: true
@@ -67,20 +58,11 @@ apps:
       - topicName: topic.OdeTIMCertExpirationTimeJson
         collectionName: OdeTIMCertExpirationTimeJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedPSMJson
-        collectionName: OdeRawEncodedPSMJson
-        generateTimestamp: true
       - topicName: topic.OdePsmJson
         collectionName: OdePsmJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedSRMJson
-        collectionName: OdeRawEncodedSRMJson
-        generateTimestamp: true
       - topicName: topic.OdeSrmJson
         collectionName: OdeSrmJson
-        generateTimestamp: true
-      - topicName: topic.OdeRawEncodedSSMJson
-        collectionName: OdeRawEncodedSSMJson
         generateTimestamp: true
       - topicName: topic.OdeSsmJson
         collectionName: OdeSsmJson
@@ -88,20 +70,11 @@ apps:
       - topicName: topic.OdeDriverAlertJson
         collectionName: OdeDriverAlertJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedSDSMJson
-        collectionName: OdeRawEncodedSDSMJson
-        generateTimestamp: true
       - topicName: topic.OdeSdsmJson
         collectionName: OdeSdsmJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedRTCMJson
-        collectionName: OdeRawEncodedRTCMJson
-        generateTimestamp: true
       - topicName: topic.OdeRtcmJson
         collectionName: OdeRtcmJson
-        generateTimestamp: true
-      - topicName: topic.OdeRawEncodedRSMJson
-        collectionName: OdeRawEncodedRSMJson
         generateTimestamp: true
       - topicName: topic.OdeRsmJson
         collectionName: OdeRsmJson
