@@ -62,7 +62,7 @@ const odeCollections = [
     // ODE Json data
     {name: "OdeDriverAlertJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
     {name: "OdeBsmJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
-    {name: "OdeBsmJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds},
+    {name: "OdeBsmJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds, additionalIndexes: [{"metadata.odeReceivedAt": -1, "payload.data.coreData.position.latitude": 1, "payload.data.coreData.position.longitude": 1}]},
     {name: "OdeMapJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
     {name: "OdeMapJson", "timeField": "recordGeneratedAt", rsuIP:"metadata.originIp", expireTime: expireSeconds},
     {name: "OdeSpatJson", ttlField: "recordGeneratedAt", "timeField": "metadata.odeReceivedAt", intersectionField: null, rsuIP:"metadata.originIp", expireTime: expireSeconds},
@@ -232,6 +232,7 @@ do {
                 createTimeIntersectionIndex(collection);
                 createTimeRsuIpIndex(collection);
                 createGeoSpatialIndex(collection);
+                createAdditionalIndexes(collection);
             }else{
                 missing_collection_count++;
                 console.log("Collection " + collection['name'] + " does not exist yet");
@@ -440,6 +441,24 @@ function createGeoSpatialIndex(collection){
 
 }
 
+function createAdditionalIndexes(collection){
+    for (const additionalIndex of collection['additionalIndexes'] || []) {
+        console.log("Creating additional index for " + collectionName + " with index: " + JSON.stringify(additionalIndex));
+        const index_name = Object.entries(additionalIndex).map(([key, value]) => `${key}_${value}`).join("_");
+        if (indexExists(collection['name'], index_name)) {
+            continue;
+        }
+        try {
+            db[collectionName].createIndex(additionalIndex);
+            console.log("Created additional index for " + collectionName + " with index: " + JSON.stringify(additionalIndex));
+        } catch (err) {
+            console.log("Failed to create additional index for " + collectionName + " with index: " + JSON.stringify(additionalIndex));
+            console.log(err);
+        }
+    }
+
+}
+
 function ttlIndexExists(collection) {
     return db[collection['name']].getIndexes().find((idx) => idx.hasOwnProperty("expireAfterSeconds")) !== undefined;
 }
@@ -458,4 +477,8 @@ function timeIndexExists(collection){
 
 function geoSpatialIndexExists(collection){
     return db[collection['name']].getIndexes().find((idx) => idx.name == collection['geoSpatialField'] + "_2dsphere_timeStamp_-1") !== undefined;
+}
+
+function indexExists(collectionName, indexName){
+    return db[collectionName].getIndexes().find((idx) => idx.name == indexName) !== undefined;
 }
