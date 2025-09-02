@@ -208,6 +208,13 @@ apps:
       - topic.MecDepositMetrics
     tableTopics: {}
     customTopics: {}
+  rsustatusmonitor:
+    name: rsu-status-monitor
+    streamTopics:
+      - topic.RmNearestNeighborUnresponsiveEvent
+    tableTopics:
+      - topic.RmIntersectionStatusRecords
+    customTopics: {}
   other:
     name: other-topics
     streamTopics: {}
