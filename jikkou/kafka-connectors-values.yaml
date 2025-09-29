@@ -271,7 +271,10 @@ apps:
         collectionName: CmRtcmMinimumDataEventAggregation
         generateTimestamp: true
         timestampField: eventGeneratedAt
-
+      - topicName: topic.CmPriorityPreemptionRequestEvent
+        collectionName: CmPriorityPreemptionRequestEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
 
 
       # Record BSM events:
