@@ -103,6 +103,12 @@ apps:
       - topicName: topic.ProcessedBsm
         collectionName: ProcessedBsm
         generateTimestamp: true
+      - topicName: topic.ProcessedSrm
+        collectionName: ProcessedSrm
+        generateTimestamp: true
+      - topicName: topic.ProcessedSsm
+        collectionName: ProcessedSsm
+        generateTimestamp: true
   intersection_api:
     name: intersection_api
     connectors:
