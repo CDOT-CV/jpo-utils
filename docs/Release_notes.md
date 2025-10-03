@@ -1,5 +1,23 @@
 # JPO-UTILS Release Notes
 
+## Version 2.2.0
+----------------------------------------
+### **Summary**
+In this release, support for the JPO ODE pipeline was expanded and updated to align with the jpo-ode 5.0.2 rework and to incorporate additional J2735 message types alongside CIMMS lane alignment features. New and updated Kafka topics, connectors, and MongoDB indexes were introduced to support RTCM, SDSM, and RSM messages. Configuration was simplified by removing redundant MONGO_INDEX_* environment variables in favor of CONNECT_CREATE, while deprecated topics and collections were removed to reduce technical debt. Further improvements include enhanced index creation via create_indexes.js, updated default Jikkou configurations, and new documentation with helper scripts for managing MongoDB storage.
+
+Enhancements in this release:
+- [CDOT PR 28](https://github.com/CDOT-CV/jpo-utils/pull/28): Rsu Status Message Support
+- [CDOT PR 29](https://github.com/CDOT-CV/jpo-utils/pull/29): Mongo env fixes
+- [CDOT PR 30](https://github.com/CDOT-CV/jpo-utils/pull/30): Revocable Lane Algorithm Support
+- [CDOT PR 31](https://github.com/CDOT-CV/jpo-utils/pull/31): RTCM Addition and Deprecated Topic Removal
+- [CDOT PR 32](https://github.com/CDOT-CV/jpo-utils/pull/32): Adding Connectors and Indexes for Revocable Lanes
+- [CDOT PR 33](https://github.com/CDOT-CV/jpo-utils/pull/33): Mongo storage management document
+- [CDOT PR 34](https://github.com/CDOT-CV/jpo-utils/pull/34): Jikkou: Add RSM Topics
+- [CDOT PR 35](https://github.com/CDOT-CV/jpo-utils/pull/35): RTCM Topics
+- [CDOT PR 36](https://github.com/CDOT-CV/jpo-utils/pull/36): Remove raw encoded collections and connectors
+- [CDOT PR 37](https://github.com/CDOT-CV/jpo-utils/pull/37): Adding OdeBsmJson index and additionalIndexes generator
+- [CDOT PR 42](https://github.com/CDOT-CV/jpo-utils/pull/40): Update Bitnami Kafka to Bitnami Legacy Kafka
+
 ## Version 2.1.3
 ----------------------------------------
 ### **Summary**
