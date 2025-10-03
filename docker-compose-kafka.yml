@@ -5,7 +5,7 @@ services:
       - kafka_connect_standalone
       - kafka_full
       - kafka
-    image: bitnami/kafka:3.8.0
+    image: bitnamilegacy/kafka:3.8.0
     hostname: kafka
     restart: ${RESTART_POLICY:-on-failure:3}
     healthcheck:
