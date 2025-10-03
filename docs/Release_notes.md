@@ -16,6 +16,7 @@ Enhancements in this release:
 - [CDOT PR 35](https://github.com/CDOT-CV/jpo-utils/pull/35): RTCM Topics
 - [CDOT PR 36](https://github.com/CDOT-CV/jpo-utils/pull/36): Remove raw encoded collections and connectors
 - [CDOT PR 37](https://github.com/CDOT-CV/jpo-utils/pull/37): Adding OdeBsmJson index and additionalIndexes generator
+- [CDOT PR 40](https://github.com/CDOT-CV/jpo-utils/pull/40): Update Bitnami Kafka to Bitnami Legacy Kafka
 
 ## Version 2.1.3
 ----------------------------------------
