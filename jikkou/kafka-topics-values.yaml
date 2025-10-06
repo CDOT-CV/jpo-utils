@@ -88,6 +88,8 @@ apps:
       - topic.ProcessedMapWKT
       - topic.ProcessedBsm
       - topic.ProcessedRtcm
+      - topic.ProcessedSrm
+      - topic.ProcessedSsm
     tableTopics: {}
     customTopics: {}
   conflictmonitor:
@@ -128,6 +130,7 @@ apps:
       - topic.CmMapMessageCountProgressionEventAggregation
       - topic.CmSpatMessageCountProgressionEventAggregation
       - topic.CmRevocableEnabledLaneAlignmentEventAggregation
+      - topic.CmPriorityPreemptionRequestEvent
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification

@@ -81,7 +81,9 @@ const odeCollections = [
 const geoJsonConverterCollections = [
     {name: "ProcessedMap", ttlField: "recordGeneratedAt", timeField: "properties.timeStamp", intersectionField: "properties.intersectionId", expireTime: expireSeconds},
     {name: "ProcessedSpat", ttlField: "recordGeneratedAt", timeField: "utcTimeStamp", intersectionField: "intersectionId", expireTime: expireSeconds},
-    {name: "ProcessedBsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds}
+    {name: "ProcessedBsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds},
+    {name: "ProcessedSrm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds},
+    {name: "ProcessedSsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds}
 ];
 
 
@@ -104,7 +106,7 @@ const conflictMonitorCollections = [
     { name: "CmTimestampDeltaEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmSpatTransitionEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmEventStateProgressionEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
-
+    { name: "CmPriorityPreemptionRequestEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     
 
 
@@ -112,6 +114,7 @@ const conflictMonitorCollections = [
     { name: "CmMapMessageCountProgressionEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmBsmMessageCountProgressionEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmRevocableEnabledLaneAlignmentEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+
 
     { name: "CmSpatMinimumDataEventAggregation", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmMapMinimumDataEventAggregation", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
