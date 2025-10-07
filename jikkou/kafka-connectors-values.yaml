@@ -103,6 +103,12 @@ apps:
       - topicName: topic.ProcessedBsm
         collectionName: ProcessedBsm
         generateTimestamp: true
+      - topicName: topic.ProcessedSrm
+        collectionName: ProcessedSrm
+        generateTimestamp: true
+      - topicName: topic.ProcessedSsm
+        collectionName: ProcessedSsm
+        generateTimestamp: true
   intersection_api:
     name: intersection_api
     connectors:
@@ -271,7 +277,10 @@ apps:
         collectionName: CmRtcmMinimumDataEventAggregation
         generateTimestamp: true
         timestampField: eventGeneratedAt
-
+      - topicName: topic.CmPriorityPreemptionRequestEvent
+        collectionName: CmPriorityPreemptionRequestEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
 
 
       # Record BSM events:
