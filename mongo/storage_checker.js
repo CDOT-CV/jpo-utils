@@ -1,4 +1,4 @@
-var collections = db.getCollectionNames();
+const collections = db.getCollectionNames();
 let totalAllocatedStorage = 0;
 let totalFreeSpace = 0;
 
