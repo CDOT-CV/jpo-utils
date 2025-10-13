@@ -55,6 +55,24 @@ use CV
 db.ProcessedSpat.getIndexes();
 ```
 
+Sample Output for Processed SPaT indexes
+``` javascript
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  {
+    v: 2,
+    key: { recordGeneratedAt: 1 },
+    name: 'recordGeneratedAt_1',
+    expireAfterSeconds: 604800 // <--- Should match value for MONGO_DATA_RETENTION_SECONDS or MONGO_ASN_RETENTION_SECONDS for ASN.1 collections
+  },
+  {
+    v: 2,
+    key: { intersectionId: -1, utcTimeStamp: -1 },
+    name: 'intersectionId_-1_utcTimeStamp_-1'
+  }
+]
+```
+
 Alternatively, this may be checked in MongoDB compass
 
 
