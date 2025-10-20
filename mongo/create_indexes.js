@@ -445,6 +445,7 @@ function createGeoSpatialIndex(collection){
 }
 
 function createAdditionalIndexes(collection){
+    const collectionName = collection['name'];
     for (const additionalIndex of collection['additionalIndexes'] || []) {
         console.log("Creating additional index for " + collectionName + " with index: " + JSON.stringify(additionalIndex));
         const index_name = Object.entries(additionalIndex).map(([key, value]) => `${key}_${value}`).join("_");
