@@ -46,15 +46,6 @@ apps:
   ode:
     name: jpo-ode
     connectors:
-      - topicName: topic.OdeRawEncodedBSMJson
-        collectionName: OdeRawEncodedBSMJson
-        generateTimestamp: true
-      - topicName: topic.OdeRawEncodedMAPJson
-        collectionName: OdeRawEncodedMAPJson
-        generateTimestamp: true
-      - topicName: topic.OdeRawEncodedSPATJson
-        collectionName: OdeRawEncodedSPATJson
-        generateTimestamp: true
       - topicName: topic.OdeSpatJson
         collectionName: OdeSpatJson
         generateTimestamp: true
@@ -67,26 +58,26 @@ apps:
       - topicName: topic.OdeTIMCertExpirationTimeJson
         collectionName: OdeTIMCertExpirationTimeJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedPSMJson
-        collectionName: OdeRawEncodedPSMJson
-        generateTimestamp: true
       - topicName: topic.OdePsmJson
         collectionName: OdePsmJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedSRMJson
-        collectionName: OdeRawEncodedSRMJson
-        generateTimestamp: true
       - topicName: topic.OdeSrmJson
         collectionName: OdeSrmJson
-        generateTimestamp: true
-      - topicName: topic.OdeRawEncodedSSMJson
-        collectionName: OdeRawEncodedSSMJson
         generateTimestamp: true
       - topicName: topic.OdeSsmJson
         collectionName: OdeSsmJson
         generateTimestamp: true
       - topicName: topic.OdeDriverAlertJson
         collectionName: OdeDriverAlertJson
+        generateTimestamp: true
+      - topicName: topic.OdeSdsmJson
+        collectionName: OdeSdsmJson
+        generateTimestamp: true
+      - topicName: topic.OdeRtcmJson
+        collectionName: OdeRtcmJson
+        generateTimestamp: true
+      - topicName: topic.OdeRsmJson
+        collectionName: OdeRsmJson
         generateTimestamp: true
   ode_duplicated:
     name: ode-duplicated
@@ -100,9 +91,6 @@ apps:
       - topicName: topic.OdeBsmJson
         collectionName: OdeBsmJson
         generateTimestamp: true
-      - topicName: topic.OdeRawEncodedTIMJson
-        collectionName: OdeRawEncodedTIMJson
-        generateTimestamp: true
   geojsonconverter_duplicated:
     name: geojsonconverter-duplicated
     connectors:
@@ -115,6 +103,19 @@ apps:
       - topicName: topic.ProcessedBsm
         collectionName: ProcessedBsm
         generateTimestamp: true
+      - topicName: topic.ProcessedSrm
+        collectionName: ProcessedSrm
+        generateTimestamp: true
+      - topicName: topic.ProcessedSsm
+        collectionName: ProcessedSsm
+        generateTimestamp: true
+  intersection_api:
+    name: intersection_api
+    connectors:
+      - topicName: topic.IntersectionApiRsuStatus
+        collectionName: IntersectionApiRsuStatus
+        useTimestamp: true
+        timestampField: timestamp
   deduplicator:
     name: deduplicator
     connectors:
@@ -130,10 +131,6 @@ apps:
         collectionName: OdeTimJson
         generateTimestamp: true
         connectorName: DeduplicatedOdeTimJson
-      - topicName: topic.DeduplicatedOdeRawEncodedTIMJson
-        collectionName: OdeRawEncodedTIMJson
-        generateTimestamp: true
-        connectorName: DeduplicatedOdeRawEncodedTIMJson
       - topicName: topic.DeduplicatedOdeBsmJson
         collectionName: OdeBsmJson
         generateTimestamp: true
@@ -220,6 +217,18 @@ apps:
         collectionName: CmBsmMessageCountProgressionEvents
         useTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentEvent
+        collectionName: CmRevocableEnabledLaneAlignmentEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmRtcmBroadcastRateEvent
+        collectionName: CmRtcmBroadcastRateEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmRtcmMinimumDataEvent
+        collectionName: CmRtcmMinimumDataEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmSpatMinimumDataEventAggregation
         collectionName: CmSpatMinimumDataEventAggregation
         generateTimestamp: true
@@ -260,6 +269,19 @@ apps:
         collectionName: CmSpatMessageCountProgressionEventAggregation
         generateTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentEventAggregation
+        collectionName: CmRevocableEnabledLaneAlignmentEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmRtcmMinimumDataEventAggregation
+        collectionName: CmRtcmMinimumDataEventAggregation
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmPriorityPreemptionRequestEvent
+        collectionName: CmPriorityPreemptionRequestEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
+
 
       # Record BSM events:
       - topicName: topic.CmBsmEvents
@@ -344,6 +366,10 @@ apps:
         collectionName: CmEventStateProgressionNotification
         generateTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentNotification
+        collectionName: CmRevocableEnabledLaneAlignmentNotification
+        generateTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmIntersectionReferenceAlignmentNotificationAggregation
         collectionName: CmIntersectionReferenceAlignmentNotificationAggregation
         generateTimestamp: true
@@ -364,6 +390,11 @@ apps:
         collectionName: CmEventStateProgressionNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
+      - topicName: topic.CmRevocableEnabledLaneAlignmentNotificationAggregation
+        collectionName: CmRevocableEnabledLaneAlignmentNotificationAggregation
+        generateTimestamp: true
+        timestampField: notificationGeneratedAt
+      
   mecdeposit:
     name: mecdeposit
     connectors:
