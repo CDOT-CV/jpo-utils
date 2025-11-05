@@ -107,7 +107,6 @@ const conflictMonitorCollections = [
     { name: "CmSpatTransitionEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmEventStateProgressionEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmPriorityPreemptionRequestEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
-    
 
 
     { name: "CmSpatMessageCountProgressionEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
@@ -162,6 +161,9 @@ const conflictMonitorCollections = [
 
     // Reports
     { name: "CmReport", timeField: "reportGeneratedAt", intersectionField: "intersectionID"},
+
+    // CIMMS Metrics
+    { name: "CmPriorityRequestMetrics", ttlField: "metricGeneratedAt", timeField: "metricGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
 
 ];
 

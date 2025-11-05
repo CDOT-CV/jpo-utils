@@ -394,6 +394,12 @@ apps:
         collectionName: CmRevocableEnabledLaneAlignmentNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
+
+      # CIMMS Metrics Events
+      - topicName: topic.CmPriorityRequestMetrics
+        collectionName: CmPriorityRequestMetrics
+        generateTimestamp: true
+        timestampField: metricGeneratedAt
       
   mecdeposit:
     name: mecdeposit
