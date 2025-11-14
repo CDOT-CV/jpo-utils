@@ -281,6 +281,10 @@ apps:
         collectionName: CmPriorityPreemptionRequestEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
+      - topicName: topic.CmVehicleMisbehaviorEvents
+        collectionName: CmVehicleMisbehaviorEvents
+        useTimestamp: true
+        timestampField: eventGeneratedAt
 
 
       # Record BSM events:

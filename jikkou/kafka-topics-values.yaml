@@ -131,6 +131,7 @@ apps:
       - topic.CmSpatMessageCountProgressionEventAggregation
       - topic.CmRevocableEnabledLaneAlignmentEventAggregation
       - topic.CmPriorityPreemptionRequestEvent
+      - topic.CmVehicleMisbehaviorEvents
       - topic.CmPriorityRequestMetrics
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
