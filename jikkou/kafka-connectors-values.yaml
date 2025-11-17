@@ -5,14 +5,13 @@
 #--------------------------------------------------------------------------------------
 # Configuration parameters used to create kafka connectors to sync data from Kafka topics
 # to MongoDB collections.
-#   
+#
 # Ref: https://docs.confluent.io/platform/current/connect/index.html#connect-connectors
 #--------------------------------------------------------------------------------------
 
 clusterName: "kafka-connect"
 connectorClass: "com.mongodb.kafka.connect.MongoSinkConnector"
 tasksMax: 1
-
 
 #--------------------------------------------------------------------------------------
 # Kafka Connectors are grouped by application.  Apps with the corresponding environment variable
@@ -28,7 +27,7 @@ tasksMax: 1
 #   ELSE
 #     - ode_duplicated
 #     - geojsonconverter_duplicated
-# 
+#
 # The Kafka Connectors have the following configuration settings:
 #   Required settings:
 #   - topicName: The name of the Kafka topic to read from
@@ -108,6 +107,9 @@ apps:
         generateTimestamp: true
       - topicName: topic.ProcessedSsm
         collectionName: ProcessedSsm
+        generateTimestamp: true
+      - topicName: topic.ProcessedTim
+        collectionName: ProcessedTim
         generateTimestamp: true
   intersection_api:
     name: intersection_api
@@ -282,12 +284,11 @@ apps:
         useTimestamp: true
         timestampField: eventGeneratedAt
 
-
       # Record BSM events:
       - topicName: topic.CmBsmEvents
         collectionName: CmBsmEvents
         generateTimestamp: true
-      
+
       # Record Assessments:
       - topicName: topic.CmLaneDirectionOfTravelAssessment
         collectionName: CmLaneDirectionOfTravelAssessment
@@ -305,7 +306,7 @@ apps:
         collectionName: CmStopLineStopAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
-      
+
       # Record Notifications
       - topicName: topic.CmSpatTimeChangeDetailsNotification
         collectionName: CmSpatTimeChangeDetailsNotification
@@ -394,7 +395,7 @@ apps:
         collectionName: CmRevocableEnabledLaneAlignmentNotificationAggregation
         generateTimestamp: true
         timestampField: notificationGeneratedAt
-      
+
   mecdeposit:
     name: mecdeposit
     connectors:
