@@ -216,6 +216,7 @@ apps:
     name: rsu-status-monitor
     streamTopics:
       - topic.RmNearestNeighborUnresponsiveEvent
+      - topic.RmNearestNeighborUnresponsiveNotification
     tableTopics:
       - topic.RmIntersectionStatusRecords
     customTopics: {}
