@@ -219,6 +219,7 @@ apps:
       - topic.RmNearestNeighborUnresponsiveNotification
     tableTopics:
       - topic.RmIntersectionStatusRecords
+      - topic.RmMonitoringStatusRecords
     customTopics: {}
   other:
     name: other-topics
