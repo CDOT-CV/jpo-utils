@@ -405,6 +405,18 @@ apps:
       - topicName: topic.MecDepositMetrics
         collectionName: MecDepositMetrics
         generateTimestamp: true
+
+  rsustatusmonitor:
+    name: rsustatusmonitor
+    connectors:
+      - topicName: topic.RmIntersectionStatusRecords
+        collectionName: RmIntersectionStatusRecords
+        useTimestamp: true
+        timestampField: timestamp
+      - topicName: topic.RmMonitoringStatusRecords
+        collectionName: RmMonitoringStatusRecords
+        useTimestamp: true
+        timestampField: timestamp
   # Allow for custom connectors to be added - users can override this file and add other kafka connectors here
   other:
     name: other
