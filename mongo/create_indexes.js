@@ -165,6 +165,9 @@ const conflictMonitorCollections = [
     // Reports
     { name: "CmReport", timeField: "reportGeneratedAt", intersectionField: "intersectionID"},
 
+    // CIMMS Metrics
+    { name: "CmPriorityRequestMetrics", ttlField: "metricGeneratedAt", timeField: "metricGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+
 ];
 
 let intersectionAPICollections = [
