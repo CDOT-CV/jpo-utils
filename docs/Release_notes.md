@@ -1,5 +1,15 @@
 # JPO-UTILS Release Notes
 
+## Version 2.3.0
+----------------------------------------
+### **Summary**
+In this release, support for the JPO ODE pipeline was expanded for RTCM messages to create new Kafka topics and MongoDB connector and collections. A modification was made for the MongoDB script to fix a bug with running the script through Docker.
+
+Enhancements in this release:
+- [Neaera PR 6](https://github.com/neaeraconsulting/jpo-utils/pull/6): RTCM topics for cimms #2
+- [Neaera PR 5](https://github.com/neaeraconsulting/jpo-utils/pull/5): RTCM topics for cimms #1
+- [CDOT PR 47](https://github.com/CDOT-CV/jpo-utils/pull/47): Setting restore_mongo.sh Execute Bit
+
 ## Version 2.2.0
 ----------------------------------------
 ### **Summary**
