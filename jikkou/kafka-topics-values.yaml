@@ -117,10 +117,12 @@ apps:
       - topic.CmBsmMessageCountProgressionEvents
       - topic.CmMapMessageCountProgressionEvents
       - topic.CmSpatMessageCountProgressionEvents
+      - topic.CmRtcmMessageCountProgressionEventAggregation
       - topic.CmEventStateProgressionEvent
       - topic.CmRevocableEnabledLaneAlignmentEvent
       - topic.CmSpatMinimumDataEventAggregation
       - topic.CmMapMinimumDataEventAggregation
+      - topic.CmRtcmMinimumDataEventAggregation
       - topic.CmIntersectionReferenceAlignmentEventAggregation
       - topic.CmSignalGroupAlignmentEventAggregation
       - topic.CmSignalStateConflictEventAggregation
@@ -131,6 +133,11 @@ apps:
       - topic.CmSpatMessageCountProgressionEventAggregation
       - topic.CmRevocableEnabledLaneAlignmentEventAggregation
       - topic.CmPriorityPreemptionRequestEvent
+      - topic.CmVehicleMisbehaviorEvents
+      - topic.CmPriorityRequestMetrics
+      - topic.CmRtcmMinimumDataEvents
+      - topic.CmRtcmBroadcastRateEvents
+      - topic.CmRtcmMessageCountProgressionEvents
     tableTopics:
       - topic.CmLaneDirectionOfTravelNotification
       - topic.CmConnectionOfTravelNotification
@@ -210,6 +217,15 @@ apps:
     streamTopics:
       - topic.MecDepositMetrics
     tableTopics: {}
+    customTopics: {}
+  rsustatusmonitor:
+    name: rsu-status-monitor
+    streamTopics:
+      - topic.RmNearestNeighborUnresponsiveEvent
+      - topic.RmNearestNeighborUnresponsiveNotification
+    tableTopics:
+      - topic.RmIntersectionStatusRecords
+      - topic.RmMonitoringStatusRecords
     customTopics: {}
   other:
     name: other-topics
