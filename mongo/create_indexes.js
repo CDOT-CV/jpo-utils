@@ -39,6 +39,7 @@ const CONNECT_CREATE_GEOJSONCONVERTER = process.env['CONNECT_CREATE_GEOJSONCONVE
 const CONNECT_CREATE_CONFLICTMONITOR = process.env['CONNECT_CREATE_CONFLICTMONITOR'] || true;
 const CONNECT_CREATE_DEDUPLICATOR = process.env['CONNECT_CREATE_DEDUPLICATOR'] || true;
 const CONNECT_INDEX_CREATE_INTERSECTION_API = process.env['CONNECT_CREATE_INTERSECTION_API'] || true;
+const CONNECT_INDEX_CREATE_RSUSTATUSMONITOR = process.env['CONNECT_CREATE_RSUSTATUSMONITOR'] || true;
 
 
 const users = [
@@ -107,6 +108,7 @@ const conflictMonitorCollections = [
     { name: "CmSpatTransitionEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmEventStateProgressionEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     { name: "CmPriorityPreemptionRequestEvent", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+    { name: "CmVehicleMisbehaviorEvents", ttlField: "eventGeneratedAt", timeField: "eventGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
     
 
 
@@ -163,10 +165,18 @@ const conflictMonitorCollections = [
     // Reports
     { name: "CmReport", timeField: "reportGeneratedAt", intersectionField: "intersectionID"},
 
+    // CIMMS Metrics
+    { name: "CmPriorityRequestMetrics", ttlField: "metricGeneratedAt", timeField: "metricGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
+
 ];
 
 let intersectionAPICollections = [
     { name: "IntersectionApiRsuStatus", timeField: "timestamp", intersectionField: "intersectionID", rsuIP:"rsuIP"},
+];
+
+let rsuStatusMonitorCollections = [
+    { name: "RmIntersectionStatusRecords", timeField: "timestamp", intersectionField: "intersectionID", rsuIP:"listenerIp"},
+    { name: "RmMonitoringStatusRecords", timeField: "timestamp", intersectionField: "intersectionID", rsuIP:"rsuIP"},
 ];
 
 let collections = [];
@@ -187,6 +197,9 @@ if(CONNECT_INDEX_CREATE_INTERSECTION_API){
     collections = collections.concat(intersectionAPICollections);
 }
 
+if(CONNECT_INDEX_CREATE_RSUSTATUSMONITOR){
+    collections = collections.concat(rsuStatusMonitorCollections);
+}
 
 try{
     
