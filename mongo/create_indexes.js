@@ -168,7 +168,7 @@ const conflictMonitorCollections = [
     { name: "CmPriorityRequestMetrics", ttlField: "metricGeneratedAt", timeField: "metricGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds },
 
     // Other Data Types 
-    { name: "CmBsmEvents", ttlField: "recordGeneratedAt", timeField: "recordGeneratedAt", intersectionField: "intersectionID", expireTime: expireSeconds }, // BSM events are not "Events" by the formal conflict monitor definition, so they are separated out.
+    { name: "CmBsmEvents", ttlField: "recordGeneratedAt", timeField: "startingBsmTimestamp", intersectionField: "intersectionID", expireTime: expireSeconds }, // BSM events are not "Events" by the formal conflict monitor definition, so they are separated out.
 
 ];
 
