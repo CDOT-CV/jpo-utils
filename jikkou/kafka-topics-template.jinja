@@ -84,6 +84,10 @@ spec:
 {{ create_topics(values.apps.mecdeposit) }}
 {% endif %}
 
+{% if system.env.KAFKA_TOPIC_CREATE_RSUSTATUSMONITOR %}
+{{ create_topics(values.apps.rsustatusmonitor) }}
+{% endif %}
+
 {% if system.env.KAFKA_TOPIC_CREATE_OTHER %}
 {{ create_topics(values.apps.other) }}
 {% endif %}

@@ -111,6 +111,9 @@ apps:
       - topicName: topic.ProcessedTim
         collectionName: ProcessedTim
         generateTimestamp: true
+      - topicName: topic.ProcessedRtcm
+        collectionName: ProcessedRtcm
+        generateTimestamp: true
   intersection_api:
     name: intersection_api
     connectors:
@@ -396,12 +399,30 @@ apps:
         generateTimestamp: true
         timestampField: notificationGeneratedAt
 
+      # CIMMS Metrics Events
+      - topicName: topic.CmPriorityRequestMetrics
+        collectionName: CmPriorityRequestMetrics
+        generateTimestamp: true
+        timestampField: metricGeneratedAt
+
   mecdeposit:
     name: mecdeposit
     connectors:
       - topicName: topic.MecDepositMetrics
         collectionName: MecDepositMetrics
         generateTimestamp: true
+
+  rsustatusmonitor:
+    name: rsustatusmonitor
+    connectors:
+      - topicName: topic.RmIntersectionStatusRecords
+        collectionName: RmIntersectionStatusRecords
+        useTimestamp: true
+        timestampField: timestamp
+      - topicName: topic.RmMonitoringStatusRecords
+        collectionName: RmMonitoringStatusRecords
+        useTimestamp: true
+        timestampField: timestamp
   # Allow for custom connectors to be added - users can override this file and add other kafka connectors here
   other:
     name: other

@@ -75,6 +75,10 @@ spec:
 {{ create_connector(values.apps.mecdeposit) }}
 {% endif %}
 
+{% if system.env.CONNECT_CREATE_RSUSTATUSMONITOR %}
+{{ create_connector(values.apps.rsustatusmonitor) }}
+{% endif %}
+
 {% if system.env.CONNECT_CREATE_OTHER %}
 {{ create_connector(values.apps.other) }}
 {% endif %}
