@@ -15,6 +15,7 @@ The JPO ITS utilities repository serves as a central location for deploying open
   - [2. MongoDB](#2-mongodb)
     - [Quick Run](#quick-run)
   - [3. Kafka](#3-kafka)
+    - [Kafka Topic Log Retention and Rotation](#kafka-topic-log-retention-and-rotation)
     - [Configure Topic Creation](#configure-topic-creation)
       - [Confluent Cloud Support](#confluent-cloud-support)
     - [Quick Run](#quick-run-1)
