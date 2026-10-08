@@ -173,6 +173,7 @@ apps:
       - topic.CmSpatTimeChangeDetailsNotificationAggregation
       - topic.CmEventStateProgressionNotificationAggregation
       - topic.CmRevocableEnabledLaneAlignmentNotificationAggregation
+      
     customTopics: {}
   intersection_api:
     name: intersection_api

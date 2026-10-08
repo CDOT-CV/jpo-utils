@@ -292,6 +292,7 @@ apps:
         useTimestamp: true
         timestampField: eventGeneratedAt
 
+
       # Record BSM events:
       - topicName: topic.CmBsmEvents
         collectionName: CmBsmEvents
@@ -314,7 +315,6 @@ apps:
         collectionName: CmStopLineStopAssessment
         useTimestamp: true
         timestampField: assessmentGeneratedAt
-
       
       # Record Notifications
       - topicName: topic.CmSpatTimeChangeDetailsNotification
@@ -410,7 +410,7 @@ apps:
         collectionName: CmPriorityRequestMetrics
         generateTimestamp: true
         timestampField: metricGeneratedAt
-
+      
   mecdeposit:
     name: mecdeposit
     connectors:
