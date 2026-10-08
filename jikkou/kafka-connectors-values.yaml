@@ -287,7 +287,6 @@ apps:
         collectionName: CmPriorityPreemptionRequestEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
-
       - topicName: topic.CmVehicleMisbehaviorEvents
         collectionName: CmVehicleMisbehaviorEvents
         useTimestamp: true
@@ -297,7 +296,6 @@ apps:
       - topicName: topic.CmBsmEvents
         collectionName: CmBsmEvents
         generateTimestamp: true
-
       
       # Record Assessments:
       - topicName: topic.CmLaneDirectionOfTravelAssessment
@@ -413,7 +411,6 @@ apps:
         generateTimestamp: true
         timestampField: metricGeneratedAt
 
-      
   mecdeposit:
     name: mecdeposit
     connectors:

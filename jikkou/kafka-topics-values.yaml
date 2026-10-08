@@ -173,7 +173,6 @@ apps:
       - topic.CmSpatTimeChangeDetailsNotificationAggregation
       - topic.CmEventStateProgressionNotificationAggregation
       - topic.CmRevocableEnabledLaneAlignmentNotificationAggregation
-
     customTopics: {}
   intersection_api:
     name: intersection_api
@@ -186,7 +185,7 @@ apps:
     tableTopics: {}
     customTopics:
       - topicName: topic.DeduplicatedProcessedMap
-        retentionMs: 43200000 # 12 hours
+        retentionMs: 43200000  # 12 hours
       - topicName: topic.DeduplicatedProcessedMapWKT
         retentionMs: 43200000
       - topicName: topic.DeduplicatedOdeMapJson
