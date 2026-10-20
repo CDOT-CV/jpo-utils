@@ -84,7 +84,8 @@ const geoJsonConverterCollections = [
     {name: "ProcessedSpat", ttlField: "recordGeneratedAt", timeField: "utcTimeStamp", intersectionField: "intersectionId", expireTime: expireSeconds},
     {name: "ProcessedBsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds},
     {name: "ProcessedSrm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds},
-    {name: "ProcessedSsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds}
+    {name: "ProcessedSsm", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "geometry.coordinates", expireTime: expireSeconds},
+    {name: "ProcessedTim", ttlField: "recordGeneratedAt", timeField: "timeStamp", geoSpatialField: "location", expireTime: expireSeconds}
 ];
 
 

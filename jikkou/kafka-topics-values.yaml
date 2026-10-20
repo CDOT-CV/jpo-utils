@@ -90,6 +90,7 @@ apps:
       - topic.ProcessedRtcm
       - topic.ProcessedSrm
       - topic.ProcessedSsm
+      - topic.ProcessedTim
     tableTopics: {}
     customTopics: {}
   conflictmonitor:
