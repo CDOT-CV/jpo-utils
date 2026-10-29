@@ -227,11 +227,11 @@ apps:
         collectionName: CmRevocableEnabledLaneAlignmentEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
-      - topicName: topic.CmRtcmBroadcastRateEvent
+      - topicName: topic.CmRtcmBroadcastRateEvents
         collectionName: CmRtcmBroadcastRateEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
-      - topicName: topic.CmRtcmMinimumDataEvent
+      - topicName: topic.CmRtcmMinimumDataEvents
         collectionName: CmRtcmMinimumDataEvent
         useTimestamp: true
         timestampField: eventGeneratedAt
