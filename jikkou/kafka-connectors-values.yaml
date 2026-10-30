@@ -206,7 +206,14 @@ apps:
         useTimestamp: true
       - topicName: topic.CmSpatTransitionEvent
         collectionName: CmSpatTransitionEvent
+      - topicName: topic.CmTimestampDeltaEvent
+        collectionName: CmTimestampDeltaEvent
         useTimestamp: true
+        timestampField: eventGeneratedAt
+      - topicName: topic.CmSpatTransitionEvent
+        collectionName: CmSpatTransitionEvent
+        useTimestamp: true
+        timestampField: eventGeneratedAt
       - topicName: topic.CmEventStateProgressionEvent
         collectionName: CmEventStateProgressionEvent
         useTimestamp: true
