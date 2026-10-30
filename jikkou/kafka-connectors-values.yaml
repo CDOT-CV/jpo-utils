@@ -350,7 +350,10 @@ apps:
         timestampField: notificationGeneratedAt
       - topicName: topic.CmIntersectionReferenceAlignmentNotification
         collectionName: CmIntersectionReferenceAlignmentNotification
+      - topicName: topic.CmIntersectionReferenceAlignmentNotification
+        collectionName: CmIntersectionReferenceAlignmentNotification
         useTimestamp: true
+        timestampField: notificationGeneratedAt
       - topicName: topic.CmSpatTransitionNotification
         collectionName: CmSpatTransitionNotification
         useTimestamp: true
