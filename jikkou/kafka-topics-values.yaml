@@ -52,6 +52,7 @@ apps:
       - topic.FilteredOdeBsmJson
       - topic.OdeTimJson
       - topic.OdeTimJsonTMCFiltered
+      - topic.OdeTimBroadcastJson
       - topic.OdeTimKTableJson
       - topic.FilteredOdeTimJson
       - topic.OdeDriverAlertJson
