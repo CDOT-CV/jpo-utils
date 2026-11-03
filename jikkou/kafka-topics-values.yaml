@@ -58,6 +58,7 @@ apps:
       - topic.FilteredOdeBsmJson
       - topic.OdeTimJson
       - topic.OdeTimJsonTMCFiltered
+      - topic.OdeTimBroadcastJson
       - topic.OdeTimKTableJson
       - topic.FilteredOdeTimJson
       - topic.OdeDriverAlertJson
@@ -108,6 +109,7 @@ apps:
       - topic.ProcessedRtcm
       - topic.ProcessedSrm
       - topic.ProcessedSsm
+      - topic.ProcessedTim
     tableTopics: {}
     customTopics: {}
   conflictmonitor:
