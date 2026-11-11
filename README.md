@@ -61,6 +61,8 @@ You must rename `sample.env` to `.env` for Docker to automatically read the file
 
 A MongoDB instance that is initialized as a standalone replica-set and has configured users is configured in the [docker-compose-mongo](docker-compose-mongo.yml) file. To use a different `setup_mongo.sh` or `create_indexes.js` script, pass in the relative path of the new script by overriding the `KAFKA_INIT_SCRIPT_RELATIVE_PATH` or `MONGO_CREATE_INDEXES_SCRIPT_RELATIVE_PATH` environmental variables. These scripts facilitate the initialization of the MongoDB Database along with the created indexes.
 
+The `mongo` and `mongo-setup` services use the official `mongo` image pinned to the MongoDB 8.0 LTS line by version tag and multi-platform SHA-256 digest (currently `8.0.34`, which ships `libbrotli1` `1.1.0-2ubuntu0.1` and resolves CVE-2026-111497). Update both the tag and the digest when upgrading. Existing data volumes created by a newer MongoDB release (for example, from the previous floating `mongo:8` tag, which now resolves to 8.3) may have a higher `featureCompatibilityVersion` and will not start under 8.0; recreate local development volumes if `mongod` reports an FCV error.
+
 Where the `COMPOSE_PROFILES` variable in you're `.env` file are as follows:
 
 - `mongo_full` - deploys all resources in the [docker-compose-mongo.yml](docker-compose-mongo.yml) file
